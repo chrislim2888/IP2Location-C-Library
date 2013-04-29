@@ -1,0 +1,27 @@
+TARGET_LIB = libIP2Location/IP2Location.lib
+TARGET_TEST = test/test-IP2Location.exe
+VPATH = libIP2Location:test
+C_COMPILE = cl
+C_LIBTOOL = lib
+C_LINKER = link
+CCFLAGS = /nologo /D WIN32 /c /ML 
+CLFLAGS = /nologo /NODEFAULTLIB:LIBCD /SUBSYSTEM:CONSOLE 
+
+HEADER_INCLUDE = /I libIP2Location /I libIP2location/iMath
+IP2LOCATION_SOURCE = libIP2Location/IP2Location.c \
+										 libIP2Location/iMath/imath.c 
+
+TEST_IP2LOCATION = test/test-IP2Location.c
+										 
+.SUFFIXES: .obj .c .exe
+
+all: $(TARGET_LIB) $(TARGET_TEST)
+
+.c.obj: 
+	$(C_COMPILE) $(CCFLAGS) $(HEADER_INCLUDE) /Fo$@ /TC $< 
+	
+$(TARGET_LIB): $(IP2LOCATION_SOURCE:.c=.obj)
+	$(C_LIBTOOL) /OUT:$@ /nologo Ws2_32.lib $(IP2LOCATION_SOURCE:.c=.obj)
+
+$(TARGET_TEST): $(TEST_IP2LOCATION:.c=.obj)
+	$(C_LINKER) $(CLFLAGS) /OUT:$(TARGET_TEST) $(TARGET_LIB) User32.lib $(TEST_IP2LOCATION:.c=.obj)
