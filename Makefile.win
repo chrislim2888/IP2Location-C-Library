@@ -9,6 +9,7 @@ CLFLAGS = /nologo /NODEFAULTLIB:LIBCD /SUBSYSTEM:CONSOLE
 
 HEADER_INCLUDE = /I libIP2Location /I libIP2location/iMath
 IP2LOCATION_SOURCE = libIP2Location/IP2Location.c \
+										 libIP2Location/IP2Loc_DBInterface.c \
 										 libIP2Location/iMath/imath.c 
 
 TEST_IP2LOCATION = test/test-IP2Location.c

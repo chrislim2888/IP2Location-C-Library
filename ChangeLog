@@ -1,3 +1,6 @@
+6.0.1.	2013-06-12
+	* Support IP2Location_open_mem interface with IP2LOCATION_CACHE_MEMORY and IP2LOCATION_SHARED_MEMORY, to improve the result retrieval using memory.
+	
 5.0.0.	2013-04-16
 	* Support DB21 to DB24
 	* New function IP2Location_get_elevation()

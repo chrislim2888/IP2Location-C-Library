@@ -8,14 +8,30 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h> 
 #if !defined(__APPLE__)
-#include <malloc.h>
+#include <stdlib.h> 
 #endif
+
+#ifdef WIN32
+#define int32_t int
+#define int64_t long long int
+#endif
+
 #ifndef WIN32
 #include <stdint.h>
 #else
+
 #ifndef uint8_t
 #define uint8_t unsigned char
 #endif
+
+#ifndef int32_t 
+#define int32_t int
+#endif
+
+#ifndef int64_t
+#define int64_t long long int
+#endif
+
 #ifndef uint32_t
 #ifndef WIN32
 #define uint32_t int
@@ -26,6 +42,7 @@ extern "C" {
 #endif
 
 #include "imath.h"
+#include "IP2Loc_DBInterface.h"
 
 #define API_VERSION   4.0.0
 #define MAX_IPV4_RANGE  4294967295U
@@ -108,11 +125,11 @@ typedef struct StringList{
 	struct StringList* next;
 } StringList;
 
-
 /*##################
 # Public Functions
 ##################*/
 IP2Location *IP2Location_open(char *db);
+int IP2Location_open_mem(IP2Location *loc, enum IP2Location_mem_type);
 uint32_t IP2Location_close(IP2Location *loc);
 IP2LocationRecord *IP2Location_get_country_short(IP2Location *loc, char *ip);
 IP2LocationRecord *IP2Location_get_country_long(IP2Location *loc, char *ip);
@@ -143,11 +160,6 @@ void IP2Location_free_record(IP2LocationRecord *record);
 
 int IP2Location_initialize(IP2Location *loc);
 IP2LocationRecord *IP2Location_new_record();
-char* IP2Location_read128(FILE *handle, uint32_t position);
-uint32_t IP2Location_read32(FILE *handle, uint32_t position);
-uint8_t IP2Location_read8(FILE *handle, uint32_t position);
-char *IP2Location_readStr(FILE *handle, uint32_t position);
-float IP2Location_readFloat(FILE *handle, uint32_t position);
 uint32_t IP2Location_ip2no(char* ip);
 mpz_t IP2Location_ipv6_to_no(char* ip);
 int IP2Location_ip_is_ipv4 (char* ipaddr);

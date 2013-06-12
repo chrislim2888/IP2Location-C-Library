@@ -1,0 +1,62 @@
+Developers guide for IP2Location C API's
+======================================
+
+This guide explains the usage and the behavior of below functions in IP2Location C library 
+(1) IP2Location_open_mem
+(2) IP2Location_close
+(3) IP2Location_delete_shm
+
+Important enum, 
+enum IP2Location_mem_type
+{
+    IP2LOCATION_FILE_IO,
+    IP2LOCATION_CACHE_MEMORY,
+    IP2LOCATION_SHARED_MEMORY
+};
+
+========
+(1) int IP2Location_open_mem(IP2Location *loc, enum IP2Location_mem_type);
+
+ loc - is of type IP2Location pointer, which is returned by function IP2Location_open. 
+ IP2Location_mem_type - is of type IP2Location_mem_type enum. This argument specifies to where the iplocation DB file will be loaded. It may be  IP2LOCATION_FILE_IO, IP2LOCATION_CACHE_MEMORY and  IP2LOCATION_SHARED_MEMORY. 
+
+ If IP2LOCATION_FILE_IO is passed as agrument, DB will be in the hard disk file and records will be searched from the hard disk file.
+ If IP2LOCATION_CACHE_MEMORY is passed as argument, ip2location DB will be loaded into the memory and search will be performed on the DB present in the memory.
+ If IP2LOCATION_SHARED_MEMORY is passed as argument, ip2location DB will be loaded into the memory and it could be shared across multiple processes. Please check at the end of this guide to know how this memory is shared and how to clean it.
+
+ IP2Location_open_mem call must always be alternated with IP2Location_close, if IP2Location_open_mem is called more than once without calling IP2Location_close(), -1 will be returned.
+
+ RETURN value:
+ For any error IP2Location_open_mem will return -1, and will not set any errno variable.
+
+=========
+ (2) uint32_t IP2Location_close(IP2Location *loc); 
+ loc - is of type  IP2Location pointer, which is returned by function IP2Location_open and it must be one used in IP2Location_open_mem. 
+
+ Call to this function will close the DB file and free the allocated cache memory or detach from the shared memory. (Shared memory will not be deleted from this call.)
+
+ RETURN value:
+	This function always return zero.
+
+=========
+ (3) void IP2Location_delete_shm();
+ 
+ This function will delete the shared memory created from IP2Location_open_mem in Linux, Unix and MAC OS. In windows its just a empty function call. Please read the next section.
+ RETURN value:
+	void
+=========
+ Note: Key used for the shared memory is "/IP2location_Shm", please make sure it will not crash with any other shared memory.
+ 
+ IP2LOCATION_SHARED_MEMORY – If IP2Location_open_mem is called with this as second argument, shared memory will be created if do not exist already or will attached to already existing shared memeoy. 
+
+In Windows: 
+If calling process of IP2Location_close function is the only attached process of the shared memory, call to IP2Location_close, along with closing the DB file and detaching from the shared memory it will delete the shared memory. If this is not the last process attached to the shared memory it will just detach from the shared memory.
+Call to IP2Location_delete_shm in windows have not effect. 
+
+In Linux, Unix and MAC OS:
+Call to IP2Location_close will not deleted the shared memory, it will only detach the process from using that memory. To delete the shared memory IP2Location_delete_shm must be called. 
+
+ When IP2Location_delete_shm function is called, and if any other process(es) is attached to shared memory, it will only delete the name of the shared memory but the other process(es) will continue to use memory and memory will be freed only after last attached process is detached from it. 
+
+ If any process after call to IP2Location_delete_shm, call IP2Location_open_mem again with IP2LOCATION_SHARED_MEMORY option, it will create a new shared memory and will not use the old one if one exists and used by any other process. 
+ Please refer shm_open and shm_unlink man pages for more info. 

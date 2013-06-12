@@ -19,10 +19,12 @@ case "$host" in
   # FreeBSD forgot to  install magic.h in a sane location. Bug or Feature?
   CPPFLAGS="$CPPFLAGS -I/usr/local/include -I/usr/src/contrib/file/"
   LDFLAGS="$LDFLAGS -L/usr/local/lib -R/usr/local/lib"
+  CFLAGS="$CFLAGS -lrt"
   ;;
 *-*-linux*)
   CPPFLAGS="$CPPFLAGS -D _GNU_SOURCE -I/usr/local/include"
   LDFLAGS="$LDFLAGS -L/usr/local/lib -R/usr/local/lib"
+  CFLAGS="$CFLAGS -lrt"
   ;;
 *-*-darwin*)
   CPPFLAGS="$CPPFLAGS -I/opt/local/include"

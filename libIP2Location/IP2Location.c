@@ -16,6 +16,7 @@
 
 #include "imath.h"
 #include "IP2Location.h"
+#include "IP2Loc_DBInterface.h"
 
 uint8_t COUNTRY_POSITION[25]             = {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 uint8_t REGION_POSITION[25]              = {0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
@@ -37,14 +38,14 @@ uint8_t MOBILEBRAND_POSITION[25]         = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 uint8_t ELEVATION_POSITION[25]           = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 19, 0, 19};
 uint8_t USAGETYPE_POSITION[25]           = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 20};
 
+static int32_t openMemFlag = 0;
 // Description: Open the IP2Location database file
 IP2Location *IP2Location_open(char *db)
 {
 	FILE *f;
 	IP2Location *loc;
 
-	if ((f=fopen(db,"rb")) == NULL)
-	{
+	if ( ( f = fopen( db, "rb")) == NULL) {
 		printf("IP2Location library error in opening database %s.\n", db);
 		return NULL;
 	}
@@ -55,20 +56,45 @@ IP2Location *IP2Location_open(char *db)
 	loc->filehandle = f;
 
 	IP2Location_initialize(loc);
-	
 	return loc;
+}
+//Description: This function to set the DB access type.
+int32_t IP2Location_open_mem(IP2Location *loc, enum IP2Location_mem_type mtype)
+{
+	if( loc == NULL)
+		return -1;
+
+	/*Once IP2Location_open_mem is called, it can not be called again till
+	 * IP2Location_close is called*/ 
+	if(openMemFlag != 0)
+		return -1;
+	openMemFlag = 1;
+
+	if( mtype == IP2LOCATION_FILE_IO ) {
+		return 0; //Just return, by default its IP2LOCATION_FILE_IO
+	}else if(  mtype == IP2LOCATION_CACHE_MEMORY ) { 
+		return IP2Location_DB_set_memory_cache(loc->filehandle);
+	}else if ( mtype == IP2LOCATION_SHARED_MEMORY ) {
+		return IP2Location_DB_set_shared_memory(loc->filehandle);
+	}else
+		return -1;
 }
 
 // Description: Close the IP2Location database file
 uint32_t IP2Location_close(IP2Location *loc)
 {
-	if (loc->filehandle != NULL) {
-		fclose(loc->filehandle);
-	}
+	openMemFlag = 0;
 	if (loc != NULL) {
+		IP2Location_DB_close(loc->filehandle);
 		free(loc);
 	}
 	return 0;
+}
+
+// Description: Delete IP2Location shared memory if its present.  
+void IP2Location_delete_shm()
+{
+	IP2Location_DB_del_shm();
 }
 
 // Descrption: Startup
@@ -733,114 +759,6 @@ void IP2Location_free_record(IP2LocationRecord *record)
 
 	free(record);
 }
-
-char* IP2Location_read128(FILE *handle, uint32_t position) 
-{
-	uint32_t b96_127 = IP2Location_read32(handle, position);
-	uint32_t b64_95 = IP2Location_read32(handle, position + 4); 
-	uint32_t b32_63 = IP2Location_read32(handle, position + 8);
-	uint32_t b1_31 = IP2Location_read32(handle, position + 12);
-
-	mpz_t result, multiplier, mp96_127, mp64_95, mp32_63, mp1_31;
-	mp_int_init(&result);
-	mp_int_init(&multiplier);
-	mp_int_init(&mp96_127);
-	mp_int_init(&mp64_95);
-	mp_int_init(&mp32_63);
-	mp_int_init(&mp1_31);
-	
-	mp_int_init_value(&multiplier, 65536);
-	mp_int_mul(&multiplier, &multiplier, &multiplier);
-	mp_int_init_value(&mp96_127, b96_127);
-	mp_int_init_value(&mp64_95, b64_95);
-	mp_int_init_value(&mp32_63, b32_63);
-	mp_int_init_value(&mp1_31, b1_31);
-
-	mp_int_mul(&mp1_31, &multiplier, &mp1_31);
-	mp_int_mul(&mp1_31, &multiplier, &mp1_31);
-	mp_int_mul(&mp1_31, &multiplier, &mp1_31);
-
-  mp_int_mul(&mp32_63, &multiplier, &mp32_63);
-	mp_int_mul(&mp32_63, &multiplier, &mp32_63);
-
-	mp_int_mul(&mp64_95, &multiplier, &mp64_95);
-	
-  mp_int_add(&mp1_31, &mp32_63, &result);
-	mp_int_add(&result, &mp64_95, &result);
-	mp_int_add(&result, &mp96_127, &result);
-	return IP2Location_mp2string(result);
-	
-}
-
-uint32_t IP2Location_read32(FILE *handle, uint32_t position)
-{
-	uint8_t byte1 = 0;
-	uint8_t byte2 = 0;
-	uint8_t byte3 = 0;
-	uint8_t byte4 = 0;
-	
-	if (handle != NULL) {
-		fseek(handle, position-1, 0);
-		fread(&byte1, 1, 1, handle);
-		fread(&byte2, 1, 1, handle);
-		fread(&byte3, 1, 1, handle);
-		fread(&byte4, 1, 1, handle);
-	}
-	return ((byte4 << 24) | (byte3 << 16) | (byte2 << 8) | (byte1));
-}
-
-uint8_t IP2Location_read8(FILE *handle, uint32_t position)
-{	
-	uint8_t ret = 0;
-
-	if (handle != NULL) {
-		fseek(handle, position-1, 0);
-		fread(&ret, 1, 1, handle);
-	}		
-	return ret;
-}
-
-
-char *IP2Location_readStr(FILE *handle, uint32_t position)
-{
-	uint8_t size = 0;
-	char *str = 0;
-
-	if (handle != NULL) {
-		fseek(handle, position, 0);
-		fread(&size, 1, 1, handle);
-		str = (char *)malloc(size+1);
-		memset(str, 0, size+1);
-		fread(str, size, 1, handle);
-	}	
-	return str;
-}
-
-
-float IP2Location_readFloat(FILE *handle, uint32_t position)
-{
-	float ret = 0.0;
-
-#ifdef _SUN_
-	char * p = (char *) &ret;
-	
-	/* for SUN SPARC, have to reverse the byte order */
-	if (handle != NULL) {
-		fseek(handle, position-1, 0);
-		fread(p+3, 1, 1, handle);
-		fread(p+2, 1, 1, handle);
-		fread(p+1, 1, 1, handle);
-		fread(p,   1, 1, handle);
-	}
-#else
-	if (handle != NULL) {
-		fseek(handle, position-1, 0);
-		fread(&ret, 4, 1, handle);
-	}
-#endif
-	return ret;
-}
-
 
 uint32_t IP2Location_ip2no(char* ipstring)
 {
