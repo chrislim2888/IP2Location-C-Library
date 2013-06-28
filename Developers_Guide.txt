@@ -45,7 +45,7 @@ enum IP2Location_mem_type
  RETURN value:
 	void
 =========
- Note: Key used for the shared memory is "/IP2location_Shm", please make sure it will not crash with any other shared memory.
+ Note: Key used for the shared memory is "/IP2location_Shm", please make sure it will not conflict with any other shared memory.
  
  IP2LOCATION_SHARED_MEMORY – If IP2Location_open_mem is called with this as second argument, shared memory will be created if do not exist already or will attached to already existing shared memeoy. 
 

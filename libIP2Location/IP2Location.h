@@ -153,6 +153,7 @@ IP2LocationRecord *IP2Location_get_elevation(IP2Location *loc, char *ip);
 IP2LocationRecord *IP2Location_get_usagetype(IP2Location *loc, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *loc, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
+void IP2Location_delete_shm();
 
 /*###################
 # Private Functions
