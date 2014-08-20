@@ -1,8 +1,8 @@
 AC_PREREQ(2.59)
-AC_INIT([libIP2Location], [2.1.5], [support@ip2location.com])
-AM_INIT_AUTOMAKE([libIP2Location], [2.1.5])
+AC_INIT([IP2Loc], [7.0.0], [support@ip2location.com])
+AM_INIT_AUTOMAKE([IP2Loc], [7.0.0])
 
-AC_PREFIX_DEFAULT(/usr/local)
+#AC_PREFIX_DEFAULT(/usr/)
 AM_CONFIG_HEADER([config.h])
 # AM_MAINTAINER_MODE
 
@@ -17,18 +17,18 @@ dnl Check for some target-specific stuff
 case "$host" in
 *-*-freebsd*)
   # FreeBSD forgot to  install magic.h in a sane location. Bug or Feature?
-  CPPFLAGS="$CPPFLAGS -I/usr/local/include -I/usr/src/contrib/file/"
-  LDFLAGS="$LDFLAGS -L/usr/local/lib -R/usr/local/lib"
+  CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/src/contrib/file/"
+  LDFLAGS="$LDFLAGS -L/usr/lib -R/usr/lib"
   CFLAGS="$CFLAGS -lrt"
   ;;
 *-*-linux*)
-  CPPFLAGS="$CPPFLAGS -D _GNU_SOURCE -I/usr/local/include"
-  LDFLAGS="$LDFLAGS -L/usr/local/lib -R/usr/local/lib"
+  CPPFLAGS="$CPPFLAGS -D _GNU_SOURCE -I/usr/include -Wno-unused-result"
+  LDFLAGS="$LDFLAGS"
   CFLAGS="$CFLAGS -lrt"
   ;;
 *-*-darwin*)
-  CPPFLAGS="$CPPFLAGS -I/opt/local/include"
-  LDFLAGS="$LDFLAGS -L/opt/local/lib"
+  CPPFLAGS="$CPPFLAGS -I/opt/include"
+  LDFLAGS="$LDFLAGS -L/opt/lib"
   if test "$GCC" = "yes"; then
           CFLAGS="$CFLAGS -no-cpp-precomp"
   fi
@@ -84,6 +84,7 @@ AC_DEFINE_DIR(SYSCONFDIR, [sysconfdir], [System configuration dir])
 
 AC_CONFIG_FILES([Makefile
                  libIP2Location/Makefile
-                 test/Makefile])
+                 test/Makefile
+                 data/Makefile])
                  
 AC_OUTPUT

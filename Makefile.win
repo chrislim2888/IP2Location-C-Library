@@ -7,10 +7,9 @@ C_LINKER = link
 CCFLAGS = /nologo /D WIN32 /c /ML 
 CLFLAGS = /nologo /NODEFAULTLIB:LIBCD /SUBSYSTEM:CONSOLE 
 
-HEADER_INCLUDE = /I libIP2Location /I libIP2location/iMath
+HEADER_INCLUDE = /I libIP2Location
 IP2LOCATION_SOURCE = libIP2Location/IP2Location.c \
-										 libIP2Location/IP2Loc_DBInterface.c \
-										 libIP2Location/iMath/imath.c 
+										 libIP2Location/IP2Loc_DBInterface.c 
 
 TEST_IP2LOCATION = test/test-IP2Location.c
 										 
