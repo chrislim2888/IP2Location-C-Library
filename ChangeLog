@@ -1,5 +1,15 @@
-5.0.0.	2013-04-16
-	* Support DB21 to DB24
+7.0.0	2014-08-01
+  * Support IPv6
+  * Remove IMath Library
+  * Bug fix in IP2Location_get_elevation()
+
+6.0.0 2013-08-23
+  * Support IP2Location_open_mem() for FILE/CACHE/SHARED Memory
+  * Support IP2Location_close() for FILE/CACHE
+  * Support IP2Location_delete_shm() for SHARED Memory
+
+5.0.0	2013-04-16
+	* Support IP2Location DB21, DB22, DB23 and DB24
 	* New function IP2Location_get_elevation()
 	* New function IP2Location_get_usagetype()
 
@@ -10,13 +20,13 @@
   * Minor bug fixes to avoid Warning during compilation
 
 4.0.0	2010-08-11
-	* Support DB19 to DB20
+	* Support DB19 and DB20
 	* New function IP2Location_get_mcc()
 	* New function IP2Location_get_mnc()
 	* New function IP2Location_get_mobilebrand()
 
 3.0.0	2008-08-12
-	* Support DB15 to DB18
+	* Support DB15, DB16, DB17 and DB18
 	* New function IP2Location_get_iddcode()
 	* New function IP2Location_get_areacode()
 	* New function IP2Location_get_weatherstationcode()
