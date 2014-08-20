@@ -26,9 +26,9 @@ int main () {
   int test_num = 1;
 
 #ifdef WIN32
-  IP2Location *IP2LocationObj = IP2Location_open("..\\data\\IP-COUNTRY-SAMPLE.BIN");
+  IP2Location *IP2LocationObj = IP2Location_open("..\\data\\IP-COUNTRY.BIN");
 #else
-  IP2Location *IP2LocationObj = IP2Location_open("../data/IP-COUNTRY-SAMPLE.BIN");
+  IP2Location *IP2LocationObj = IP2Location_open("../data/IP-COUNTRY.BIN");
 #endif
 	IP2LocationRecord *record = NULL;
 	
@@ -43,11 +43,7 @@ int main () {
 		fprintf(stderr, "IPv4: Call to IP2Location_open_mem failed\n");
 	}
 	
-#ifdef WIN32
 	f = fopen("country_test_ipv4_data.txt","r");
-#else
-	f = fopen("country_test_ipv4_data.txt","r");
-#endif
 
 	while (fscanf(f, "%s", ipAddress) != EOF) {
 		fscanf(f, "%s", expectedCountry);
@@ -101,7 +97,7 @@ int main () {
 		fscanf(f, "%s", expectedCountry);
 		record = IP2Location_get_all(IP2LocationObj, ipAddress);
 		if (strcmp(expectedCountry,record->country_short) != 0) {
-			fprintf(stderr,"Test IP Address %s (Test %d) failed. We got %s but expected %s,\n",ipAddress,test_num,record->country_short,expectedCountry);
+			fprintf(stdout,"Test IP Address %s (Test %d) failed. We got %s but expected %s,\n",ipAddress,test_num,record->country_short,expectedCountry);
 			failed++;
 		}
 		IP2Location_free_record(record);

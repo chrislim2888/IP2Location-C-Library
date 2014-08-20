@@ -1,3 +1,20 @@
+/*
+ * IP2Location C library is distributed under LGPL version 3
+ * Copyright (c) 2013 IP2Location.com. support at ip2location dot com 
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not see <http://www.gnu.org/licenses/>.
+ */
 #ifndef HAVE_IP2LOCATION_H
 #define HAVE_IP2LOCATION_H
 
@@ -12,6 +29,7 @@ extern "C" {
 #endif
 
 #ifdef WIN32
+#define int16_t short
 #define int32_t int
 #define int64_t long long int
 #endif
@@ -22,6 +40,10 @@ extern "C" {
 
 #ifndef uint8_t
 #define uint8_t unsigned char
+#endif
+
+#ifndef uint16_t
+#define uint16_t short
 #endif
 
 #ifndef int32_t 
@@ -41,10 +63,9 @@ extern "C" {
 #endif
 #endif
 
-#include "imath.h"
 #include "IP2Loc_DBInterface.h"
 
-#define API_VERSION   4.0.0
+#define API_VERSION   7.0.0
 #define MAX_IPV4_RANGE  4294967295U
 #define MAX_IPV6_RANGE  "340282366920938463463374607431768211455"
 #define IPV4 0
@@ -94,6 +115,10 @@ typedef struct
 	uint32_t databasecount;
 	uint32_t databaseaddr;
 	uint32_t ipversion;
+	uint32_t ipv4databasecount;
+	uint32_t ipv4databaseaddr;
+	uint32_t ipv6databasecount;
+	uint32_t ipv6databaseaddr;
 } IP2Location;
 
 typedef struct 
@@ -119,11 +144,6 @@ typedef struct
 	float elevation;
 	char *usagetype;
 } IP2LocationRecord;
-
-typedef struct StringList{
-	char* data;
-	struct StringList* next;
-} StringList;
 
 /*##################
 # Public Functions
@@ -154,25 +174,6 @@ IP2LocationRecord *IP2Location_get_usagetype(IP2Location *loc, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *loc, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
 void IP2Location_delete_shm();
-
-/*###################
-# Private Functions
-###################*/
-
-int IP2Location_initialize(IP2Location *loc);
-IP2LocationRecord *IP2Location_new_record();
-uint32_t IP2Location_ip2no(char* ip);
-mpz_t IP2Location_ipv6_to_no(char* ip);
-int IP2Location_ip_is_ipv4 (char* ipaddr);
-int IP2Location_ip_is_ipv6 (char* ipaddr);
-IP2LocationRecord *IP2Location_get_record(IP2Location *loc, char *ip, uint32_t mode);
-IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ipstring, uint32_t mode);
-char* IP2Location_mp2string (mpz_t mp);
-StringList* IP2Location_split(char* delimiters, char* targetString, unsigned int flags, int limit);
-char* IP2Location_replace(char* substr, char* replace, char* targetString);
-unsigned int IP2Location_substr_count(char* substr, char* targetString);
-unsigned int StringListCount (StringList* toCount);
-void FreeStringList (StringList* toFree);
 
 #ifdef __cplusplus
 }

@@ -1,9 +1,21 @@
 /*
- * FileName: IP2Loc_DBInterface.c
- * Author: Guruswamy Basavaiah
- * email: guru2018@gmail.com
- * Description: Interface functions which will interact with binary file or binary file cache or binary file shared memory 
- */
+ * IP2Location C library is distributed under LGPL version 3
+ * Copyright (c) 2013 IP2Location.com. support at ip2location dot com 
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not see <http://www.gnu.org/licenses/>.
+ *
+ */ 
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -24,7 +36,6 @@
 #include <errno.h>
 
 
-#include "imath.h"
 #include "IP2Location.h"
 #include "IP2Loc_DBInterface.h"
 
@@ -73,6 +84,7 @@ int32_t IP2Location_DB_set_shared_memory(FILE *filehandle)
 {
 	struct stat statbuf;
 	int32_t DB_loaded = 1;
+	void *addr = (void*)MAP_ADDR;
 
 	DB_access_type = IP2LOCATION_SHARED_MEMORY;
 
@@ -97,8 +109,8 @@ int32_t IP2Location_DB_set_shared_memory(FILE *filehandle)
 		DB_access_type = IP2LOCATION_FILE_IO;
 		return -1;
 	}
-
-	cache_shm_ptr = mmap(MAP_ADDR, statbuf.st_size + 1, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+	
+	cache_shm_ptr = mmap(addr, statbuf.st_size + 1, PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
 	if (cache_shm_ptr == (void *) -1) {
 		close(shm_fd);
 		if( DB_loaded == 0 )
@@ -222,41 +234,15 @@ void IP2Location_DB_del_shm()
 #endif
 #endif
 
-char* IP2Location_read128(FILE *handle, uint32_t position) 
+struct in6_addr_local IP2Location_readIPv6Address(FILE *handle, uint32_t position) 
 {
-	uint32_t b96_127 = IP2Location_read32(handle, position);
-	uint32_t b64_95 = IP2Location_read32(handle, position + 4); 
-	uint32_t b32_63 = IP2Location_read32(handle, position + 8);
-	uint32_t b1_31 = IP2Location_read32(handle, position + 12);
-
-	mpz_t result, multiplier, mp96_127, mp64_95, mp32_63, mp1_31;
-	mp_int_init(&result);
-	mp_int_init(&multiplier);
-	mp_int_init(&mp96_127);
-	mp_int_init(&mp64_95);
-	mp_int_init(&mp32_63);
-	mp_int_init(&mp1_31);
-	
-	mp_int_init_value(&multiplier, 65536);
-	mp_int_mul(&multiplier, &multiplier, &multiplier);
-	mp_int_init_value(&mp96_127, b96_127);
-	mp_int_init_value(&mp64_95, b64_95);
-	mp_int_init_value(&mp32_63, b32_63);
-	mp_int_init_value(&mp1_31, b1_31);
-
-	mp_int_mul(&mp1_31, &multiplier, &mp1_31);
-	mp_int_mul(&mp1_31, &multiplier, &mp1_31);
-	mp_int_mul(&mp1_31, &multiplier, &mp1_31);
-
-	mp_int_mul(&mp32_63, &multiplier, &mp32_63);
-	mp_int_mul(&mp32_63, &multiplier, &mp32_63);
-
-	mp_int_mul(&mp64_95, &multiplier, &mp64_95);
-	
-	mp_int_add(&mp1_31, &mp32_63, &result);
-	mp_int_add(&result, &mp64_95, &result);
-	mp_int_add(&result, &mp96_127, &result);
-	return IP2Location_mp2string(result);
+	int i,j;
+	struct in6_addr_local addr6;
+	for( i = 0, j = 15; i < 16; i++, j-- )
+	{
+		addr6.u.addr8[i] = IP2Location_read8(handle, position + j);
+	}
+	return addr6; 
 }
 
 uint32_t IP2Location_read32(FILE *handle, uint32_t position)
@@ -270,10 +256,10 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
 	//Read from file	
 	if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position-1, 0);
-		fread(&byte1, 1, 1, handle);
-		fread(&byte2, 1, 1, handle);
-		fread(&byte3, 1, 1, handle);
-		fread(&byte4, 1, 1, handle);
+		fread(&byte1, 1, 1, handle); 
+		fread(&byte2, 1, 1, handle); 
+		fread(&byte3, 1, 1, handle); 
+		fread(&byte4, 1, 1, handle); 
 	}
 	else
 	{
@@ -292,7 +278,7 @@ uint8_t IP2Location_read8(FILE *handle, uint32_t position)
 
 	if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position-1, 0);
-		fread(&ret, 1, 1, handle);
+		fread(&ret, 1, 1, handle); 
 	}
 	else
 	{
@@ -309,10 +295,10 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
 
 	if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position, 0);
-		fread(&size, 1, 1, handle);
+		fread(&size, 1, 1, handle); 
 		str = (char *)malloc(size+1);
 		memset(str, 0, size+1);
-		fread(str, size, 1, handle);
+		fread(str, size, 1, handle); 
 	}
 	else {
 		size = cache_shm[ position ]; 
@@ -328,7 +314,7 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 	float ret = 0.0;
 	uint8_t *cache_shm = cache_shm_ptr;
 
-#ifdef _SUN_
+#if defined(_SUN_) || defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc64__)
 	char * p = (char *) &ret;
 	
 	/* for SUN SPARC, have to reverse the byte order */
@@ -348,7 +334,7 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 #else
 	if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position-1, 0);
-		fread(&ret, 4, 1, handle);
+		fread(&ret, 4, 1, handle); 
 	}
 	else {
 		memcpy((void*) &ret, (void*)&cache_shm[ position - 1 ], 4); 

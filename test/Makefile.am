@@ -11,7 +11,6 @@ DEPS = $(top_builddir)/libIP2Location/libIP2Location.la
 LDADDS = $(top_builddir)/libIP2Location/libIP2Location.la
 
 test_IP2Location_SOURCES = test-IP2Location.c
-test_IP2Location_CFLAGS = -I../libIP2Location/iMath
 test_IP2Location_LDFLAGS =
 test_IP2Location_DEPENDENCIES = $(DEPS)
 test_IP2Location_LDADD = $(LDADDS)
