@@ -1,4 +1,4 @@
-# IP2Location C Library 7.0.0
+# IP2Location C Library
 
 IP2Location is a C library that enables the user to find the country, region, city, latitude, longitude, 
 zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, 
