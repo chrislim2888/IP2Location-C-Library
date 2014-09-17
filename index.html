@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ip2location-c-library by chrislim2888</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Ip2location-c-library</h1>
+        <p>IP2Location C library enables the user to find the country, region, city, coordinates, zip code, time zone, ISP, domain name, connection type, area code, weather and mobile information that any IP address or hostname originates from.</p>
+
+        <p class="view"><a href="https://github.com/chrislim2888/IP2Location-C-Library">View the Project on GitHub <small>chrislim2888/IP2Location-C-Library</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/chrislim2888/IP2Location-C-Library/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/chrislim2888/IP2Location-C-Library/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/chrislim2888/IP2Location-C-Library">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="ip2location-c-library-700" class="anchor" href="#ip2location-c-library-700"><span class="octicon octicon-link"></span></a>IP2Location C Library 7.0.0</h1>
+
+<p>IP2Location is a C library that enables the user to find the country, region, city, latitude, longitude, 
+zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, 
+usage type by IP address or hostname originates from. The library reads the geo location information
+from <strong>IP2Location BIN data</strong> file.</p>
+
+<p>Supported IPv4 and IPv6 address.</p>
+
+<p>For more details, please visit:
+<a href="http://www.ip2location.com/developers/c">http://www.ip2location.com/developers/c</a></p>
+
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<h3>
+<a name="unixlinux" class="anchor" href="#unixlinux"><span class="octicon octicon-link"></span></a>Unix/Linux</h3>
+
+<pre><code>cd C-IP2Location-&lt;version&gt;
+autoreconf -i -v --force
+./configure
+make
+cd data
+perl ip-country.pl
+</code></pre>
+
+<h3>
+<a name="windows" class="anchor" href="#windows"><span class="octicon octicon-link"></span></a>Windows</h3>
+
+<pre><code>Execute "vcvarsall.bat". (This file is part of Microsoft Visual C, not ip2location code) 
+nmake -f Makefile.win
+cd data
+perl ip-country.pl
+</code></pre>
+
+<h3>
+<a name="macos" class="anchor" href="#macos"><span class="octicon octicon-link"></span></a>MacOS</h3>
+
+<pre><code>cd C-IP2Location-&lt;version&gt;
+autoreconf -i -v --force
+export CFLAGS=-I/usr/include/malloc 
+./configure
+make
+cd data
+perl ip-country.pl
+</code></pre>
+
+<h1>
+<a name="testing" class="anchor" href="#testing"><span class="octicon octicon-link"></span></a>Testing</h1>
+
+<pre><code>cd C-IP2Location-&lt;version&gt;
+cd test
+test-IP2Location
+</code></pre>
+
+<h1>
+<a name="sample-bin-databases" class="anchor" href="#sample-bin-databases"><span class="octicon octicon-link"></span></a>Sample BIN Databases</h1>
+
+<ul>
+<li>Download free IP2Location LITE databases at <a href="http://lite.ip2location.com">http://lite.ip2location.com</a><br>
+</li>
+<li>Download IP2Location sample databases at <a href="http://www.ip2location.com/developers">http://www.ip2location.com/developers</a>
+</li>
+</ul><h1>
+<a name="support" class="anchor" href="#support"><span class="octicon octicon-link"></span></a>Support</h1>
+
+<p>Email: <a href="mailto:support@ip2location.com">support@ip2location.com</a>.<br>
+URL: <a href="http://www.ip2location.com">http://www.ip2location.com</a></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/chrislim2888">chrislim2888</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
