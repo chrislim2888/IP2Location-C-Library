@@ -1,3 +1,8 @@
+7.0.1	2015-04-16
+  * Support API version return
+  * IP2Location_api_version_num
+  * IP2Location_api_version_string
+  
 7.0.0	2014-08-01
   * Support IPv6
   * Remove IMath Library
