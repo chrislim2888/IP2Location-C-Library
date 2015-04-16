@@ -1,6 +1,6 @@
 /*
  * IP2Location C library is distributed under LGPL version 3
- * Copyright (c) 2013 IP2Location.com. support at ip2location dot com 
+ * Copyright (c) 2013-2015 IP2Location.com. support at ip2location dot com 
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -643,4 +643,18 @@ static int IP2Location_ip_is_ipv4 (char* ipaddr) {
 static int IP2Location_ip_is_ipv6 (char* ipaddr) {
 	struct in6_addr_local ipv6;
 	return inet_pton(AF_INET6, ipaddr, &ipv6);
+}
+
+// Return API version numeric
+unsigned long int IP2Location_api_version_num(void)
+{
+	return(API_VERSION_NUMERIC);
+}
+
+// Return API version as string
+char *IP2Location_api_version_string(void)
+{
+	static char version[16];
+	snprintf(version, sizeof(version), "%d.%d.%d", API_VERSION_MAJOR, API_VERSION_MINOR, API_VERSION_RELEASE);
+	return(version);
 }

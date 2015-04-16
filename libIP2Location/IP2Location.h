@@ -1,6 +1,6 @@
 /*
  * IP2Location C library is distributed under LGPL version 3
- * Copyright (c) 2013 IP2Location.com. support at ip2location dot com 
+ * Copyright (c) 2013-2015 IP2Location.com. support at ip2location dot com 
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -65,7 +65,14 @@ extern "C" {
 
 #include "IP2Loc_DBInterface.h"
 
-#define API_VERSION   7.0.0
+#define API_VERSION   7.0.1
+
+
+#define API_VERSION_MAJOR   7
+#define API_VERSION_MINOR   0
+#define API_VERSION_RELEASE 1
+#define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
+
 #define MAX_IPV4_RANGE  4294967295U
 #define MAX_IPV6_RANGE  "340282366920938463463374607431768211455"
 #define IPV4 0
@@ -174,6 +181,8 @@ IP2LocationRecord *IP2Location_get_usagetype(IP2Location *loc, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *loc, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
 void IP2Location_delete_shm();
+unsigned long int IP2Location_api_version_num(void);
+char *IP2Location_api_version_string(void);
 
 #ifdef __cplusplus
 }

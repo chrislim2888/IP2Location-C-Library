@@ -25,6 +25,8 @@ int main () {
   int failed = 0;
   int test_num = 1;
 
+  printf("IP2Location API version: %s (%lu)\n", IP2Location_api_version_string(), IP2Location_api_version_num());
+  
 #ifdef WIN32
   IP2Location *IP2LocationObj = IP2Location_open("..\\data\\IP-COUNTRY.BIN");
 #else
