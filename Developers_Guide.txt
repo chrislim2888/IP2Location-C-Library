@@ -72,4 +72,4 @@ When IP2Location_delete_shm() function is called, and if any other process(es) i
 After calling IP2Location_delete_shm(), the next call to IP2Location_open_mem() with IP2LOCATION_SHARED_MEMORY option will result in a new shared memory and will not reuse the old one if one exists and used by any other process. Please refer shm_open and shm_unlink man pages for more info. 
 
 
-Version 7.0.0  05/08/2014
+Version 7.0.2  08/11/2015

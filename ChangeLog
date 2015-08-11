@@ -1,3 +1,6 @@
+7.0.2	2015-08-11
+  * Replace "bigint" by "Math::BigInt" in data/ip-country.pl (contributed by Peter Bieringer <pb@bieringer.de>)
+  
 7.0.1	2015-04-16
   * Support API version return
   * IP2Location_api_version_num

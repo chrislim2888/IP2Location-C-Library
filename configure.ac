@@ -1,6 +1,6 @@
 AC_PREREQ(2.59)
-AC_INIT([IP2Loc], [7.0.0], [support@ip2location.com])
-AM_INIT_AUTOMAKE([IP2Loc], [7.0.0])
+AC_INIT([IP2Loc], [7.0.2], [support@ip2location.com])
+AM_INIT_AUTOMAKE([IP2Loc], [7.0.2])
 
 #AC_PREFIX_DEFAULT(/usr/)
 AM_CONFIG_HEADER([config.h])
@@ -22,7 +22,7 @@ case "$host" in
   CFLAGS="$CFLAGS -lrt"
   ;;
 *-*-linux*)
-  CPPFLAGS="$CPPFLAGS -D _GNU_SOURCE -I/usr/include -Wno-unused-result"
+  CPPFLAGS="$CPPFLAGS -D _GNU_SOURCE -I/usr/include "
   LDFLAGS="$LDFLAGS"
   CFLAGS="$CFLAGS -lrt"
   ;;

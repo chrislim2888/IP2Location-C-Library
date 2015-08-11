@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use strict;
-use bigint;
+use Math::BigInt;
 
 &csv2bin_ipv4;
 &csv2bin_ipv6;
