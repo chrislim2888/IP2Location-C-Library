@@ -138,6 +138,9 @@ static int IP2Location_initialize(IP2Location *loc)
 	loc->ipv4databaseaddr   = IP2Location_read32(loc->filehandle, 10);
 	loc->ipv6databasecount  = IP2Location_read32(loc->filehandle, 14);
 	loc->ipv6databaseaddr   = IP2Location_read32(loc->filehandle, 18);
+	
+	loc->ipv4indexbaseaddr 	= IP2Location_read32(loc->filehandle, 22);
+	loc->ipv6indexbaseaddr	= IP2Location_read32(loc->filehandle, 26);
 
 	return 0;
 }
@@ -495,6 +498,7 @@ static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ip
 	FILE *handle = loc->filehandle;
 	uint32_t baseaddr = loc->ipv6databaseaddr;
 	uint32_t dbcolumn = loc->databasecolumn;
+	uint32_t ipv6indexbaseaddr = loc->ipv6indexbaseaddr;
 
 	uint32_t low = 0;
 	uint32_t high = loc->ipv6databasecount;
@@ -513,11 +517,21 @@ static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ip
 		return bad_record(INVALID_IPV6_ADDRESS);
 	}
 
-        ipno = parsed_ipv.ipv6;
+	ipno = parsed_ipv.ipv6;
+		
+	if (ipv6indexbaseaddr > 0){
+		/* use the index table */
+		uint32_t ipnum1 = (ipno.u.addr8[0] * 256) + ipno.u.addr8[1];
+		uint32_t indexpos = ipv6indexbaseaddr + (ipnum1 << 3);
+		
+		low = IP2Location_read32(handle, indexpos);
+		high = IP2Location_read32(handle, indexpos + 4);
+		
+	}
 
 	while (low <= high) 
 	{
-		mid = (uint32_t)((low + high)/2);
+		mid = (uint32_t)((low + high) >> 1);
 		ipfrom = IP2Location_readIPv6Address(handle, baseaddr + mid * (dbcolumn * 4 + 12)); 
 		ipto = IP2Location_readIPv6Address(handle, baseaddr + ( mid + 1 ) * (dbcolumn * 4 + 12)); 
 		
@@ -542,6 +556,7 @@ static IP2LocationRecord *IP2Location_get_record(IP2Location *loc, char *ipstrin
 	FILE *handle = loc->filehandle;
 	uint32_t baseaddr = loc->ipv4databaseaddr;
 	uint32_t dbcolumn = loc->databasecolumn;
+	uint32_t ipv4indexbaseaddr = loc->ipv4indexbaseaddr;
 
 	uint32_t low = 0;
 	uint32_t high = loc->ipv4databasecount;
@@ -564,10 +579,19 @@ static IP2LocationRecord *IP2Location_get_record(IP2Location *loc, char *ipstrin
 	if (ipno == (uint32_t) MAX_IPV4_RANGE) {
 		ipno = ipno - 1;
 	}
+	
+	if (ipv4indexbaseaddr > 0){
+		/* use the index table */
+		uint32_t ipnum1n2 = (uint32_t) ipno >> 16;
+		uint32_t indexpos = ipv4indexbaseaddr + (ipnum1n2 << 3);
+		
+		low = IP2Location_read32(handle, indexpos);
+		high = IP2Location_read32(handle, indexpos + 4);
+	}
 
 	while (low <= high) 
 	{
-		mid = (uint32_t)((low + high)/2);
+		mid = (uint32_t)((low + high) >> 1);
 		ipfrom = IP2Location_read32(handle, baseaddr + mid * dbcolumn * 4);
 		ipto 	= IP2Location_read32(handle, baseaddr + (mid + 1) * dbcolumn * 4);
 

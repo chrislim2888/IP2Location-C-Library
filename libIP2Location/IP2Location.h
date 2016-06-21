@@ -65,12 +65,12 @@ extern "C" {
 
 #include "IP2Loc_DBInterface.h"
 
-#define API_VERSION   7.0.2
+#define API_VERSION   8.0.0
 
 
-#define API_VERSION_MAJOR   7
+#define API_VERSION_MAJOR   8
 #define API_VERSION_MINOR   0
-#define API_VERSION_RELEASE 2
+#define API_VERSION_RELEASE 0
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE  4294967295U
@@ -126,6 +126,8 @@ typedef struct
 	uint32_t ipv4databaseaddr;
 	uint32_t ipv6databasecount;
 	uint32_t ipv6databaseaddr;
+	uint32_t ipv4indexbaseaddr;
+	uint32_t ipv6indexbaseaddr;
 } IP2Location;
 
 typedef struct 

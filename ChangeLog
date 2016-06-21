@@ -1,3 +1,6 @@
+8.0.0	2016-06-21
+  * Add code to lookup for index section which available in new BIN format
+  
 7.0.2	2015-08-11
   * Replace "bigint" by "Math::BigInt" in data/ip-country.pl (contributed by Peter Bieringer <pb@bieringer.de>)
   
