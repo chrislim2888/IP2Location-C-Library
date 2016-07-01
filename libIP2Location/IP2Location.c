@@ -35,6 +35,12 @@
 #include "IP2Location.h"
 #include "IP2Loc_DBInterface.h"
 
+typedef struct ipv_t {
+    	uint32_t ipversion;
+    	uint32_t ipv4;
+	struct in6_addr_local ipv6;
+} ipv_t;
+
 uint8_t COUNTRY_POSITION[25]             = {0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 uint8_t REGION_POSITION[25]              = {0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
 uint8_t CITY_POSITION[25]                = {0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4};
@@ -62,9 +68,10 @@ static struct in6_addr_local  IP2Location_ipv6_to_no(char* ipaddr);
 static int IP2Location_ip_is_ipv4 (char* ipaddr);
 static int IP2Location_ip_is_ipv6 (char* ipaddr);
 static IP2LocationRecord *IP2Location_get_record(IP2Location *loc, char *ip, uint32_t mode);
-static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ipstring, uint32_t mode);
+static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ipstring, uint32_t mode, ipv_t parsed_ipv);
 
 static int32_t openMemFlag = 0;
+
 // Description: Open the IP2Location database file
 IP2Location *IP2Location_open(char *db)
 {
@@ -165,11 +172,6 @@ int ipv6_compare(struct in6_addr_local *addr1, struct in6_addr_local *addr2)
 	return ret;
 }
 
-typedef struct ipv_t {
-    	uint32_t ipversion;
-    	uint32_t ipv4;
-	struct in6_addr_local ipv6;
-} ipv_t;
 
 // Parses IPv[46] addresses and returns both the version of address
 // and binary address used for searching
@@ -180,34 +182,34 @@ static ipv_t parse_addr(const char *addr)
 	ipv_t parsed;
     	if (IP2Location_ip_is_ipv6((char *)addr))
     	{
-		// Convert ::FFFF:x.y.z.w to IPv4
-		if (strlen(addr) > 7 &&
-			addr[0] == ':' &&
-			addr[1] == ':' &&
-			(addr[2] == 'F' || addr[2] == 'f') &&
-			(addr[3] == 'F' || addr[3] == 'f') &&
-			(addr[4] == 'F' || addr[4] == 'f') &&
-			(addr[5] == 'F' || addr[5] == 'f') &&
-			addr[6] == ':' && IP2Location_ip_is_ipv4((char *)addr + 7))
-		{
-			parsed.ipversion = 4;	
-			parsed.ipv4 = IP2Location_ip2no((char *)addr + 7);
-		}
-		else
-		{
-			parsed.ipversion = 6;	
-   	     		inet_pton(AF_INET6, addr, &parsed.ipv6);
-		}
+			// Convert ::FFFF:x.y.z.w to IPv4
+			if (strlen(addr) > 7 &&
+				addr[0] == ':' &&
+				addr[1] == ':' &&
+				(addr[2] == 'F' || addr[2] == 'f') &&
+				(addr[3] == 'F' || addr[3] == 'f') &&
+				(addr[4] == 'F' || addr[4] == 'f') &&
+				(addr[5] == 'F' || addr[5] == 'f') &&
+				addr[6] == ':' && IP2Location_ip_is_ipv4((char *)addr + 7))
+			{
+				parsed.ipversion = 4;	
+				parsed.ipv4 = IP2Location_ip2no((char *)addr + 7);
+			}
+			else
+			{
+				parsed.ipversion = 6;	
+					inet_pton(AF_INET6, addr, &parsed.ipv6);
+			}
 
     	}
     	else if (IP2Location_ip_is_ipv4((char *)addr))
     	{
-		parsed.ipversion = 4;	
-		parsed.ipv4 = IP2Location_ip2no((char *)addr);
+			parsed.ipversion = 4;	
+			parsed.ipv4 = IP2Location_ip2no((char *)addr);
     	}
     	else
     	{
-		parsed.ipversion = -1;	
+			parsed.ipversion = -1;	
     	}
     	return parsed;
 }
@@ -493,7 +495,7 @@ static IP2LocationRecord *read_record(IP2Location *loc, uint32_t rowaddr, uint32
 }
 
 // Description: Get record for a IPv6 from database
-static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ipstring, uint32_t mode)
+static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ipstring, uint32_t mode, ipv_t parsed_ipv)
 {
 	FILE *handle = loc->filehandle;
 	uint32_t baseaddr = loc->ipv6databaseaddr;
@@ -507,15 +509,6 @@ static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ip
 	struct in6_addr_local ipfrom;
 	struct in6_addr_local ipto;
 	struct in6_addr_local ipno;
-
-	ipv_t parsed_ipv = parse_addr(ipstring);
-	if (parsed_ipv.ipversion == 4) {
-		return IP2Location_get_record(loc, ipstring, mode);
-	}
-	
-	if (parsed_ipv.ipversion != 6) {
-		return bad_record(INVALID_IPV6_ADDRESS);
-	}
 
 	ipno = parsed_ipv.ipv6;
 		
@@ -568,7 +561,7 @@ static IP2LocationRecord *IP2Location_get_record(IP2Location *loc, char *ipstrin
 
 	ipv_t parsed_ipv = parse_addr(ipstring);
 	if (parsed_ipv.ipversion == 6) {
-		return IP2Location_get_ipv6_record(loc, ipstring, mode);
+		return IP2Location_get_ipv6_record(loc, ipstring, mode, parsed_ipv);
 	}
 	
 	if (parsed_ipv.ipversion != 4) {
