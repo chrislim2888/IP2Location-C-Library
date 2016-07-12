@@ -1,7 +1,7 @@
 /*
  * IP2Location C library is distributed under LGPL version 3
- * Copyright (c) 2013 IP2Location.com. support at ip2location dot com 
- * 
+ * Copyright (c) 2013 IP2Location.com. support at ip2location dot com
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not see <http://www.gnu.org/licenses/>.
  *
- */ 
+ */
 
 #ifndef HAVE_IP2LOC_DBINTERFACE_H
 #define HAVE_IP2LOC_DBINTERFACE_H
@@ -27,21 +27,22 @@ extern "C" {
 
 enum IP2Location_mem_type
 {
-	IP2LOCATION_FILE_IO,
-	IP2LOCATION_CACHE_MEMORY,
-	IP2LOCATION_SHARED_MEMORY
+    IP2LOCATION_FILE_IO,
+    IP2LOCATION_CACHE_MEMORY,
+    IP2LOCATION_SHARED_MEMORY
 };
 
 struct in6_addr_local
 {
-	union {
-		uint8_t addr8[16];
-		uint8_t addr16[8];
-	}u;
+    union
+    {
+        uint8_t addr8[16];
+        uint8_t addr16[8];
+    } u;
 };
 
 
-/*All below function are private function IP2Location library*/
+/* All below function are private function IP2Location library */
 struct in6_addr_local IP2Location_readIPv6Address(FILE *handle, uint32_t position);
 uint32_t IP2Location_read32(FILE *handle, uint32_t position);
 uint8_t IP2Location_read8(FILE *handle, uint32_t position);
