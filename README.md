@@ -12,7 +12,6 @@ For more details, please visit:
 
 # Installation
 ###  Unix/Linux
-    cd C-IP2Location-<version>
     autoreconf -i -v --force
     ./configure
     make
@@ -26,7 +25,6 @@ For more details, please visit:
     perl ip-country.pl
 
 ### MacOS
-    cd C-IP2Location-<version>
     autoreconf -i -v --force
     export CFLAGS=-I/usr/include/malloc 
     ./configure
@@ -35,7 +33,6 @@ For more details, please visit:
     perl ip-country.pl
 
 # Testing
-    cd C-IP2Location-<version>
     cd test
     test-IP2Location
 
