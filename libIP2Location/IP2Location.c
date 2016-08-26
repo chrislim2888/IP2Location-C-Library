@@ -205,7 +205,7 @@ static ipv_t IP2Location_parse_addr(const char *addr)
         {
             // IPv4 address in IPv6 format (::ffff:0.0.0.0 or ::ffff:00:00)
             parsed.ipversion = 4;
-            parsed.ipv4 = (parsed.ipv6.u.addr8[12] << 24) + (parsed.ipv6.u.addr8[12] << 16) + (parsed.ipv6.u.addr8[12] << 8) + parsed.ipv6.u.addr8[12];
+            parsed.ipv4 = (parsed.ipv6.u.addr8[12] << 24) + (parsed.ipv6.u.addr8[13] << 16) + (parsed.ipv6.u.addr8[14] << 8) + parsed.ipv6.u.addr8[15];
         }
         else
         {
