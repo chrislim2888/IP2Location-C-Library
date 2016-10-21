@@ -85,7 +85,7 @@ extern "C" {
 #define  ISP                    0x00010
 #define  LATITUDE               0x00020
 #define  LONGITUDE              0x00040
-#define  DOMAIN                 0x00080
+#define  DOMAIN_                0x00080 // DOMAIN is a math.h macro
 #define  ZIPCODE                0x00100
 #define  TIMEZONE               0x00200
 #define  NETSPEED               0x00400
@@ -99,7 +99,7 @@ extern "C" {
 #define  ELEVATION              0x40000
 #define  USAGETYPE              0x80000
 
-#define  ALL          COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAIN | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE
+#define  ALL          COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAIN_ | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE
 
 #define  DEFAULT	     0x0001
 #define  NO_EMPTY_STRING 0x0002

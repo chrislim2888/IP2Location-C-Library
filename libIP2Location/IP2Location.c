@@ -266,7 +266,7 @@ IP2LocationRecord *IP2Location_get_longitude(IP2Location *loc, char *ip)
 // Description: Get domain name
 IP2LocationRecord *IP2Location_get_domain(IP2Location *loc, char *ip)
 {
-    return IP2Location_get_record(loc, ip, DOMAIN);
+    return IP2Location_get_record(loc, ip, DOMAIN_);
 }
 
 // Description: Get ZIP code
@@ -445,7 +445,7 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *loc, uint32_t row
         record->longitude = 0.0;
     }
 
-    if ((mode & DOMAIN) && (DOMAIN_POSITION[dbtype] != 0))
+    if ((mode & DOMAIN_) && (DOMAIN_POSITION[dbtype] != 0))
     {
         record->domain = IP2Location_readStr(handle, IP2Location_read32(handle, rowaddr + 4 * (DOMAIN_POSITION[dbtype]-1)));
     }
