@@ -13,3 +13,6 @@ configure
 libtool
 stamp-h1
 test/test-IP2Location
+test/*.log
+test/*.trs
+data/*.BIN
