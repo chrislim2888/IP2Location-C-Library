@@ -186,6 +186,7 @@ void IP2Location_free_record(IP2LocationRecord *record);
 void IP2Location_delete_shm();
 unsigned long int IP2Location_api_version_num(void);
 char *IP2Location_api_version_string(void);
+char *IP2Location_lib_version_string(void);
 
 #ifdef __cplusplus
 }
