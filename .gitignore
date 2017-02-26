@@ -1,0 +1,15 @@
+*.o
+*.lo
+*.la
+*~
+autom4te.cache/*
+*/.deps/*
+*/.libs/*
+config.log
+config.status
+config.h
+Makefile
+configure
+libtool
+stamp-h1
+test/test-IP2Location
