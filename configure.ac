@@ -87,4 +87,6 @@ AC_CONFIG_FILES([Makefile
                  test/Makefile
                  data/Makefile])
                  
-AC_OUTPUT
+AC_OUTPUT([
+		 contrib/IP2Location.spec
+	   ])
