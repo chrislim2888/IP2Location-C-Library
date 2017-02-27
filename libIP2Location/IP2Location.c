@@ -33,6 +33,7 @@
 
 #include "IP2Location.h"
 #include "IP2Loc_DBInterface.h"
+#include "../config.h"
 
 typedef struct ipv_t
 {
@@ -775,4 +776,9 @@ char *IP2Location_api_version_string(void)
     return(version);
 }
 
+// Description: Return Library version as string
+char *IP2Location_lib_version_string(void)
+{
+    return(PACKAGE_VERSION);
+}
 

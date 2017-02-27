@@ -65,12 +65,13 @@ extern "C" {
 
 #include "IP2Loc_DBInterface.h"
 
-#define API_VERSION   8.0.3
+/* API version changes only if functions are added (release) or changed (minor/major) */
+#define API_VERSION   8.0.4
 
 
 #define API_VERSION_MAJOR   8
 #define API_VERSION_MINOR   0
-#define API_VERSION_RELEASE 3
+#define API_VERSION_RELEASE 4
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE  4294967295U
@@ -185,6 +186,7 @@ void IP2Location_free_record(IP2LocationRecord *record);
 void IP2Location_delete_shm();
 unsigned long int IP2Location_api_version_num(void);
 char *IP2Location_api_version_string(void);
+char *IP2Location_lib_version_string(void);
 
 #ifdef __cplusplus
 }
