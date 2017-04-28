@@ -211,9 +211,8 @@ int32_t IP2Location_DB_Load_to_mem(FILE *filehandle, void *memory, int64_t size)
 int32_t IP2Location_DB_close(FILE *filehandle)
 {
     struct stat statbuf;
-    if ( filehandle != NULL )
-        fclose(filehandle);
-    if ( DB_access_type == IP2LOCATION_CACHE_MEMORY )
+    
+	if ( DB_access_type == IP2LOCATION_CACHE_MEMORY )
     {
         if( cache_shm_ptr != NULL )
             free(cache_shm_ptr);
@@ -236,6 +235,10 @@ int32_t IP2Location_DB_close(FILE *filehandle)
 #endif
         }
     }
+	
+	if ( filehandle != NULL )
+        fclose(filehandle);
+    
     DB_access_type = IP2LOCATION_FILE_IO;
     return 0;
 }
