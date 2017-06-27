@@ -299,11 +299,12 @@ uint8_t IP2Location_read8(FILE *handle, uint32_t position)
 {
     uint8_t ret = 0;
     uint8_t *cache_shm = cache_shm_ptr;
+    size_t temp;
 
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position-1, 0);
-        size_t temp = fread(&ret, 1, 1, handle);
+        temp = fread(&ret, 1, 1, handle);
     }
     else
     {
