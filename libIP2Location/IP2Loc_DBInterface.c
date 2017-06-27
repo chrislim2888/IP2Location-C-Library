@@ -274,15 +274,16 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
     uint8_t byte3 = 0;
     uint8_t byte4 = 0;
     uint8_t *cache_shm = cache_shm_ptr;
-
+    size_t temp;
+    
     //Read from file
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position-1, 0);
-        fread(&byte1, 1, 1, handle);
-        fread(&byte2, 1, 1, handle);
-        fread(&byte3, 1, 1, handle);
-        fread(&byte4, 1, 1, handle);
+        temp = fread(&byte1, 1, 1, handle);
+        temp = fread(&byte2, 1, 1, handle);
+        temp = fread(&byte3, 1, 1, handle);
+        temp = fread(&byte4, 1, 1, handle);
     }
     else
     {
@@ -302,7 +303,7 @@ uint8_t IP2Location_read8(FILE *handle, uint32_t position)
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position-1, 0);
-        fread(&ret, 1, 1, handle);
+        size_t temp = fread(&ret, 1, 1, handle);
     }
     else
     {
@@ -316,14 +317,14 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
     uint8_t size = 0;
     char *str = 0;
     uint8_t *cache_shm = cache_shm_ptr;
-
+    size_t temp;
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position, 0);
-        fread(&size, 1, 1, handle);
+        temp = fread(&size, 1, 1, handle);
         str = (char *)malloc(size+1);
         memset(str, 0, size+1);
-        fread(str, size, 1, handle);
+        temp = fread(str, size, 1, handle);
     }
     else
     {
@@ -339,18 +340,19 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 {
     float ret = 0.0;
     uint8_t *cache_shm = cache_shm_ptr;
-
+    size_t temp;
+    
 #if defined(_SUN_) || defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc64__)
     char * p = (char *) &ret;
-
+    
     // for SUN SPARC, have to reverse the byte order
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position-1, 0);
-        fread(p+3, 1, 1, handle);
-        fread(p+2, 1, 1, handle);
-        fread(p+1, 1, 1, handle);
-        fread(p,   1, 1, handle);
+        size_t temp = fread(p+3, 1, 1, handle);
+        size_t temp = fread(p+2, 1, 1, handle);
+        size_t temp = fread(p+1, 1, 1, handle);
+        size_t temp = fread(p,   1, 1, handle);
     }
     else
     {
@@ -363,7 +365,7 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position-1, 0);
-        fread(&ret, 4, 1, handle);
+        size_t temp = fread(&ret, 4, 1, handle);
     }
     else
     {
