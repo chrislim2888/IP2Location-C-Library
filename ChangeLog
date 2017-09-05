@@ -1,3 +1,5 @@
+From 8.0.6 onwards, please visit the comment on the github releases for the changes made.
+
 8.0.5	2017-04-28
   * Fix the munmap not calling issue by relocated the fclose file handler to the bottom of function
   
