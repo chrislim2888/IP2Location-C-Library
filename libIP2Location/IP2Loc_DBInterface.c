@@ -350,10 +350,10 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position-1, 0);
-        size_t temp = fread(p+3, 1, 1, handle);
-        size_t temp = fread(p+2, 1, 1, handle);
-        size_t temp = fread(p+1, 1, 1, handle);
-        size_t temp = fread(p,   1, 1, handle);
+        temp = fread(p+3, 1, 1, handle);
+        temp = fread(p+2, 1, 1, handle);
+        temp = fread(p+1, 1, 1, handle);
+        temp = fread(p,   1, 1, handle);
     }
     else
     {
@@ -366,7 +366,7 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position-1, 0);
-        size_t temp = fread(&ret, 4, 1, handle);
+        temp = fread(&ret, 4, 1, handle);
     }
     else
     {

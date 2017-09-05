@@ -33,7 +33,14 @@
 
 #include "IP2Location.h"
 #include "IP2Loc_DBInterface.h"
-#include "../config.h"
+
+#ifdef _WIN32
+  #define _STR2(x)  #x
+  #define _STR(x)  _STR2(x)
+  #define PACKAGE_VERSION  _STR(API_VERSION)
+#else
+  #include "../config.h"
+#endif
 
 typedef struct ipv_t
 {
