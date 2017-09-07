@@ -5,7 +5,7 @@ Summary:	C library for mapping IP address to geolocation information
 Version:	%{version}
 Release:	5%{?dist}
 Group:		System Environment/Libraries
-License:	LGPLv3
+License:	MIT
 URL:		http://www.ip2location.com/
 Source0:	https://github.com/chrislim2888/IP2Location-C-Library/archive/%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -91,7 +91,7 @@ rm -rf %{buildroot}
 %files
 %defattr(644,root,root,755)
 
-%doc AUTHORS ChangeLog COPYING README LICENSE.GPLv3 NEWS INSTALL LICENSE.LGPLv3
+%doc AUTHORS ChangeLog COPYING README.md LICENSE.TXT NEWS INSTALL LICENSE.TXT
 
 %attr(755,-,-) %{_libdir}/*.so*
 

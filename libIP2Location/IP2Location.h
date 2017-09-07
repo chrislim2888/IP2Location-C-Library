@@ -1,5 +1,5 @@
 /*
- * IP2Location C library is distributed under LGPL version 3
+ * IP2Location C library is distributed under MIT license
  * Copyright (c) 2013-2015 IP2Location.com. support at ip2location dot com
  *
  * This library is free software; you can redistribute it and/or
