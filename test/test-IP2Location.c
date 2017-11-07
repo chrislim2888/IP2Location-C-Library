@@ -9,21 +9,21 @@
 #include <string.h>
 
 int main () {
-  FILE *f;
-  char ipAddress[30];
-  char expectedCountry[3];
-  int failed = 0;
-  int test_num = 1;
+	FILE *f;
+	char ipAddress[30];
+	char expectedCountry[3];
+	int failed = 0;
+	int test_num = 1;
 
-  printf("IP2Location API version: %s (%lu)\n", IP2Location_api_version_string(), IP2Location_api_version_num());
-  
 #ifdef WIN32
-  IP2Location *IP2LocationObj = IP2Location_open("..\\data\\IP-COUNTRY.BIN");
+	IP2Location *IP2LocationObj = IP2Location_open("..\\data\\IP-COUNTRY.BIN");
 #else
-  IP2Location *IP2LocationObj = IP2Location_open("../data/IP-COUNTRY.BIN");
+	IP2Location *IP2LocationObj = IP2Location_open("../data/IP-COUNTRY.BIN");
 #endif
 	IP2LocationRecord *record = NULL;
 	
+	printf("IP2Location API version: %s (%lu)\n", IP2Location_api_version_string(), IP2Location_api_version_num());
+
 	if (IP2LocationObj == NULL)
 	{
 		printf("Please install the database in correct path.\n");

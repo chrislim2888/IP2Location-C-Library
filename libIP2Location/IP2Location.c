@@ -767,8 +767,8 @@ unsigned long int IP2Location_api_version_num(void)
 // Description: Return API version as string
 char *IP2Location_api_version_string(void)
 {
-    static char version[16];
-    snprintf(version, sizeof(version), "%d.%d.%d", API_VERSION_MAJOR, API_VERSION_MINOR, API_VERSION_RELEASE);
+    static char version[64];
+    sprintf(version, "%d.%d.%d", API_VERSION_MAJOR, API_VERSION_MINOR, API_VERSION_RELEASE);
     return(version);
 }
 
