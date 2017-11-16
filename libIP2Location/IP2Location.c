@@ -579,6 +579,11 @@ static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *loc, char *ip
 
     ipno = parsed_ipv.ipv6;
 
+    if (!high)
+    {
+        return NULL;
+    }
+
     if (ipv6indexbaseaddr > 0)
     {
         // use the index table
