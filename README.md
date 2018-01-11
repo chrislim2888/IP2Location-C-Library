@@ -15,6 +15,7 @@ For more details, please visit:
     autoreconf -i -v --force
     ./configure
     make
+    make install
     cd data
     perl ip-country.pl
 
@@ -29,6 +30,7 @@ For more details, please visit:
     export CFLAGS=-I/usr/include/malloc 
     ./configure
     make
+    make install
     cd data
     perl ip-country.pl
 
