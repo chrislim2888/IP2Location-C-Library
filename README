@@ -4,7 +4,7 @@ IP2Location is a C library that enables the user to find the country, region, ci
 
 Supported IPv4 and IPv6 address.
 
-For more details, please visit: http://www.ip2location.com/developers/c
+For more details, please visit: https://www.ip2location.com/developers/c
 Installation
 Unix/Linux
 
