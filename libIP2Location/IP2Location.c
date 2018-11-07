@@ -543,7 +543,9 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *loc, uint32_t row
 
     if ((mode & ELEVATION) && (ELEVATION_POSITION[dbtype] != 0))
     {
-        record->elevation = atof(IP2Location_readStr(handle, IP2Location_read32(handle, rowaddr + 4 * (ELEVATION_POSITION[dbtype]-1))));
+        char *mem = IP2Location_readStr(handle, IP2Location_read32(handle, rowaddr + 4 * (ELEVATION_POSITION[dbtype]-1)));
+	record->elevation = atof(mem);
+	free(mem);
     }
     else
     {
