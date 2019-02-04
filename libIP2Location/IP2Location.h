@@ -56,12 +56,12 @@ extern "C" {
 #include "IP2Loc_DBInterface.h"
 
 /* API version changes only if functions are added (release) or changed (minor/major) */
-#define API_VERSION   8.0.7
+#define API_VERSION   8.0.8
 
 
 #define API_VERSION_MAJOR   8
 #define API_VERSION_MINOR   0
-#define API_VERSION_RELEASE 7
+#define API_VERSION_RELEASE 8
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE  4294967295U
