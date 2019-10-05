@@ -1,4 +1,4 @@
-%define	version 8.0.4
+%define	version 8.0.9
 
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
