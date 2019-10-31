@@ -46,6 +46,12 @@ For more details, please visit:
 * Use the IPv4 BIN file if you just need to query IPv4 addresses.
 * Use the IPv6 BIN file if you need to query BOTH IPv4 and IPv6 addresses.
 
+# NOTES
+If you encountered **error while loading shared libraries** in linux platform, that could be due to the shared library was saved into **usr/local/lib** that might not be the default library path. You can run the below command
+```
+ldconfig /usr/local/lib
+```
+
 # Support
 Email: support@ip2location.com.  
 URL: [https://www.ip2location.com](https://www.ip2location.com)
