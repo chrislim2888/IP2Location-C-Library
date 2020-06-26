@@ -56,7 +56,7 @@ extern "C" {
 #include "IP2Loc_DBInterface.h"
 
 /* API version changes only if functions are added (release) or changed (minor/major) */
-#define API_VERSION   8.0.8
+#define API_VERSION   8.0.9
 
 
 #define API_VERSION_MAJOR   8
