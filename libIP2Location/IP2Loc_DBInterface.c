@@ -271,9 +271,13 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(&byte1, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
         temp = fread(&byte2, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
         temp = fread(&byte3, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
         temp = fread(&byte4, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
     }
     else
     {
@@ -295,6 +299,7 @@ uint8_t IP2Location_read8(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(&ret, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
     }
     else
     {
@@ -309,13 +314,16 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
     char *str = 0;
     uint8_t *cache_shm = cache_shm_ptr;
     size_t temp;
+
     if (DB_access_type == IP2LOCATION_FILE_IO && handle != NULL)
     {
         fseek(handle, position, 0);
         temp = fread(&size, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
         str = (char *)malloc(size+1);
         memset(str, 0, size+1);
         temp = fread(str, size, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
     }
     else
     {
@@ -341,9 +349,13 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(p+3, 1, 1, handle);
+	if (temp == NULL) { }; // make -Wunused-but-set-variable happy for now
         temp = fread(p+2, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
         temp = fread(p+1, 1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
         temp = fread(p,   1, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
     }
     else
     {
@@ -357,6 +369,7 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(&ret, 4, 1, handle);
+	if (temp) { }; // make -Wunused-but-set-variable happy for now
     }
     else
     {
@@ -365,5 +378,3 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 #endif
     return ret;
 }
-
-
