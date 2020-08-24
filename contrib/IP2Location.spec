@@ -108,6 +108,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Oct  5 2019 Peter Bieringer <pb@bieringer.de> - 8.0.9-5
+- update version to 8.0.9
+
 * Sun Feb 26 2017 Peter Bieringer <pb@bieringer.de> - 8.0.4-5
 - update to 8.0.4
 - add some fixes related to move to github
