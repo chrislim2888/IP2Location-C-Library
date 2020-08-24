@@ -271,13 +271,13 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(&byte1, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0; };
         temp = fread(&byte2, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0; };
         temp = fread(&byte3, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0; };
         temp = fread(&byte4, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0; };
     }
     else
     {
@@ -299,7 +299,7 @@ uint8_t IP2Location_read8(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(&ret, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0; };
     }
     else
     {
@@ -319,11 +319,11 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
     {
         fseek(handle, position, 0);
         temp = fread(&size, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return ""; };
         str = (char *)malloc(size+1);
         memset(str, 0, size+1);
         temp = fread(str, size, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return ""; };
     }
     else
     {
@@ -349,13 +349,13 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(p+3, 1, 1, handle);
-	if (temp == NULL) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0.0; };
         temp = fread(p+2, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0.0; };
         temp = fread(p+1, 1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0.0; };
         temp = fread(p,   1, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0.0; };
     }
     else
     {
@@ -369,7 +369,7 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
     {
         fseek(handle, position-1, 0);
         temp = fread(&ret, 4, 1, handle);
-	if (temp) { }; // make -Wunused-but-set-variable happy for now
+	if (temp == 0) { return 0.0; };
     }
     else
     {
