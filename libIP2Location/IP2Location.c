@@ -61,7 +61,6 @@ uint8_t USAGETYPE_POSITION[25]           = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 static int IP2Location_initialize(IP2Location *loc);
 static IP2LocationRecord *IP2Location_new_record();
 static uint32_t IP2Location_ip2no(char* ip);
-static struct in6_addr_local  IP2Location_ipv6_to_no(char* ipaddr);
 static int IP2Location_ip_is_ipv4 (char* ipaddr);
 static int IP2Location_ip_is_ipv6 (char* ipaddr);
 static IP2LocationRecord *IP2Location_get_record(IP2Location *loc, char *ip, uint32_t mode);
