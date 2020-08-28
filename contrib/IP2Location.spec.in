@@ -4,11 +4,9 @@ Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
 Version:	%{version}
 Release:	5%{?dist}
-Group:		System Environment/Libraries
 License:	MIT
 URL:		http://www.ip2location.com/
-Source0:	https://github.com/chrislim2888/IP2Location-C-Library/archive/%{version}.tar.gz
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Source0:	https://github.com/chrislim2888/IP2Location-C-Library/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:	libtool
 
 
@@ -26,7 +24,6 @@ the included downloader.
 
 %package 	devel
 Summary:	Static library and header files for the ip2location library
-Group:		Development/C
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 
@@ -51,63 +48,60 @@ perl -pi -e 's/-Wno-unused-result//' configure.ac
 
 %build
 sh ./bootstrap
-autoreconf -fi
+autoreconf -fiv
 
 %configure --disable-static
-make clean
-make %{?_smp_mflags} COPTS="$RPM_OPT_FLAGS"
+%make_build COPTS="$RPM_OPT_FLAGS"
 
 # convert CSV to BIN
 make -C data convert
+
 
 %check
 LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH make check
 
 
 %install
-rm -rf %{buildroot}
-
-make install DESTDIR=%{buildroot}
+%make_install
 
 # cleanup
 rm -f %{buildroot}%{_libdir}/*.*a
 
 # tools
 install -d %{buildroot}%{_datadir}/%{name}/tools
-cp tools/download.pl %{buildroot}%{_datadir}/%{name}/tools
+install -pm 0755 tools/download.pl %{buildroot}%{_datadir}/%{name}/tools
 
 # database directory
 install -d %{buildroot}%{_datadir}/%{name}/
 
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
-%clean
-rm -rf %{buildroot}
-
 %files
 %defattr(644,root,root,755)
 
-%doc AUTHORS ChangeLog COPYING README.md LICENSE.TXT NEWS INSTALL LICENSE.TXT
+%license COPYING LICENSE.TXT
 
-%attr(755,-,-) %{_libdir}/*.so*
+%doc AUTHORS ChangeLog README.md NEWS
 
-%attr(755,-,-) %{_datadir}/%{name}/tools/*
+%attr(755,-,-) %{_libdir}/libIP2Location.so
+%attr(755,-,-) %{_libdir}/libIP2Location.so.1
+%attr(755,-,-) %{_libdir}/libIP2Location.so.1.0.0
+
+%attr(755,-,-) %{_datadir}/%{name}/tools/
 
 %dir %{_datadir}/%{name}/
 
 
 %files devel
 %defattr(-,root,root)
-%{_includedir}/*
+%{_includedir}/IP2Loc*.h
 
 %doc Developers_Guide.txt
 
 
 %changelog
+* Fri Aug 28 2020 Peter Bieringer <pb@bieringer.de>
+- fix spec file according to BZ#1873302
+
 * Sat Oct  5 2019 Peter Bieringer <pb@bieringer.de> - 8.0.9-5
 - update version to 8.0.9
 
