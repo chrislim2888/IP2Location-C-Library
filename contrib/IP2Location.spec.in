@@ -3,7 +3,7 @@
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
 Version:	%{version}
-Release:	5%{?dist}
+Release:	6%{?dist}
 License:	MIT
 URL:		http://www.ip2location.com/
 Source0:	https://github.com/chrislim2888/IP2Location-C-Library/archive/%{version}/%{name}-%{version}.tar.gz
