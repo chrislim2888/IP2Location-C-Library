@@ -80,7 +80,6 @@ install -d %{buildroot}%{_datadir}/%{name}/
 
 %doc AUTHORS ChangeLog README.md NEWS
 
-%{_libdir}/libIP2Location.so
 %{_libdir}/libIP2Location.so.1
 %{_libdir}/libIP2Location.so.1.0.0
 
@@ -91,6 +90,7 @@ install -d %{buildroot}%{_datadir}/%{name}/
 
 %files devel
 %{_includedir}/IP2Loc*.h
+%{_libdir}/libIP2Location.so
 
 %doc Developers_Guide.txt
 
