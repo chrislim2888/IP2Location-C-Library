@@ -76,23 +76,20 @@ install -d %{buildroot}%{_datadir}/%{name}/
 
 
 %files
-%defattr(644,root,root,755)
-
 %license COPYING LICENSE.TXT
 
 %doc AUTHORS ChangeLog README.md NEWS
 
-%attr(755,-,-) %{_libdir}/libIP2Location.so
-%attr(755,-,-) %{_libdir}/libIP2Location.so.1
-%attr(755,-,-) %{_libdir}/libIP2Location.so.1.0.0
+%{_libdir}/libIP2Location.so
+%{_libdir}/libIP2Location.so.1
+%{_libdir}/libIP2Location.so.1.0.0
 
-%attr(755,-,-) %{_datadir}/%{name}/tools/
+%{_datadir}/%{name}/tools/
 
 %dir %{_datadir}/%{name}/
 
 
 %files devel
-%defattr(-,root,root)
 %{_includedir}/IP2Loc*.h
 
 %doc Developers_Guide.txt
