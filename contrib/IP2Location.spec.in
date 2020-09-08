@@ -8,6 +8,7 @@ License:	MIT
 URL:		http://www.ip2location.com/
 Source0:	https://github.com/chrislim2888/IP2Location-C-Library/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:	libtool
+BuildRequires:	perl(Math::BigInt)
 
 
 %description
@@ -96,6 +97,9 @@ install -d %{buildroot}%{_datadir}/%{name}/
 
 
 %changelog
+* Tue Sep 08 2020 Peter Bieringer <pb@bieringer.de> - 8.0.9-6
+- add missing BuildRequires perl(Math::BigInt)
+
 * Fri Aug 28 2020 Peter Bieringer <pb@bieringer.de>
 - fix spec file according to BZ#1873302
 
