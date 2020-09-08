@@ -40,6 +40,10 @@ Sample BIN Databases
     Download free IP2Location LITE databases at https://lite.ip2location.com
     Download IP2Location sample databases at https://www.ip2location.com/developers
 
+Packages for Fedora/Enterprise Linux can be found here
+    https://koji.fedoraproject.org/koji/packageinfo?packageID=32132
+    https://src.fedoraproject.org/rpms/IP2Location
+
 Support
 
 Email: support@ip2location.com.

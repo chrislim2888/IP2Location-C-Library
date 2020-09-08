@@ -52,6 +52,10 @@ If you encountered **error while loading shared libraries** in linux platform, t
 ldconfig /usr/local/lib
 ```
 
+# Packages for Fedora/Enterprise Linux can be found here
+https://koji.fedoraproject.org/koji/packageinfo?packageID=32132
+https://src.fedoraproject.org/rpms/IP2Location
+
 # Support
 Email: support@ip2location.com.  
 URL: [https://www.ip2location.com](https://www.ip2location.com)
