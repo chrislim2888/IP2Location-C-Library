@@ -94,6 +94,10 @@ int main () {
 			return -1;
 		};
 		record = IP2Location_get_all(IP2LocationObj, ipAddress);
+		if (record == NULL) {
+			fprintf(stdout,"NULL record returned on IP2Location_get_all for ipAddress=%s\n", ipAddress);
+			return -1;
+		};
 		if (strcmp(expectedCountry,record->country_short) != 0) {
 			fprintf(stdout,"Test IP Address %s (Test %d) failed. We got %s but expected %s,\n",ipAddress,test_num,record->country_short,expectedCountry);
 			failed++;
