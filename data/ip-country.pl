@@ -6,115 +6,46 @@ use Math::BigInt;
 &csv2bin_ipv6;
 
 sub csv2bin_ipv4 {
-	my $count = 0;
-	my $base = 64;
-	my $longsize = 4;
-	my $columnsize = 2;
 	my $dbtype = 1;
-	my $filename_in = "IP-COUNTRY.CSV";
-	my $filename_out = "IP-COUNTRY.BIN";
-	my %country;
-	my %db;
-	
-	open IN, "<$filename_in" or die "Error: Unable to open $filename_in";
-	while (<IN>) {
-		my @array = &splitcsv($_);
-		$db{$array[0]}{"country"} = $array[2];
-		$country{$array[2]}{"LONG"} = $array[3];
-		$count++;
-	}
-	close IN;
-	
-	$count++;
-	my $addr = $base + $count * $longsize * $columnsize;
-	
-	foreach my $co (sort keys(%country)) {
-		$country{$co}{"ADDR"} = $addr;
-		$addr = $addr + 1 + 2 + 1 + length($country{$co}{"LONG"});
-	}
-	
-	my ($Second, $Minute, $Hour, $Day, $Month, $Year, $WeekDay, $DayOfYear, $IsDST) = localtime(time) ; 
-	
-	open OUT, ">$filename_out" or die "Error: Unable to open $filename_out";
-	binmode(OUT);
-	
-	print OUT pack("C", $dbtype);
-	print OUT pack("C", $columnsize);
-	print OUT pack("C", $Year - 100);
-	print OUT pack("C", $Month + 1);
-	print OUT pack("C", $Day);
-	print OUT pack("V", $count);
-	print OUT pack("V", 64+1);
-	print OUT pack("V", 0);
-	
-	foreach my $i (17..63) {
-		print OUT pack("C", 0);
-	}
-	
-	foreach my $ip (sort {$a <=> $b} keys(%db)) {
-		print OUT pack("V", $ip);
-		print OUT pack("V", $country{$db{$ip}{"country"}}{"ADDR"});
-	}
-	
-	print OUT pack("V", 4294967295);
-	print OUT pack("V", $country{"-"}{"ADDR"});
-	
-	foreach my $co (sort keys(%country)) {
-		print OUT pack("C", length($co));
-		print OUT $co;
-		if ($co eq "-") {
-			print OUT " ";
-		}
-		print OUT pack("C", length($country{$co}{"LONG"}));
-		print OUT $country{$co}{"LONG"};
-	}
-	close OUT;
-	print STDOUT "$filename_in to $filename_out conversion done.\n";
-}
-
-
-sub csv2bin_ipv6 {
 	my $ipv4_infilename = "IP-COUNTRY.CSV";
-	my $ipv6_infilename = "IP-COUNTRY.6.CSV";
-	my $ipv6_outfilename = "IPV6-COUNTRY.BIN";
-	
-	my $ipv4_count = 0;
-	my $ipv4_base = 64;
-	my $longsize = 4;
-	my $columnsize = 2;
-	my $dbtype = 1;
-	
-	my $ipv6_longsize = 16;
+	my $ipv4_outfilename = "IP-COUNTRY.BIN";
+	my $ipv6_index_base = 0;
 	my $ipv6_count = 0;
 	my $ipv6_base = 0;
-	
+	my $ipv4_index_base = 64;
+	my %ipv4_index_row_min;
+	my %ipv4_index_row_max;
+	my $ipv4_count = 0;
+	my $ipv4_base = $ipv4_index_base + 256**2*8;
+	my $longsize = 4;
+	my $columnsize = 2;
 	my ($second, $minute, $hour, $day, $month, $year, $weekday, $dayofyear, $isdst) = localtime(time); 
-	
 	my %country;
-	my %region;
-	
 	my @sorted_country;
- 	
-	open IN, "<$ipv4_infilename" or die "Error: Unable to open $ipv4_infilename";
+		
+	open IN, "<$ipv4_infilename" or die "Error open $ipv4_infilename";
 	while (<IN>) {
-		my @array = &splitcsv($_);
+		chomp($_);
+		$_ =~ s/^\"//;
+		$_ =~ s/\"$//;
+		my @array = split (/\",\"/, $_);
 		$country{$array[2]}{"LONG"} = $array[3];
+		my $no2from = &ipv4_first2octet($array[0]);
+		my $no2to = &ipv4_first2octet($array[1]);
+		foreach my $no2 ($no2from .. $no2to) {
+			if (!defined($ipv4_index_row_min{$no2})) {
+				$ipv4_index_row_min{$no2} = $ipv4_count;
+			}
+			$ipv4_index_row_max{$no2} = $ipv4_count;
+		}
 		$ipv4_count++;
 	}
 	close IN;
 	
-	open IN, "<$ipv6_infilename" or die "Error: Unable to open $ipv6_infilename";
-	while (<IN>) {
-		my @array = &splitcsv($_);
-		$country{$array[2]}{"LONG"} = $array[3];
-		$ipv6_count++;
-	}
-	close IN;
-	
+	$country{"-"}{"-"}++;
 	$ipv4_count++;
-	$ipv6_count++;
-	$ipv6_base = $ipv4_base + $ipv4_count * $longsize * $columnsize;
-	my $addr = $ipv6_base + $ipv6_count * $longsize * ($columnsize + 3);
+	
+	my $addr = $ipv4_base + $ipv4_count * $longsize * $columnsize;
 	
 	@sorted_country = sort keys(%country);
 	foreach my $co (@sorted_country) {
@@ -122,8 +53,149 @@ sub csv2bin_ipv6 {
 		$addr = $addr + 1 + 2 + 1 + length($country{$co}{"LONG"});
 	}
 	
-	#print STDERR "WRITING $outfilename\n";
-	open OUT, ">$ipv6_outfilename" or die "Error: Unable to open $ipv6_outfilename";
+	open OUT, ">$ipv4_outfilename" or die "Error writing $ipv4_outfilename";
+	binmode(OUT);
+	
+	print OUT pack("C", $dbtype);
+	print OUT pack("C", $columnsize);
+	print OUT pack("C", $year - 100);
+	print OUT pack("C", $month + 1);
+	print OUT pack("C", $day);
+	print OUT pack("V", $ipv4_count);
+	print OUT pack("V", $ipv4_base + 1);
+	print OUT pack("V", $ipv6_count);
+	print OUT pack("V", $ipv6_base + 1);
+	print OUT pack("V", $ipv4_index_base + 1);
+	print OUT pack("V", $ipv6_index_base + 1);
+	
+	foreach my $i (29 .. 63) {
+		print OUT pack("C", 0);
+	}
+	
+	foreach my $c (sort {$a <=> $b} keys(%ipv4_index_row_min)) {
+		print OUT pack("V", $ipv4_index_row_min{$c});
+		print OUT pack("V", $ipv4_index_row_max{$c});
+	}
+	
+	my $p = tell(OUT);
+	if ($p != 524352) {
+		print STDERR "$ipv4_outfilename Index Out of Range\b";
+		die;
+	}
+	
+	open IN, "<$ipv4_infilename" or die;
+	while (<IN>) {
+		chomp($_);
+		$_ =~ s/^\"//;
+		$_ =~ s/\"$//;
+		my @array = split (/\",\"/, $_);
+		print OUT pack("V", $array[0]);
+		print OUT pack("V", $country{$array[2]}{"ADDR"});
+	}
+	close IN;
+	
+	print OUT pack("V", 4294967295);
+	print OUT pack("V", $country{"-"}{"ADDR"});
+		
+	foreach my $co (@sorted_country) {
+		print OUT pack("C", length($co));
+		print OUT $co;
+		if ($co eq "-") {
+			print OUT " ";
+		}
+		if ($co eq "UK") {
+			print STDERR "ERROR: UK should not be in the database!\n";
+			die;
+		}
+		print OUT pack("C", length($country{$co}{"LONG"}));
+		print OUT $country{$co}{"LONG"};
+	}
+	close OUT;
+	
+	print STDOUT "$ipv4_infilename to $ipv4_outfilename conversion done.\n";
+	
+}
+
+
+sub csv2bin_ipv6 {
+	my $dbtype = 1;
+	my $ipv4_infilename = "IP-COUNTRY.CSV";
+	my $ipv6_infilename = "IP-COUNTRY.6.CSV";
+	my $ipv6_outfilename = "IPV6-COUNTRY.BIN";
+	my $ipv4_index_base = 64;
+	my $ipv6_index_base = $ipv4_index_base + 256**2*8;
+	my %ipv4_index_row_min;
+	my %ipv4_index_row_max;
+	my %ipv6_index_row_min;
+	my %ipv6_index_row_max;
+	my $ipv4_count = 0;
+	my $ipv4_base = $ipv6_index_base + 256**2*8;
+	my $longsize = 4;
+	my $columnsize = 2;
+	my $ipv6_longsize = 16;
+	my $ipv6_count = 0;
+	my $ipv6_base = 0;
+	my ($second, $minute, $hour, $day, $month, $year, $weekday, $dayofyear, $isdst) = localtime(time); 
+
+	my %country;
+	my @sorted_country;
+ 	
+	open IN, "<$ipv4_infilename" or die "Error open $ipv4_infilename";
+	while (<IN>) {
+		chomp($_);
+		$_ =~ s/^\"//;
+		$_ =~ s/\"$//;
+		my @array = split (/\",\"/, $_);
+		if ($array[2] eq "UK") {
+			$array[2] = "GB";
+		}
+		$country{$array[2]}{"LONG"} = $array[3];
+		my $no2from = &ipv4_first2octet($array[0]);
+		my $no2to = &ipv4_first2octet($array[1]);
+		foreach my $no2 ($no2from .. $no2to) {
+			if (!defined($ipv4_index_row_min{$no2})) {
+				$ipv4_index_row_min{$no2} = $ipv4_count;
+			}
+			$ipv4_index_row_max{$no2} = $ipv4_count;
+		}
+		$ipv4_count++;
+	}
+	close IN;
+	
+	open IN, "<$ipv6_infilename" or die "Error open $ipv6_infilename";
+	while (<IN>) {
+		chomp($_);
+		$_ =~ s/^\"//;
+		$_ =~ s/\"$//;
+		my @array = split (/\",\"/, $_);
+		$country{$array[2]}{"LONG"} = $array[3];
+		my $no2from = new Math::BigInt(&ipv6_first2octet($array[0]));
+		my $no2to = new Math::BigInt(&ipv6_first2octet($array[1]));
+		foreach my $no2 ($no2from .. $no2to) {
+			if (!defined($ipv6_index_row_min{$no2})) {
+				$ipv6_index_row_min{$no2} = $ipv6_count;
+			}
+			$ipv6_index_row_max{$no2} = $ipv6_count;
+		}
+		$ipv6_count++;
+	}
+	close IN;
+
+	$country{"-"}{"-"}++;
+
+	$ipv4_count++;
+	$ipv6_count++;
+
+	$ipv6_base = $ipv4_base + $ipv4_count * $longsize * $columnsize;
+	my $addr = $ipv6_base + $ipv6_count * $longsize * ($columnsize + 3); #IPv6 address range is 4 bytes vs 1 byte in IPv4
+	
+	@sorted_country = sort keys(%country);
+	foreach my $co (@sorted_country) {
+		$country{$co}{"ADDR"} = $addr;
+		$addr = $addr + 1 + 2 + 1 + length($country{$co}{"LONG"});
+	}
+
+	open OUT, ">$ipv6_outfilename" or die "Error writing $ipv6_outfilename";
 	binmode(OUT); #binary mode
 	
 	print OUT pack("C", $dbtype);
@@ -135,14 +207,38 @@ sub csv2bin_ipv6 {
 	print OUT pack("V", $ipv4_base + 1);
 	print OUT pack("V", $ipv6_count);
 	print OUT pack("V", $ipv6_base + 1);
-	
-	foreach my $i (22..64) {
+	print OUT pack("V", $ipv4_index_base + 1);
+	print OUT pack("V", $ipv6_index_base + 1);
+
+	foreach my $i (29 .. 63) {
 		print OUT pack("C", 0);
 	}
+
+	foreach my $c (sort {$a <=> $b} keys(%ipv4_index_row_min)) {
+		print OUT pack("V", $ipv4_index_row_min{$c});
+		print OUT pack("V", $ipv4_index_row_max{$c});
+	}
+
+	foreach my $c (sort {$a <=> $b} keys(%ipv6_index_row_min)) {
+		print OUT pack("V", $ipv6_index_row_min{$c});
+		print OUT pack("V", $ipv6_index_row_max{$c});
+	}
 	
-	open IN, "<$ipv4_infilename" or die "Error: Unable to open $ipv4_infilename";
+	my $p = tell(OUT);
+	if ($p != 1048640) {
+		print STDERR "$ipv6_outfilename $p Index Out of Range\b";
+		die;
+	}
+	
+	open IN, "<$ipv4_infilename" or die;
 	while (<IN>) {
-		my @array = &splitcsv($_);
+		chomp($_);
+		$_ =~ s/^\"//;
+		$_ =~ s/\"$//;
+		my @array = split (/\",\"/, $_);
+		if ($array[2] eq "UK") {
+			$array[2] = "GB";
+		}
 		print OUT pack("V", $array[0]);
 		print OUT pack("V", $country{$array[2]}{"ADDR"});
 	}
@@ -151,7 +247,8 @@ sub csv2bin_ipv6 {
 	print OUT pack("V", 4294967295);
 	print OUT pack("V", $country{"-"}{"ADDR"});
  	
-	open IN, "<$ipv6_infilename" or die "Error: Unable to open $ipv6_infilename";
+	# export IPv6 range
+	open IN, "<$ipv6_infilename" or die;
 	while (<IN>) {
 		my @array = &splitcsv($_);
 		print OUT &int2bytes($array[0]);
@@ -168,11 +265,16 @@ sub csv2bin_ipv6 {
 		if ($co eq "-") {
 			print OUT " ";
 		}
+		if ($co eq "UK") {
+			print STDERR "ERROR: UK should not be in the database!\n";
+			$co = "GB";
+		}
 		print OUT pack("C", length($country{$co}{"LONG"}));
 		print OUT $country{$co}{"LONG"};
 	}
-	close OUT;
-	print STDOUT "$ipv6_infilename to $ipv6_outfilename conversion done.\n";
+	close OUT;	
+
+	print STDOUT "$ipv6_infilename + $ipv4_infilename to $ipv6_outfilename conversion done.\n";
 }
 
 sub int2bytes {
@@ -200,4 +302,16 @@ sub splitcsv {
 		push @cells, (defined $value ? $value : '');
 	}
 	return @cells;
+}
+
+sub ipv4_first2octet {
+	my $no = shift(@_);
+	$no = $no >> 16;
+	return $no;
+}
+
+sub ipv6_first2octet {
+	my $ip = new Math::BigInt(shift(@_));
+	my $remainder = 0;
+	($ip, $remainder) = $ip->bdiv(2**112);
 }
