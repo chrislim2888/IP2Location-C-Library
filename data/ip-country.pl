@@ -22,6 +22,8 @@ sub csv2bin_ipv4 {
 	my ($second, $minute, $hour, $day, $month, $year, $weekday, $dayofyear, $isdst) = localtime(time); 
 	my %country;
 	my @sorted_country;
+
+	print STDOUT "$ipv4_infilename to $ipv4_outfilename conversion started (can take some time).\n";
 		
 	open IN, "<$ipv4_infilename" or die "Error open $ipv4_infilename";
 	while (<IN>) {
@@ -140,6 +142,8 @@ sub csv2bin_ipv6 {
 	my %country;
 	my @sorted_country;
  	
+	print STDOUT "$ipv6_infilename + $ipv4_infilename to $ipv6_outfilename conversion started (can take some time).\n";
+
 	open IN, "<$ipv4_infilename" or die "Error open $ipv4_infilename";
 	while (<IN>) {
 		chomp($_);
