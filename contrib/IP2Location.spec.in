@@ -3,7 +3,7 @@
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
 Version:	%{version}
-Release:	6%{?dist}
+Release:	8%{?dist}
 License:	MIT
 URL:		http://www.ip2location.com/
 Source0:	https://github.com/chrislim2888/IP2Location-C-Library/archive/%{version}/%{name}-%{version}.tar.gz
@@ -24,7 +24,7 @@ the included downloader.
 
 
 %package 	devel
-Summary:	Static library and header files for the ip2location library
+Summary:	Static library and header files for the IP2Location library
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 
@@ -37,6 +37,23 @@ utilization. The library contains API to query all IP2Location LITE and
 commercial binary databases.
 
 This package contains the development files for the IP2Location library.
+
+
+%package 	data-sample
+Summary:	Sample data files for the IP2Location library
+Requires:	%{name} = %{version}-%{release}
+
+%description 	data-sample
+IP2Location C library enables the user to get the country, region, city,
+coordinates, ZIP code, time zone, ISP, domain name, connection type,
+area code, weather info, mobile carrier, elevation and usage type from any IP
+address or hostname. This library has been optimized for speed and memory
+utilization. The library contains API to query all IP2Location LITE and
+commercial binary databases.
+
+This package contains the sample data files for testing the library.
+
+Latest lite databases can be downloaded from https://lite.ip2location.com
 
 
 %prep
@@ -74,6 +91,10 @@ install -pm 0755 tools/download.pl %{buildroot}%{_datadir}/%{name}/tools
 
 # database directory
 install -d %{buildroot}%{_datadir}/%{name}/
+# note: according to https://www.ip2location.com/development-libraries/ip2location/c
+# IPv6 sample file has *.SAMPLE* while IPv4 has *-SAMPLE* in ZIP file
+install -p data/IP-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IP-COUNTRY-SAMPLE.BIN
+install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SAMPLE.BIN
 
 
 %files
@@ -96,7 +117,14 @@ install -d %{buildroot}%{_datadir}/%{name}/
 %doc Developers_Guide.txt
 
 
+%files data-sample
+%attr(644,-,-) %{_datadir}/%{name}/*.BIN
+
+
 %changelog
+* Tue Sep 15 2020 Peter Bieringer <pb@bieringer.de> - 8.0.9-8
+- new subpackage data-sample
+
 * Tue Sep 08 2020 Peter Bieringer <pb@bieringer.de> - 8.0.9-6
 - add missing BuildRequires perl(Math::BigInt)
 
