@@ -19,13 +19,15 @@ sub csv2bin_ipv4 {
 	my $ipv4_base = $ipv4_index_base + 256**2*8;
 	my $longsize = 4;
 	my $columnsize = 2;
-	my ($second, $minute, $hour, $day, $month, $year, $weekday, $dayofyear, $isdst) = localtime(time); 
 	my %country;
 	my @sorted_country;
 
 	print STDOUT "$ipv4_infilename to $ipv4_outfilename conversion started (can take some time).\n";
 		
 	open IN, "<$ipv4_infilename" or die "Error open $ipv4_infilename";
+
+	my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks) = stat($ipv4_infilename);
+
 	while (<IN>) {
 		chomp($_);
 		$_ =~ s/^\"//;
@@ -54,6 +56,8 @@ sub csv2bin_ipv4 {
 		$country{$co}{"ADDR"} = $addr;
 		$addr = $addr + 1 + 2 + 1 + length($country{$co}{"LONG"});
 	}
+
+	my ($second, $minute, $hour, $day, $month, $year, $weekday, $dayofyear, $isdst) = gmtime($mtime);
 	
 	open OUT, ">$ipv4_outfilename" or die "Error writing $ipv4_outfilename";
 	binmode(OUT);
@@ -137,14 +141,19 @@ sub csv2bin_ipv6 {
 	my $ipv6_longsize = 16;
 	my $ipv6_count = 0;
 	my $ipv6_base = 0;
-	my ($second, $minute, $hour, $day, $month, $year, $weekday, $dayofyear, $isdst) = localtime(time); 
 
 	my %country;
 	my @sorted_country;
- 	
+
 	print STDOUT "$ipv6_infilename + $ipv4_infilename to $ipv6_outfilename conversion started (can take some time).\n";
 
+	my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks);
+
 	open IN, "<$ipv4_infilename" or die "Error open $ipv4_infilename";
+
+	($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks) = stat($ipv4_infilename);
+	my $ip2location_mtime = $mtime;
+
 	while (<IN>) {
 		chomp($_);
 		$_ =~ s/^\"//;
@@ -167,6 +176,10 @@ sub csv2bin_ipv6 {
 	close IN;
 	
 	open IN, "<$ipv6_infilename" or die "Error open $ipv6_infilename";
+
+	($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks) = stat($ipv4_infilename);
+	$ip2location_mtime = $mtime if ($mtime > $ip2location_mtime); # select newest
+
 	while (<IN>) {
 		chomp($_);
 		$_ =~ s/^\"//;
@@ -198,6 +211,8 @@ sub csv2bin_ipv6 {
 		$country{$co}{"ADDR"} = $addr;
 		$addr = $addr + 1 + 2 + 1 + length($country{$co}{"LONG"});
 	}
+
+	my ($second, $minute, $hour, $day, $month, $year, $weekday, $dayofyear, $isdst) = gmtime($ip2location_mtime);
 
 	open OUT, ">$ipv6_outfilename" or die "Error writing $ipv6_outfilename";
 	binmode(OUT); #binary mode
