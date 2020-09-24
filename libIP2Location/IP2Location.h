@@ -160,7 +160,7 @@ IP2LocationRecord *IP2Location_get_longitude(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_domain(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_zipcode(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_timezone(IP2Location *handler, char *ip);
-IP2LocationRecord *IP2Location_get_net_speed(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_netspeed(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_iddcode(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_areacode(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_weatherstationcode(IP2Location *handler, char *ip);
