@@ -1,10 +1,11 @@
 /*
  * IP2Location C library is distributed under MIT license
- * Copyright (c) 2013-2015 IP2Location.com. support at ip2location dot com
+ * Copyright (c) 2013-2020 IP2Location.com. support at ip2handleration dot com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
  */
+
 #ifndef HAVE_IP2LOCATION_H
 #define HAVE_IP2LOCATION_H
 
@@ -53,133 +54,139 @@ extern "C" {
 #endif
 #endif
 
-#include "IP2Loc_DBInterface.h"
-
-/* API version changes only if functions are added (release) or changed (minor/major) */
-#define API_VERSION   8.0.9
-
-
-#define API_VERSION_MAJOR   8
-#define API_VERSION_MINOR   0
-#define API_VERSION_RELEASE 9
+#define API_VERSION			8.1.0
+#define API_VERSION_MAJOR	8
+#define API_VERSION_MINOR	1
+#define API_VERSION_RELEASE	0
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
-#define MAX_IPV4_RANGE  4294967295U
-#define MAX_IPV6_RANGE  "340282366920938463463374607431768211455"
-#define IPV4 0
-#define IPV6 1
+#define MAX_IPV4_RANGE	4294967295U
+#define MAX_IPV6_RANGE	"340282366920938463463374607431768211455"
+#define IPV4	0
+#define IPV6	1
 
-#define  COUNTRYSHORT           0x00001
-#define  COUNTRYLONG            0x00002
-#define  REGION                 0x00004
-#define  CITY                   0x00008
-#define  ISP                    0x00010
-#define  LATITUDE               0x00020
-#define  LONGITUDE              0x00040
-#define  DOMAIN_                0x00080 // DOMAIN is a math.h macro
-#define  ZIPCODE                0x00100
-#define  TIMEZONE               0x00200
-#define  NETSPEED               0x00400
-#define  IDDCODE                0x00800
-#define  AREACODE               0x01000
-#define  WEATHERSTATIONCODE     0x02000
-#define  WEATHERSTATIONNAME     0x04000
-#define  MCC                    0x08000
-#define  MNC                    0x10000
-#define  MOBILEBRAND            0x20000
-#define  ELEVATION              0x40000
-#define  USAGETYPE              0x80000
+#define COUNTRYSHORT		0x00001
+#define COUNTRYLONG			0x00002
+#define REGION				0x00004
+#define CITY				0x00008
+#define ISP					0x00010
+#define LATITUDE			0x00020
+#define LONGITUDE			0x00040
+#define DOMAINNAME			0x00080
+#define ZIPCODE				0x00100
+#define TIMEZONE			0x00200
+#define NETSPEED			0x00400
+#define IDDCODE				0x00800
+#define AREACODE			0x01000
+#define WEATHERSTATIONCODE	0x02000
+#define WEATHERSTATIONNAME	0x04000
+#define MCC					0x08000
+#define MNC					0x10000
+#define MOBILEBRAND			0x20000
+#define ELEVATION			0x40000
+#define USAGETYPE			0x80000
 
-#define  ALL          COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAIN_ | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE
+#define DEFAULT				0x0001
+#define NO_EMPTY_STRING		0x0002
+#define NO_LEADING			0x0004
+#define NO_TRAILING			0x0008
 
-#define  DEFAULT	     0x0001
-#define  NO_EMPTY_STRING 0x0002
-#define  NO_LEADING      0x0004
-#define  NO_TRAILING     0x0008
+#define ALL COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAINNAME | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE
+#define INVALID_IP_ADDRESS "INVALID IP ADDRESS"
+#define IPV6_ADDRESS_MISSING_IN_IPV4_BIN "IPV6 ADDRESS MISSING IN IPV4 BIN"
+#define NOT_SUPPORTED "This parameter is unavailable for selected data file. Please upgrade the data file."
+#define IP2LOCATION_SHM "/IP2handleration_Shm"
+#define MAP_ADDR 4194500608
 
-#define INVALID_IPV6_ADDRESS "INVALID IPV6 ADDRESS"
-#define INVALID_IPV4_ADDRESS "INVALID IPV4 ADDRESS"
-#define  NOT_SUPPORTED "This parameter is unavailable for selected data file. Please upgrade the data file."
+enum IP2Location_lookup_mode {
+	IP2LOCATION_FILE_IO,
+	IP2LOCATION_CACHE_MEMORY,
+	IP2LOCATION_SHARED_MEMORY
+};
 
-
-typedef struct
-{
-    FILE *filehandle;
-    uint8_t databasetype;
-    uint8_t databasecolumn;
-    uint8_t databaseday;
-    uint8_t databasemonth;
-    uint8_t databaseyear;
-    uint32_t databasecount;
-    uint32_t databaseaddr;
-    uint32_t ipversion;
-    uint32_t ipv4databasecount;
-    uint32_t ipv4databaseaddr;
-    uint32_t ipv6databasecount;
-    uint32_t ipv6databaseaddr;
-    uint32_t ipv4indexbaseaddr;
-    uint32_t ipv6indexbaseaddr;
+typedef struct {
+	FILE *file;
+	uint8_t database_type;
+	uint8_t database_column;
+	uint8_t database_day;
+	uint8_t database_month;
+	uint8_t database_year;
+	uint32_t database_count;
+	uint32_t database_address;
+	uint32_t ip_version;
+	uint32_t ipv4_database_count;
+	uint32_t ipv4_database_address;
+	uint32_t ipv6_database_count;
+	uint32_t ipv6_database_address;
+	uint32_t ipv4_index_base_address;
+	uint32_t ipv6_index_base_address;
 } IP2Location;
 
-typedef struct
-{
-    char *country_short;
-    char *country_long;
-    char *region;
-    char *city;
-    char *isp;
-    float latitude;
-    float longitude;
-    char *domain;
-    char *zipcode;
-    char *timezone;
-    char *netspeed;
-    char *iddcode;
-    char *areacode;
-    char *weatherstationcode;
-    char *weatherstationname;
-    char *mcc;
-    char *mnc;
-    char *mobilebrand;
-    float elevation;
-    char *usagetype;
+typedef struct {
+	char *country_short;
+	char *country_long;
+	char *region;
+	char *city;
+	char *isp;
+	char *domain;
+	char *zip_code;
+	char *time_zone;
+	char *net_speed;
+	char *idd_code;
+	char *area_code;
+	char *weather_station_code;
+	char *weather_station_name;
+	char *mcc;
+	char *mnc;
+	char *mobile_brand;
+	char *usage_type;
+
+	float latitude;
+	float longitude;
+	float elevation;
 } IP2LocationRecord;
 
-/*##################
-# Public Functions
-##################*/
-IP2Location *IP2Location_open(char *db);
-int IP2Location_open_mem(IP2Location *loc, enum IP2Location_mem_type);
-uint32_t IP2Location_close(IP2Location *loc);
-IP2LocationRecord *IP2Location_get_country_short(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_country_long(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_region(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_city (IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_isp(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_latitude(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_longitude(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_domain(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_zipcode(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_timezone(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_netspeed(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_iddcode(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_areacode(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_weatherstationcode(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_weatherstationname(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_mcc(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_mnc(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_mobilebrand(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_elevation(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_usagetype(IP2Location *loc, char *ip);
-IP2LocationRecord *IP2Location_get_all(IP2Location *loc, char *ip);
+/* Public functions */
+IP2Location *IP2Location_open(char *bin);
+int IP2Location_set_lookup_mode(IP2Location *handler, enum IP2Location_lookup_mode);
+uint32_t IP2Location_close(IP2Location *handler);
+IP2LocationRecord *IP2Location_get_country_short(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_country_long(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_region(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_city (IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_isp(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_latitude(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_longitude(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_domain(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_zipcode(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_timezone(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_net_speed(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_iddcode(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_areacode(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_weatherstationcode(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_weatherstationname(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_mcc(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_mnc(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_mobilebrand(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_elevation(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_usagetype(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
-void IP2Location_delete_shm();
-unsigned long int IP2Location_api_version_num(void);
+void IP2Location_clear_memory();
+unsigned long int IP2Location_api_version_number(void);
 char *IP2Location_api_version_string(void);
 char *IP2Location_lib_version_string(void);
+struct in6_addr IP2Location_read_ipv6_address(FILE *handle, uint32_t position);
+uint32_t IP2Location_read32(FILE *handle, uint32_t position);
+uint8_t IP2Location_read8(FILE *handle, uint32_t position);
+char *IP2Location_read_string(FILE *handle, uint32_t position);
+float IP2Location_read_float(FILE *handle, uint32_t position);
+int32_t IP2Location_set_memory_cache(FILE *file);
+int32_t IP2Location_set_shared_memory(FILE *file);
+int32_t IP2Location_close_memory(FILE *file);
+void IP2Location_delete_shared_memory();
 
 #ifdef __cplusplus
 }
 #endif
-
 #endif
