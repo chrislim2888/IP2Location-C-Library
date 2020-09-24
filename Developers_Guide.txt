@@ -1,15 +1,15 @@
 Developers' Guide for IP2Location C Library
 ===========================================
 
-This guide explains the usage and the behavior of the below functions in the IP2Location C library 
+This guide explains the usage and the behavior of the below functions in the IP2Location C library
 
-(1) IP2Location_open_mem
+(1) IP2Location_set_lookup_mode
 (2) IP2Location_close
-(3) IP2Location_delete_shm
+(3) IP2Location_clear_memory
 
 Enumeration in IP2Location C Library
 ------------------------------------
-enum IP2Location_mem_type {
+enum IP2Location_lookup_mode {
     IP2LOCATION_FILE_IO,
     IP2LOCATION_CACHE_MEMORY,
     IP2LOCATION_SHARED_MEMORY
@@ -17,28 +17,28 @@ enum IP2Location_mem_type {
 
 Functions in IP2Location C Library
 -----------------------------------
-Function (1) 
+Function (1)
 
-   int IP2Location_open_mem(IP2Location *loc, enum IP2Location_mem_type);
+   int IP2Location_set_lookup_mode(IP2Location *handler, enum IP2Location_lookup_mode);
 
-loc - is of type IP2Location pointer, which is returned by function IP2Location_open. 
-IP2Location_mem_type - is of type IP2Location_mem_type enum. This argument specifies how the iplocation DB file will be loaded. It may be  IP2LOCATION_FILE_IO, IP2LOCATION_CACHE_MEMORY and  IP2LOCATION_SHARED_MEMORY. 
+handler - is of type IP2Location pointer, which is returned by function IP2Location_open.
+IP2Location_lookup_mode - is of type IP2Location_lookup_mode enum. This argument specifies how the iplocation DB file will be loaded. It may be IP2LOCATION_FILE_IO, IP2LOCATION_CACHE_MEMORY and  IP2LOCATION_SHARED_MEMORY.
 
 If IP2LOCATION_FILE_IO is passed as argument, records will be searched directly from the DB file on the hard disk.
 If IP2LOCATION_CACHE_MEMORY is passed as argument, ip2location DB will be loaded into the memory and search will be performed on the DB present in the memory.
 If IP2LOCATION_SHARED_MEMORY is passed as argument, ip2location DB will be loaded into the memory and it will be shared across multiple processes. Please check at the end of this guide to know how this memory is shared and how to release the resource when it's no longer needed.
 
-IP2Location_open_mem call must always be paired with a call to IP2Location_close; if IP2Location_open_mem is called more than once without calling IP2Location_close(), -1 will be returned.
+IP2Location_set_lookup_mode call must always be paired with a call to IP2Location_close; if IP2Location_set_lookup_mode is called more than once without calling IP2Location_close(), -1 will be returned.
 
 RETURN value:
-For any error IP2Location_open_mem will return -1, and will not set any errno variable.
+For any error IP2Location_set_lookup_mode will return -1, and will not set any errno variable.
 
 
 Function (2)
 
-   uint32_t IP2Location_close(IP2Location *loc); 
+   uint32_t IP2Location_close(IP2Location *handler);
 
-loc - is of type  IP2Location pointer, which is returned by function IP2Location_open and it must be one used in IP2Location_open_mem. 
+handler - is of type  IP2Location pointer, which is returned by function IP2Location_open and it must be one used in IP2Location_set_lookup_mode.
 
 Calling this function will close the DB file and free the allocated cache memory or detach from the shared memory. (Shared memory will not be deleted from this call.)
 
@@ -48,28 +48,28 @@ This function always return zero.
 
 Function (3)
 
-   void IP2Location_delete_shm();
+   void IP2Location_clear_memory();
 
-This function will delete the shared memory created from IP2Location_open_mem in Linux, Unix and MAC OS. In Windows, it's just an empty function call. Please read the next section.
+This function will delete the shared memory created from IP2Location_set_lookup_mode in Linux, Unix and MAC OS. In Windows, it's just an empty function call. Please read the next section.
 
 RETURN value:
 void
 
 Note: Key used for the shared memory is "/IP2location_Shm", please make sure it does not conflict with any other shared memory.
 
-IP2LOCATION_SHARED_MEMORY – If IP2Location_open_mem is called with this as the second argument, shared memory will be created if it does not already exists else the existing shared memory will be read instead. 
+IP2LOCATION_SHARED_MEMORY – If IP2Location_set_lookup_mode is called with this as the second argument, shared memory will be created if it does not already exists else the existing shared memory will be read instead.
 
-In Windows: 
+In Windows:
 Whenever the IP2Location_close() function is called by the sole process attached to the shared memory, then the DB file will be closed and the shared memory will be deleted.
 If there are other processes attached to the shared memory, then the caller process will just detach itself from the shared memory while leaving the shared memory intact.
-Call to IP2Location_delete_shm in Windows have no effect as Windows does not support shared memory. 
+Call to IP2Location_clear_memory in Windows have no effect as Windows does not support shared memory.
 
 In Linux, Unix and MacOS:
-Call to IP2Location_close will not deleted the shared memory, it will only detach the process from using that memory. To delete the shared memory IP2Location_delete_shm() must be called. 
+Call to IP2Location_close will not deleted the shared memory, it will only detach the process from using that memory. To delete the shared memory IP2Location_clear_memory() must be called.
 
-When IP2Location_delete_shm() function is called, and if any other process(es) is attached to shared memory, it will only delete the name of the shared memory but the other process(es) will continue to use memory and memory will be freed only after last attached process is detached from it. 
+When IP2Location_clear_memory() function is called, and if any other process(es) is attached to shared memory, it will only delete the name of the shared memory but the other process(es) will continue to use memory and memory will be freed only after last attached process is detached from it.
 
-After calling IP2Location_delete_shm(), the next call to IP2Location_open_mem() with IP2LOCATION_SHARED_MEMORY option will result in a new shared memory and will not reuse the old one if one exists and used by any other process. Please refer shm_open and shm_unlink man pages for more info. 
+After calling IP2Location_clear_memory(), the next call to IP2Location_set_lookup_mode() with IP2LOCATION_SHARED_MEMORY option will result in a new shared memory and will not reuse the old one if one exists and used by any other process. Please refer shm_open and shm_unlink man pages for more info.
 
 
-Version 7.0.2  08/11/2015
+Version 8.1.1  25/09/2020

@@ -7,4 +7,4 @@ lib_LTLIBRARIES = libIP2Location.la
 include_HEADERS = IP2Location.h
 
 libIP2Location_la_SOURCES = IP2Location.c									
-libIP2Location_la_LDFLAGS = -no-undefined -version-info 1:0:0
+libIP2Location_la_LDFLAGS = -no-undefined -version-info 2:0:0
