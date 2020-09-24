@@ -1,4 +1,4 @@
-%define	version 8.0.9
+%define	version 8.1.0
 
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
@@ -122,6 +122,12 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Thu Sep 24 2020 IP2Location <support@ip2location.com> - 8.1.0-1
+- fixed version number and typo
+
+* Thu Sep 24 2002 IP2Location <support@ip2location.com> - 8.1.0
+- fixed memory leak issues
+
 * Tue Sep 15 2020 Peter Bieringer <pb@bieringer.de> - 8.0.9-8
 - new subpackage data-sample
 
