@@ -95,7 +95,7 @@ extern "C" {
 #define INVALID_IP_ADDRESS "INVALID IP ADDRESS"
 #define IPV6_ADDRESS_MISSING_IN_IPV4_BIN "IPV6 ADDRESS MISSING IN IPV4 BIN"
 #define NOT_SUPPORTED "This parameter is unavailable for selected data file. Please upgrade the data file."
-#define IP2LOCATION_SHM "/IP2handleration_Shm"
+#define IP2LOCATION_SHM "/IP2location_Shm"
 #define MAP_ADDR 4194500608
 
 enum IP2Location_lookup_mode {
