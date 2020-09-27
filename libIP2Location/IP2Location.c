@@ -129,6 +129,12 @@ static int IP2Location_initialize(IP2Location *handler)
 	return 0;
 }
 
+// Setup lookup mode (Will deprecate in coming major version update)
+int32_t IP2Location_open_mem(IP2Location *handler, enum IP2Location_lookup_mode mode)
+{
+	return IP2Location_set_lookup_mode(handler, mode);
+}
+
 // Set lookup mode
 int32_t IP2Location_set_lookup_mode(IP2Location *handler, enum IP2Location_lookup_mode mode)
 {
@@ -167,6 +173,12 @@ uint32_t IP2Location_close(IP2Location *handler)
 	}
 
 	return 0;
+}
+
+// Clear memory object (Will deprecate in coming major version update)
+void IP2Location_delete_shm()
+{
+	IP2Location_delete_shared_memory();
 }
 
 // Clear memory object
@@ -745,6 +757,13 @@ static int IP2Location_is_ipv6(char *ip)
 {
 	struct in6_addr result;
 	return inet_pton(AF_INET6, ip, &result);
+}
+
+
+// Get API version numeric (Will deprecate in coming major version update)
+unsigned long int IP2Location_api_version_num(void)
+{
+	return (API_VERSION_NUMERIC);
 }
 
 // Get API version numeric
