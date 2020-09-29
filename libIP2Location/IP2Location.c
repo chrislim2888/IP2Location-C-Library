@@ -176,7 +176,7 @@ uint32_t IP2Location_close(IP2Location *handler)
 }
 
 // Clear memory object (Will deprecate in coming major version update)
-void IP2Location_delete_shm()
+void IP2Location_DB_del_shm()
 {
 	IP2Location_delete_shared_memory();
 }
@@ -386,18 +386,18 @@ static IP2LocationRecord *IP2Location_bad_record(const char *message)
 	record->latitude = 0;
 	record->longitude = 0;
 	record->domain = strdup(message);
-	record->zip_code = strdup(message);
-	record->time_zone = strdup(message);
-	record->net_speed = strdup(message);
-	record->idd_code = strdup(message);
-	record->area_code = strdup(message);
-	record->weather_station_code = strdup(message);
-	record->weather_station_name = strdup(message);
+	record->zipcode = strdup(message);
+	record->timezone = strdup(message);
+	record->netspeed = strdup(message);
+	record->iddcode = strdup(message);
+	record->areacode = strdup(message);
+	record->weatherstationcode = strdup(message);
+	record->weatherstationname = strdup(message);
 	record->mcc = strdup(message);
 	record->mnc = strdup(message);
-	record->mobile_brand = strdup(message);
+	record->mobilebrand = strdup(message);
 	record->elevation = 0;
-	record->usage_type = strdup(message);
+	record->usagetype = strdup(message);
 
 	return record;
 }
@@ -480,72 +480,72 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint32_t
 	}
 
 	if ((mode & ZIPCODE) && (ZIPCODE_POSITION[database_type] != 0)) {
-		if (!record->zip_code) {
-			record->zip_code = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (ZIPCODE_POSITION[database_type] - 1)));
+		if (!record->zipcode) {
+			record->zipcode = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (ZIPCODE_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->zip_code) {
-			record->zip_code = strdup(NOT_SUPPORTED);
+		if (!record->zipcode) {
+			record->zipcode = strdup(NOT_SUPPORTED);
 		}
 	}
 
 	if ((mode & TIMEZONE) && (TIMEZONE_POSITION[database_type] != 0)) {
-		if (!record->time_zone) {
-			record->time_zone = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (TIMEZONE_POSITION[database_type] - 1)));
+		if (!record->timezone) {
+			record->timezone = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (TIMEZONE_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->time_zone) {
-			record->time_zone = strdup(NOT_SUPPORTED);
+		if (!record->timezone) {
+			record->timezone = strdup(NOT_SUPPORTED);
 		}
 	}
 
 	if ((mode & NETSPEED) && (NETSPEED_POSITION[database_type] != 0)) {
-		if (!record->net_speed) {
-			record->net_speed = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (NETSPEED_POSITION[database_type] - 1)));
+		if (!record->netspeed) {
+			record->netspeed = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (NETSPEED_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->net_speed) {
-			record->net_speed = strdup(NOT_SUPPORTED);
+		if (!record->netspeed) {
+			record->netspeed = strdup(NOT_SUPPORTED);
 		}
 	}
 
 	if ((mode & IDDCODE) && (IDDCODE_POSITION[database_type] != 0)) {
-		if (!record->idd_code) {
-			record->idd_code = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (IDDCODE_POSITION[database_type] - 1)));
+		if (!record->iddcode) {
+			record->iddcode = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (IDDCODE_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->idd_code) {
-			record->idd_code = strdup(NOT_SUPPORTED);
+		if (!record->iddcode) {
+			record->iddcode = strdup(NOT_SUPPORTED);
 		}
 	}
 
 	if ((mode & AREACODE) && (AREACODE_POSITION[database_type] != 0)) {
-		if (!record->area_code) {
-			record->area_code = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (AREACODE_POSITION[database_type] - 1)));
+		if (!record->areacode) {
+			record->areacode = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (AREACODE_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->area_code) {
-			record->area_code = strdup(NOT_SUPPORTED);
+		if (!record->areacode) {
+			record->areacode = strdup(NOT_SUPPORTED);
 		}
 	}
 
 	if ((mode & WEATHERSTATIONCODE) && (WEATHERSTATIONCODE_POSITION[database_type] != 0)) {
-		if (!record->weather_station_code) {
-			record->weather_station_code = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (WEATHERSTATIONCODE_POSITION[database_type] - 1)));
+		if (!record->weatherstationcode) {
+			record->weatherstationcode = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (WEATHERSTATIONCODE_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->weather_station_code) {
-			record->weather_station_code = strdup(NOT_SUPPORTED);
+		if (!record->weatherstationcode) {
+			record->weatherstationcode = strdup(NOT_SUPPORTED);
 		}
 	}
 
 	if ((mode & WEATHERSTATIONNAME) && (WEATHERSTATIONNAME_POSITION[database_type] != 0)) {
-		if (!record->weather_station_name) {
-			record->weather_station_name = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (WEATHERSTATIONNAME_POSITION[database_type] - 1)));
+		if (!record->weatherstationname) {
+			record->weatherstationname = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (WEATHERSTATIONNAME_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->weather_station_name) {
-			record->weather_station_name = strdup(NOT_SUPPORTED);
+		if (!record->weatherstationname) {
+			record->weatherstationname = strdup(NOT_SUPPORTED);
 		}
 	}
 
@@ -570,12 +570,12 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint32_t
 	}
 
 	if ((mode & MOBILEBRAND) && (MOBILEBRAND_POSITION[database_type] != 0)) {
-		if (!record->mobile_brand) {
-			record->mobile_brand = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (MOBILEBRAND_POSITION[database_type] - 1)));
+		if (!record->mobilebrand) {
+			record->mobilebrand = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (MOBILEBRAND_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->mobile_brand) {
-			record->mobile_brand = strdup(NOT_SUPPORTED);
+		if (!record->mobilebrand) {
+			record->mobilebrand = strdup(NOT_SUPPORTED);
 		}
 	}
 
@@ -588,12 +588,12 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint32_t
 	}
 
 	if ((mode & USAGETYPE) && (USAGETYPE_POSITION[database_type] != 0)) {
-		if (!record->usage_type) {
-			record->usage_type = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (USAGETYPE_POSITION[database_type] - 1)));
+		if (!record->usagetype) {
+			record->usagetype = IP2Location_read_string(handle, IP2Location_read32(handle, rowaddr + 4 * (USAGETYPE_POSITION[database_type] - 1)));
 		}
 	} else {
-		if (!record->usage_type) {
-			record->usage_type = strdup(NOT_SUPPORTED);
+		if (!record->usagetype) {
+			record->usagetype = strdup(NOT_SUPPORTED);
 		}
 	}
 	return record;
@@ -731,17 +731,17 @@ void IP2Location_free_record(IP2LocationRecord *record) {
 	free(record->domain);
 	free(record->isp);
 	free(record->region);
-	free(record->zip_code);
-	free(record->time_zone);
-	free(record->net_speed);
-	free(record->idd_code);
-	free(record->area_code);
-	free(record->weather_station_code);
-	free(record->weather_station_name);
+	free(record->zipcode);
+	free(record->timezone);
+	free(record->netspeed);
+	free(record->iddcode);
+	free(record->areacode);
+	free(record->weatherstationcode);
+	free(record->weatherstationname);
 	free(record->mcc);
 	free(record->mnc);
-	free(record->mobile_brand);
-	free(record->usage_type);
+	free(record->mobilebrand);
+	free(record->usagetype);
 	free(record);
 }
 
@@ -1148,4 +1148,5 @@ float IP2Location_read_float(FILE *handle, uint32_t position)
 #endif
 	return ret;
 }
+
 

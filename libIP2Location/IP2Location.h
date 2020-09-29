@@ -54,10 +54,10 @@ extern "C" {
 #endif
 #endif
 
-#define API_VERSION			8.1.3
+#define API_VERSION			8.1.4
 #define API_VERSION_MAJOR	8
 #define API_VERSION_MINOR	1
-#define API_VERSION_RELEASE	3
+#define API_VERSION_RELEASE	4
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE	4294967295U
@@ -129,17 +129,17 @@ typedef struct {
 	char *city;
 	char *isp;
 	char *domain;
-	char *zip_code;
-	char *time_zone;
-	char *net_speed;
-	char *idd_code;
-	char *area_code;
-	char *weather_station_code;
-	char *weather_station_name;
+	char *zipcode;
+	char *timezone;
+	char *netspeed;
+	char *iddcode;
+	char *areacode;
+	char *weatherstationcode;
+	char *weatherstationname;
 	char *mcc;
 	char *mnc;
-	char *mobile_brand;
-	char *usage_type;
+	char *mobilebrand;
+	char *usagetype;
 
 	float latitude;
 	float longitude;
@@ -173,7 +173,7 @@ IP2LocationRecord *IP2Location_get_elevation(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_usagetype(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
-void IP2Location_delete_shm();
+void IP2Location_DB_del_shm();
 void IP2Location_clear_memory();
 unsigned long int IP2Location_api_version_number(void);
 unsigned long int IP2Location_api_version_num(void);

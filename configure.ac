@@ -1,6 +1,6 @@
 AC_PREREQ(2.59)
-AC_INIT([IP2Loc], [8.1.3], [support@ip2location.com])
-AM_INIT_AUTOMAKE([IP2Loc], [8.1.3])
+AC_INIT([IP2Loc], [8.1.4], [support@ip2location.com])
+AM_INIT_AUTOMAKE([IP2Loc], [8.1.4])
 
 #AC_PREFIX_DEFAULT(/usr/)
 AM_CONFIG_HEADER([config.h])
