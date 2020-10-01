@@ -154,7 +154,7 @@ typedef struct {
 	char *weather_station_code;
 	char *weather_station_name;
 	char *mobile_brand;
-	char *usaget_ype;
+	char *usage_type;
 } IP2LocationRecord;
 
 /* Public functions */

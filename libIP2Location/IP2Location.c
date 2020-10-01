@@ -411,6 +411,16 @@ static IP2LocationRecord *IP2Location_bad_record(const char *message)
 	record->elevation = 0;
 	record->usagetype = strdup(message);
 
+	record->zip_code = strdup(message);
+	record->time_zone = strdup(message);
+	record->net_speed = strdup(message);
+	record->idd_code = strdup(message);
+	record->area_code = strdup(message);
+	record->weather_station_code = strdup(message);
+	record->weather_station_name = strdup(message);
+	record->mobile_brand = strdup(message);
+	record->usage_type = strdup(message);
+
 	return record;
 }
 
@@ -608,6 +618,17 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint32_t
 			record->usagetype = strdup(NOT_SUPPORTED);
 		}
 	}
+
+	record->zip_code = record->zipcode;
+	record->time_zone = record->timezone;
+	record->net_speed = record->netspeed;
+	record->idd_code = record->iddcode;
+	record->area_code = record->areacode;
+	record->weather_station_code = record->weatherstationcode;
+	record->weather_station_name = record->weatherstationname;
+	record->mobile_brand = record->mobilebrand;
+	record->usage_type = record->usagetype;
+
 	return record;
 }
 
@@ -754,6 +775,7 @@ void IP2Location_free_record(IP2LocationRecord *record) {
 	free(record->mnc);
 	free(record->mobilebrand);
 	free(record->usagetype);
+
 	free(record);
 }
 
