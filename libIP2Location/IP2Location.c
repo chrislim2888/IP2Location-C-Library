@@ -156,6 +156,12 @@ int32_t IP2Location_open_mem(IP2Location *handler, enum IP2Location_lookup_mode 
 	}
 }
 
+// Alias to IP2Location_open_mem()
+int32_t IP2Location_set_lookup_mode(IP2Location *handler, enum IP2Location_lookup_mode mode)
+{
+	return IP2Location_open_mem(handler, mode);
+}
+
 // Close the IP2Location database file
 uint32_t IP2Location_close(IP2Location *handler)
 {
@@ -175,6 +181,18 @@ void IP2Location_delete_shm()
     IP2Location_DB_del_shm();
 }
 
+// Alias to IP2Location_delete_shm()
+void IP2Location_clear_memory()
+{
+	IP2Location_delete_shm();
+}
+
+// Alias to IP2Location_DB_del_shm()
+void IP2Location_delete_shared_memory()
+{
+	IP2Location_DB_del_shm();
+}
+
 // Compare IPv6 address
 int ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
 {
@@ -190,6 +208,12 @@ int ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
 	}
 
 	return ret;
+}
+
+// Alias to 
+int IP2Location_ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
+{
+	return ipv6_compare(addr1, addr2);
 }
 
 // Parse IP address into binary address for lookup purpose
@@ -621,10 +645,10 @@ static IP2LocationRecord * IP2Location_get_ipv6_record(IP2Location *handler, uin
 		ip_from = IP2Location_readIPv6Address(handle, base_address + mid * (database_column * 4 + 12));
 		ip_to = IP2Location_readIPv6Address(handle, base_address + (mid + 1) * (database_column * 4 + 12));
 
-		if ((ipv6_compare(&ip_number, &ip_from) >= 0) && (ipv6_compare(&ip_number, &ip_to) < 0)) {
+		if ((IP2Location_ipv6_compare(&ip_number, &ip_from) >= 0) && (IP2Location_ipv6_compare(&ip_number, &ip_to) < 0)) {
 			return IP2Location_read_record(handler, base_address + mid * (database_column * 4 + 12) + 12, mode);
 		} else {
-			if (ipv6_compare(&ip_number, &ip_from) < 0) {
+			if (IP2Location_ipv6_compare(&ip_number, &ip_from) < 0) {
 				high = mid - 1;
 			} else {
 				low = mid + 1;
@@ -753,6 +777,12 @@ unsigned long int IP2Location_api_version_num(void)
 	return (API_VERSION_NUMERIC);
 }
 
+// Alias to IP2Location_api_version_num()
+unsigned long int IP2Location_api_version_number(void)
+{
+	return IP2Location_api_version_num();
+}
+
 // Get API version as string
 char *IP2Location_api_version_string(void)
 {
@@ -790,6 +820,12 @@ int32_t IP2Location_DB_set_memory_cache(FILE *file)
 	}
 
 	return 0;
+}
+
+// Alias to IP2Location_DB_set_memory_cache()
+int32_t IP2Location_set_memory_cache(FILE *file)
+{
+	return IP2Location_DB_set_memory_cache(file);
 }
 
 // Set to use shared memory
@@ -902,6 +938,12 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 #endif
 #endif
 
+// Alias to IP2Location_DB_set_shared_memory()
+int32_t IP2Location_set_shared_memory(FILE *file)
+{
+	return IP2Location_DB_set_shared_memory(file);
+}
+
 // Load BIN file into memory
 int32_t IP2Location_load_database_into_memory(FILE *file, void *memory, int64_t size)
 {
@@ -948,6 +990,13 @@ int32_t IP2Location_DB_close(FILE *file)
 	return 0;
 }
 
+
+// Alias to IP2Location_DB_close
+int32_t IP2Location_close_memory(FILE *file)
+{
+	return IP2Location_DB_close(file);
+}
+
 #ifndef	WIN32
 // Remove shared memory object
 void IP2Location_DB_del_shm()
@@ -972,6 +1021,12 @@ struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position)
 	}
 
 	return addr6;
+}
+
+// Alias to IP2Location_readIPv6Address()
+struct in6_addr IP2Location_read_ipv6_address(FILE *handle, uint32_t position)
+{
+	return IP2Location_readIPv6Address(handle, position);
 }
 
 uint32_t IP2Location_read32(FILE *handle, uint32_t position)
@@ -1073,6 +1128,12 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
 	return str;
 }
 
+// Alias to IP2Location_readStr()
+char *IP2Location_read_string(FILE *handle, uint32_t position)
+{	
+	return IP2Location_readStr(handle, position);
+}
+
 float IP2Location_readFloat(FILE *handle, uint32_t position)
 {
 	float ret = 0.0;
@@ -1130,4 +1191,8 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 	return ret;
 }
 
-
+// Alias to IP2Location_readFloat()
+float IP2Location_read_float(FILE *handle, uint32_t position)
+{
+	return IP2Location_readFloat(handle, position);
+}
