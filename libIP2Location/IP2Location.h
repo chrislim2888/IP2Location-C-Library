@@ -54,10 +54,10 @@ extern "C" {
 #endif
 #endif
 
-#define API_VERSION			8.1.4
+#define API_VERSION			8.2.0
 #define API_VERSION_MAJOR	8
-#define API_VERSION_MINOR	1
-#define API_VERSION_RELEASE	4
+#define API_VERSION_MINOR	2
+#define API_VERSION_RELEASE	0
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE	4294967295U
@@ -128,6 +128,8 @@ typedef struct {
 	char *region;
 	char *city;
 	char *isp;
+	float latitude;
+	float longitude;
 	char *domain;
 	char *zipcode;
 	char *timezone;
@@ -139,17 +141,13 @@ typedef struct {
 	char *mcc;
 	char *mnc;
 	char *mobilebrand;
-	char *usagetype;
-
-	float latitude;
-	float longitude;
 	float elevation;
+	char *usagetype;
 } IP2LocationRecord;
 
 /* Public functions */
 IP2Location *IP2Location_open(char *bin);
 int IP2Location_open_mem(IP2Location *handler, enum IP2Location_lookup_mode);
-int IP2Location_set_lookup_mode(IP2Location *handler, enum IP2Location_lookup_mode);
 uint32_t IP2Location_close(IP2Location *handler);
 IP2LocationRecord *IP2Location_get_country_short(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_country_long(IP2Location *handler, char *ip);
@@ -173,21 +171,24 @@ IP2LocationRecord *IP2Location_get_elevation(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_usagetype(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
-void IP2Location_DB_del_shm();
-void IP2Location_clear_memory();
-unsigned long int IP2Location_api_version_number(void);
+void IP2Location_delete_shm();
 unsigned long int IP2Location_api_version_num(void);
 char *IP2Location_api_version_string(void);
 char *IP2Location_lib_version_string(void);
-struct in6_addr IP2Location_read_ipv6_address(FILE *handle, uint32_t position);
+void IP2Location_delete_shared_memory();
+
+struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position);
 uint32_t IP2Location_read32(FILE *handle, uint32_t position);
 uint8_t IP2Location_read8(FILE *handle, uint32_t position);
-char *IP2Location_read_string(FILE *handle, uint32_t position);
-float IP2Location_read_float(FILE *handle, uint32_t position);
-int32_t IP2Location_set_memory_cache(FILE *file);
-int32_t IP2Location_set_shared_memory(FILE *file);
-int32_t IP2Location_close_memory(FILE *file);
-void IP2Location_delete_shared_memory();
+char *IP2Location_readStr(FILE *handle, uint32_t position);
+float IP2Location_readFloat(FILE *handle, uint32_t position);
+int32_t IP2Location_DB_set_file_io();
+int32_t IP2Location_DB_set_memory_cache(FILE *file);
+int32_t IP2Location_DB_set_shared_memory(FILE *file);
+int32_t IP2Location_DB_close(FILE *file);
+void IP2Location_DB_del_shm();
+
+
 
 #ifdef __cplusplus
 }

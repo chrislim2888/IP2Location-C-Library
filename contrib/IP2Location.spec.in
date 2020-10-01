@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Thu Oct 01 2020 IP2Location <support@ip2location.com> - 8.2.0
+- reverted changes based on 8.0.9
+
 * Wed Sep 30 2020 IP2Location <support@ip2location.com> - 8.1.4
 - restored internal variables
 

@@ -22,7 +22,7 @@ int main () {
 #endif
 	IP2LocationRecord *record = NULL;
 	
-	printf("IP2Location API version: %s (%lu)\n", IP2Location_api_version_string(), IP2Location_api_version_number());
+	printf("IP2Location API version: %s (%lu)\n", IP2Location_api_version_string(), IP2Location_api_version_num());
 
 	if (IP2LocationObj == NULL)
 	{
@@ -30,9 +30,9 @@ int main () {
 		return -1;
 	}
 
-	if(IP2Location_set_lookup_mode(IP2LocationObj, IP2LOCATION_SHARED_MEMORY) == -1)
+	if(IP2Location_open_mem(IP2LocationObj, IP2LOCATION_SHARED_MEMORY) == -1)
 	{
-		fprintf(stderr, "IPv4: Call to IP2Location_set_lookup_mode failed\n");
+		fprintf(stderr, "IPv4: Call to IP2Location_open_mem failed\n");
 	}
 	
 	f = fopen("country_test_ipv4_data.txt","r");
@@ -60,11 +60,11 @@ int main () {
 	/*Below call will delete the shared memory unless if any other process is attached it. 
 	 *if any other process is attached to it, shared memory will be closed when last process
 	 *attached to it closes the shared memory 
-	 *If any process call e, next process which IP2Location_set_lookup_mode
+	 *If any process call e, next process which IP2Location_open_mem
 	 *with shared memory option, will open the new shared memory.Deleted memory will not be available for
 	 * any new process but will be accesible for the processes which are already using it. 
 	 */
-	IP2Location_clear_memory();
+	IP2Location_delete_shm();
 	if ((test_num > 1) && (failed == 0)) {
 		fprintf(stdout, "IP2Location IPv4 Testing passed.\n");
 	}
@@ -75,9 +75,9 @@ int main () {
 #else
 	IP2LocationObj = IP2Location_open("../data/IPV6-COUNTRY.BIN");
 #endif
-	if ( IP2Location_set_lookup_mode(IP2LocationObj, IP2LOCATION_FILE_IO) == -1 )
+	if ( IP2Location_open_mem(IP2LocationObj, IP2LOCATION_FILE_IO) == -1 )
 	{
-		fprintf(stderr, "IPv6: Call to IP2Location_set_lookup_mode failed\n");
+		fprintf(stderr, "IPv6: Call to IP2Location_open_mem failed\n");
 	}	
 	record = NULL;
 	if (IP2LocationObj == NULL)
