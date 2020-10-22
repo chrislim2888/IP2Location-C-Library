@@ -8,8 +8,7 @@ CCFLAGS = /nologo /D WIN32 /c /ML
 CLFLAGS = /nologo /NODEFAULTLIB:LIBCD /SUBSYSTEM:CONSOLE 
 
 HEADER_INCLUDE = /I libIP2Location
-IP2LOCATION_SOURCE = libIP2Location/IP2Location.c \
-										 libIP2Location/IP2Loc_DBInterface.c 
+IP2LOCATION_SOURCE = libIP2Location/IP2Location.c
 
 TEST_IP2LOCATION = test/test-IP2Location.c
 										 
