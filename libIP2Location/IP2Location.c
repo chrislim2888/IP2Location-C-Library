@@ -828,7 +828,7 @@ char *IP2Location_bin_version(IP2Location *handler)
 		return NULL;
 	}
 
-	static char version[10];
+	static char version[64];
 	
 	sprintf(version, "%d-%d-%d", handler->database_year + 2000, handler->database_month, handler->database_day);
 	
