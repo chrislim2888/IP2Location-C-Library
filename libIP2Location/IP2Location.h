@@ -54,9 +54,9 @@ extern "C" {
 #endif
 #endif
 
-#define API_VERSION			8.2.0
+#define API_VERSION			8.3.0
 #define API_VERSION_MAJOR	8
-#define API_VERSION_MINOR	2
+#define API_VERSION_MINOR	3
 #define API_VERSION_RELEASE	0
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
@@ -187,6 +187,7 @@ void IP2Location_delete_shm();
 unsigned long int IP2Location_api_version_num(void);
 char *IP2Location_api_version_string(void);
 char *IP2Location_lib_version_string(void);
+char *IP2Location_bin_version(IP2Location *handler);
 
 struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position);
 uint32_t IP2Location_read32(FILE *handle, uint32_t position);

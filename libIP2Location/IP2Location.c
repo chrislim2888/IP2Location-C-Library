@@ -821,6 +821,20 @@ char *IP2Location_lib_version_string(void)
 	return (PACKAGE_VERSION);
 }
 
+// Get BIN database version
+char *IP2Location_bin_version(IP2Location *handler)
+{
+	if (handler == NULL) {
+		return NULL;
+	}
+
+	static char version[10];
+	
+	sprintf(version, "%d-%d-%d", handler->database_year + 2000, handler->database_month, handler->database_day);
+	
+	return (version);
+}
+
 // Set to use memory caching
 int32_t IP2Location_DB_set_memory_cache(FILE *file)
 {

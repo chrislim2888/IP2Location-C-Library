@@ -30,6 +30,8 @@ int main () {
 		return -1;
 	}
 
+	fprintf(stdout,"IP2Location BIN version: %s\n", IP2Location_bin_version(IP2LocationObj));
+
 	if(IP2Location_open_mem(IP2LocationObj, IP2LOCATION_SHARED_MEMORY) == -1)
 	{
 		fprintf(stderr, "IPv4: Call to IP2Location_open_mem failed\n");
