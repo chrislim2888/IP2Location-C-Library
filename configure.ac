@@ -1,13 +1,8 @@
 AC_PREREQ(2.59)
-AC_INIT([IP2Loc], [8.3.0], [support@ip2location.com])
-AM_INIT_AUTOMAKE([IP2Loc], [8.3.0])
+AC_INIT([IP2Loc], [8.4.0], [support@ip2location.com])
+AM_INIT_AUTOMAKE([ subdir-objects ])
 
-#AC_PREFIX_DEFAULT(/usr/)
 AM_CONFIG_HEADER([config.h])
-# AM_MAINTAINER_MODE
-
-AM_CONDITIONAL(NDEBUG, test "$disable_debug" = yes)
-AM_CONDITIONAL(PROFILE, test "$enable_profile" = yes)
 
 AC_CANONICAL_HOST
 AC_C_CONST
@@ -22,7 +17,7 @@ case "$host" in
   CFLAGS="$CFLAGS -lrt"
   ;;
 *-*-linux*)
-  CPPFLAGS="$CPPFLAGS -D _GNU_SOURCE -I/usr/include "
+  CPPFLAGS="$CPPFLAGS -D _GNU_SOURCE -I/usr/include -Wno-unused-result"
   LDFLAGS="$LDFLAGS"
   CFLAGS="$CFLAGS -lrt"
   ;;
@@ -41,15 +36,7 @@ AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
-# Checks for header files.
-#AC_HEADER_DIRENT
-#AC_HEADER_STDC
-#AC_HEADER_SYS_WAIT
-#AC_HEADER_TIME
-#AC_HEADER_STDBOOL
-
 AC_CHECK_HEADERS([netinet/in.h stdlib.h string.h unistd.h])
-
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
@@ -83,10 +70,10 @@ AC_DEFINE_DIR(LIBDIR, libdir, [where to look for plugins])
 AC_DEFINE_DIR(SYSCONFDIR, [sysconfdir], [System configuration dir])
 
 AC_CONFIG_FILES([Makefile
-                 libIP2Location/Makefile
-                 test/Makefile
-                 data/Makefile])
-                 
+		libIP2Location/Makefile
+		test/Makefile
+		data/Makefile])
+
 AC_OUTPUT([
-		 contrib/IP2Location.spec
-	   ])
+  contrib/IP2Location.spec
+])

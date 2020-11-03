@@ -1,0 +1,96 @@
+.TH IP2LOCATION 1
+.SH NAME
+ip2location \- query IP address information from local IP2Location BIN data file
+
+.SH SYNOPSIS
+ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-ip [IP ADDRESS] [OPTIONS]
+    
+.SH DESCRIPTION
+.PP
+ip2location read the IP address, IPv4 or IPv6 address format, and get the information from IP2Location BIN data file for display.
+.PP
+User may provide the IP address as standard input or file containing one IP address per line. Several output formats supported such as CSV, TAB and XML.
+.PP
+You can download the IP2Location BIN data file from http://www.ip2location.com or http://lite.ip2location.com
+.SH EXAMPLES
+.TP
+ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-ip [IP ADDRESS]
+Query an IP address and display the results on screen
+.TP
+ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-input-file [INPUT FILE PATH]
+Query all IP addresses from an input file and display the results on screen
+.TP
+ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-input-file [INPUT FILE PATH] \-\-format XML
+Query all IP addresses from an input file and display the results in XML format on screen
+.TP
+ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-input-file [INPUT FILE PATH] \-\-format TAB \-\-output-file [OUTPUT FILE PATH]
+Query all IP addresses from an input file and output the result to a file in TAB format
+.TP
+ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-ip [IP ADDRESS] \-\-field country_code \-\no-heading
+Query an IP address and display the country_short result
+.TP
+ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-ip [IP ADDRESS] \-\-field country_code,city_name \-\no-heading \-\-format TAB
+Query an IP address and display the country_short and city result
+    
+.SH OPTIONS
+\-b, \-\-bin-version
+    Print the IP2Location BIN database version.
+
+\-d, \-\-data-file
+    Specify the path of IP2Location .BIN data file.
+
+\-i, \-\-input-file
+    Specify an input file with IP address list.
+
+\-p, \-\-ip         
+    Specify an IP address query (Supported IPv4 and IPv6 address).
+
+\-o, \-\-output-file 
+    Specify output file for query results.
+
+\-f, \-\-format     
+    Specify output format. Supported formats are:
+        \- CSV (default)
+        \- TAB
+        \- XML
+           
+\-h, \-?, \-\-help       
+    Display this help file
+
+\-v, \-\-version    
+    Display the version number
+
+\-e, \-\-field          
+    Specify the field to be displayed. Supported values are:
+        \- ip
+        \- country_code
+        \- country_name
+        \- region_name
+        \- city_name
+        \- isp
+        \- latitude
+        \- longitude
+        \- domain
+        \- zip_code
+        \- time_zone
+        \- net_speed
+        \- idd_code
+        \- area_code
+        \- weather_station_code
+        \- weather_station_name
+        \- mcc
+        \- mnc
+        \- mobile_brand
+        \- elevation
+        \- usage_type
+        
+\-n, \-\no-heading              
+    Suppress the heading display.
+    
+.SH [AUTHORS]
+This tool was created by IP2Location (http://www.ip2location.com).
+    
+.SH [COPYRIGHT AND LICENSE]
+Copyright 2001\-2020 IP2Location.com
+
+This tool is licensed under MIT.
