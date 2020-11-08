@@ -5,14 +5,14 @@
 static void print_usage(const char *argv0)
 {
 	printf(
-"ip2location -p [IP ADDRESS] -d [IP2LOCATION BIN DATA PATH] [OPTIONS]\n"
+"ip2location -d <IP2LOCATION BIN DATA PATH> -p <IP ADDRESS> [OPTIONS]\n"
 "	-b, --bin-version\n"
 "		Print the IP2Location BIN database version.\n"
 "\n"
 "	-d, --data-file\n"
 "		Specify the path of IP2Location BIN data file.\n"
 "\n"
-"   -e, --field\n"
+"	-e, --field\n"
 "		Output the field data.\n"
 "		Field name includes:\n"
 "			country_code	 \n"
@@ -76,33 +76,33 @@ static void print_usage(const char *argv0)
 "			Usage type classification of ISP or company.\n"
 "\n"
 "	-f, --format\n"
-"	Output format. Supported format:\n"
-"		- csv (default)\n"
-"		- tab\n"
-"		- xml\n"
+"		Output format. Supported format:\n"
+"			CSV (default)\n"
+"			TAB\n"
+"			XML\n"
 "\n"
 "	-h, -?, --help\n"
-"	Display the help.\n"
+"		Display the help.\n"
 "\n"
 "	-i, --input-file\n"
-"	Specify an input file of IP address list, one IP per row.\n"
+"		Specify an input file of IP address list, one IP per row.\n"
 "\n"
 "	-n, --no-heading\n"
-"	Suppress the heading display.\n"
+"		Suppress the heading display.\n"
 "\n"
 "	-o, --output-file\n"
-"	Specify an output file to store the lookup results.\n"
+"		Specify an output file to store the lookup results.\n"
 "\n"
 "	-p, --ip\n"
-"	Specify an IP address query (Supported IPv4 and IPv6 address).\n"
+"		Specify an IP address query (Supported IPv4 and IPv6 address).\n"
 "\n"
 "	-v, --version\n"
-"	Print the version of the IP2Location version.\n");
+"		Print the version of the IP2Location version.\n");
 }
 
 static void print_version()
 {
-	printf("IP2Location version 8.4.0\n");
+	printf("IP2Location version %s\n", IP2Location_lib_version_string());
 }
 
 static void print_footer(FILE *fout, const char *field, const char *format)
