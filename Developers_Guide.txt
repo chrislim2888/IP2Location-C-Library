@@ -72,4 +72,4 @@ When IP2Location_clear_memory() function is called, and if any other process(es)
 After calling IP2Location_clear_memory(), the next call to IP2Location_set_lookup_mode() with IP2LOCATION_SHARED_MEMORY option will result in a new shared memory and will not reuse the old one if one exists and used by any other process. Please refer shm_open and shm_unlink man pages for more info.
 
 
-Version 8.4.0  03/11/2020
+Version 8.3.1  03/11/2020
