@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Mon Nov 09 2020 IP2Location <support@ip2location.com> - 8.3.1-1
+- fixed version number
+
 * Tue Nov 03 2020 IP2Location <support@ip2location.com> - 8.3.1
 - included ip2location lookup
 
