@@ -868,6 +868,15 @@ int32_t IP2Location_set_memory_cache(FILE *file)
 
 // Set to use shared memory
 #ifndef WIN32
+static const char *get_shm_name(void) {
+	static char name[64] = "";
+
+	if (!name[0]) {
+		sprintf(name, "%s_%ld", IP2LOCATION_SHM, (long)getpid());
+	}
+	return name;
+}
+
 int32_t IP2Location_DB_set_shared_memory(FILE *file)
 {
 	struct stat buffer;
@@ -877,12 +886,12 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 	lookup_mode = IP2LOCATION_SHARED_MEMORY;
 
 	// New shared memory object is created
-	if ((shm_fd = shm_open(IP2LOCATION_SHM, O_RDWR | O_CREAT | O_EXCL, 0777)) != -1) {
+	if ((shm_fd = shm_open(get_shm_name(), O_RDWR | O_CREAT | O_EXCL, 0777)) != -1) {
 		is_dababase_loaded = 0;
 	}
 
 	// Failed to create new shared memory object
-	else if ((shm_fd = shm_open(IP2LOCATION_SHM, O_RDWR , 0777)) == -1) {
+	else if ((shm_fd = shm_open(get_shm_name(), O_RDWR , 0777)) == -1) {
 		lookup_mode = IP2LOCATION_FILE_IO;
 		return -1;
 	}
@@ -891,7 +900,7 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		close(shm_fd);
 
 		if (is_dababase_loaded == 0) {
-			shm_unlink(IP2LOCATION_SHM);
+			shm_unlink(get_shm_name());
 		}
 		
 		lookup_mode = IP2LOCATION_FILE_IO;
@@ -901,7 +910,7 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 
 	if (is_dababase_loaded == 0 && ftruncate(shm_fd, buffer.st_size + 1) == -1) {
 		close(shm_fd);
-		shm_unlink(IP2LOCATION_SHM);
+		shm_unlink(get_shm_name());
 		lookup_mode = IP2LOCATION_FILE_IO;
 		return -1;
 	}
@@ -912,7 +921,7 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		close(shm_fd);
 
 		if (is_dababase_loaded == 0) {
-			shm_unlink(IP2LOCATION_SHM);
+			shm_unlink(get_shm_name());
 		}
 		
 		lookup_mode = IP2LOCATION_FILE_IO;
@@ -924,7 +933,7 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		if (IP2Location_load_database_into_memory(file, memory_pointer, buffer.st_size) == -1) {
 			munmap(memory_pointer, buffer.st_size);
 			close(shm_fd);
-			shm_unlink(IP2LOCATION_SHM);
+			shm_unlink(get_shm_name());
 			lookup_mode = IP2LOCATION_FILE_IO;
 			return -1;
 		}
@@ -1039,7 +1048,7 @@ int32_t IP2Location_close_memory(FILE *file)
 // Remove shared memory object
 void IP2Location_DB_del_shm()
 {
-	shm_unlink(IP2LOCATION_SHM);
+	shm_unlink(get_shm_name());
 }
 #else
 #ifdef WIN32
