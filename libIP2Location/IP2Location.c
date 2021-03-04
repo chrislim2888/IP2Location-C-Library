@@ -33,6 +33,7 @@
 	#define _STR2(x) #x
 	#define _STR(x) _STR2(x)
 	#define PACKAGE_VERSION _STR(API_VERSION)
+	#include <tchar.h>
 #else
 	#include "../config.h"
 #endif
@@ -866,17 +867,18 @@ int32_t IP2Location_set_memory_cache(FILE *file)
 	return IP2Location_DB_set_memory_cache(file);
 }
 
-// Set to use shared memory
+// Return the shared-memory name
 #ifndef WIN32
 static const char *get_shm_name(void) {
 	static char name[64] = "";
 
 	if (!name[0]) {
-		sprintf(name, "%s_%ld", IP2LOCATION_SHM, (long)getpid());
+		sprintf(name, "/%s_%ld", IP2LOCATION_SHM, (long)getpid());
 	}
 	return name;
 }
 
+// Set to use shared memory
 int32_t IP2Location_DB_set_shared_memory(FILE *file)
 {
 	struct stat buffer;
@@ -943,6 +945,19 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 }
 #else
 #ifdef WIN32
+// Return a name for the shared-memory object
+// For Windows, this depends on whether 'UNICODE' is defined
+// (hence the use of 'TCHAR').
+static const TCHAR *get_shm_name(void) {
+	static TCHAR name[64] = _T("");
+
+	if (!name[0]) {
+		_sntprintf(name, sizeof(name)/sizeof(name[0]), _T("%s_%lu"),
+                   _T(IP2LOCATION_SHM), GetProcessId(NULL));
+	}
+	return name;
+}
+
 int32_t IP2Location_DB_set_shared_memory(FILE *file)
 {
 	struct stat buffer;
@@ -955,7 +970,7 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		return -1;
 	}
 
-	shm_fd = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, buffer.st_size + 1, TEXT(IP2LOCATION_SHM));
+	shm_fd = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, buffer.st_size + 1, get_shm_name());
 
 	if (shm_fd == NULL) {
 		lookup_mode = IP2LOCATION_FILE_IO;
