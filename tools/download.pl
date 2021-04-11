@@ -2,7 +2,7 @@
 ###############################################################################
 # IP2Location Download Client
 ###############################################################################
-# Perl script to download IP2Location(tm) batabase from the server.
+# Perl script to download IP2Location(tm) database from the server.
 # Note: User subscription login and password required.
 #
 # There is no warranty or guarantee conveyed by the author/copyright holder of
