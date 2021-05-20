@@ -1,6 +1,6 @@
 /*
  * IP2Location C library is distributed under MIT license
- * Copyright (c) 2013-2020 IP2Location.com. support at ip2location dot com
+ * Copyright (c) 2013-2021 IP2Location.com. support at ip2location dot com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -54,10 +54,10 @@ extern "C" {
 #endif
 #endif
 
-#define API_VERSION			8.3.1
+#define API_VERSION			8.4.0
 #define API_VERSION_MAJOR	8
-#define API_VERSION_MINOR	3
-#define API_VERSION_RELEASE	1
+#define API_VERSION_MINOR	4
+#define API_VERSION_RELEASE	0
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE	4294967295U
@@ -85,16 +85,19 @@ extern "C" {
 #define MOBILEBRAND			0x20000
 #define ELEVATION			0x40000
 #define USAGETYPE			0x80000
+#define ADDRESSTYPE			0x81000
+#define CATEGORY			0x82000
 
 #define DEFAULT				0x0001
 #define NO_EMPTY_STRING		0x0002
 #define NO_LEADING			0x0004
 #define NO_TRAILING			0x0008
 
-#define ALL COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAINNAME | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE
+#define ALL COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAINNAME | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE | ADDRESSTYPE | CATEGORY
 #define INVALID_IP_ADDRESS "INVALID IP ADDRESS"
 #define IPV6_ADDRESS_MISSING_IN_IPV4_BIN "IPV6 ADDRESS MISSING IN IPV4 BIN"
 #define NOT_SUPPORTED "This parameter is unavailable for selected data file. Please upgrade the data file."
+#define INVALID_BIN_DATABASE "Incorrect IP2Location BIN file format. Please make sure that you are using the latest IP2Location BIN file."
 #define IP2LOCATION_SHM "IP2location_Shm"
 #define MAP_ADDR 4194500608
 
@@ -111,6 +114,8 @@ typedef struct {
 	uint8_t database_day;
 	uint8_t database_month;
 	uint8_t database_year;
+	uint8_t product_code;
+	uint8_t license_code;
 	uint32_t database_count;
 	uint32_t database_address;
 	uint32_t ip_version;
@@ -120,6 +125,7 @@ typedef struct {
 	uint32_t ipv6_database_address;
 	uint32_t ipv4_index_base_address;
 	uint32_t ipv6_index_base_address;
+	uint32_t database_size;
 } IP2Location;
 
 typedef struct {
@@ -155,6 +161,8 @@ typedef struct {
 	char *weather_station_name;
 	char *mobile_brand;
 	char *usage_type;
+	char *address_type;
+	char *category;
 } IP2LocationRecord;
 
 /* Public functions */
@@ -181,6 +189,8 @@ IP2LocationRecord *IP2Location_get_mnc(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_mobilebrand(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_elevation(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_usagetype(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_addresstype(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_category(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
 void IP2Location_delete_shm();

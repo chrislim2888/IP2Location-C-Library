@@ -2,7 +2,7 @@
 
 IP2Location is a C library that enables the user to find the country, region, city, latitude, longitude, 
 zip code, time zone, ISP, domain name, connection type, area code, weather, mobile network, elevation, 
-usage type by IP address or hostname originates from. The library reads the geo location information
+usage type, address type and category by IP address or hostname originates from. The library reads the geo location information
 from **IP2Location BIN data** file.
 
 Supported IPv4 and IPv6 address.

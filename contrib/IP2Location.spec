@@ -1,4 +1,4 @@
-%define	version 8.3.1
+%define	version 8.4.0
 
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Thu May 20 2021 IP2Location <support@ip2location.com> - 8.4.0
+- added supports for DB25 to display address type and category fields
+
 * Mon Nov 09 2020 IP2Location <support@ip2location.com> - 8.3.1-1
 - fixed version number
 

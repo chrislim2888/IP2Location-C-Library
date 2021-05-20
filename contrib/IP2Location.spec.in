@@ -14,10 +14,10 @@ BuildRequires:	perl(Math::BigInt)
 %description
 IP2Location C library enables the user to get the country, region, city,
 coordinates, ZIP code, time zone, ISP, domain name, connection type,
-area code, weather info, mobile carrier, elevation and usage type from any IP
-address or hostname. This library has been optimized for speed and memory
-utilization. The library contains API to query all IP2Location LITE and
-commercial binary databases.
+area code, weather info, mobile carrier, elevation, usage type, address type
+and category from any IP address or hostname. This library has been optimized
+for speed and memory utilization. The library contains API to query all IP2Location
+LITE and commercial binary databases.
 
 Users can download the latest LITE database from IP2Location web site using e.g.
 the included downloader.
@@ -31,10 +31,10 @@ Provides:	%{name}-devel = %{version}-%{release}
 %description 	devel
 IP2Location C library enables the user to get the country, region, city,
 coordinates, ZIP code, time zone, ISP, domain name, connection type,
-area code, weather info, mobile carrier, elevation and usage type from any IP
-address or hostname. This library has been optimized for speed and memory
-utilization. The library contains API to query all IP2Location LITE and
-commercial binary databases.
+area code, weather info, mobile carrier, elevation, usage type, address type
+and category from any IP address or hostname. This library has been optimized
+for speed and memory utilization. The library contains API to query all IP2Location
+LITE and commercial binary databases.
 
 This package contains the development files for the IP2Location library.
 
@@ -46,10 +46,10 @@ Requires:	%{name} = %{version}-%{release}
 %description 	data-sample
 IP2Location C library enables the user to get the country, region, city,
 coordinates, ZIP code, time zone, ISP, domain name, connection type,
-area code, weather info, mobile carrier, elevation and usage type from any IP
-address or hostname. This library has been optimized for speed and memory
-utilization. The library contains API to query all IP2Location LITE and
-commercial binary databases.
+area code, weather info, mobile carrier, elevation, usage type, address type
+and category from any IP address or hostname. This library has been optimized
+for speed and memory utilization. The library contains API to query all IP2Location
+LITE and commercial binary databases.
 
 This package contains the sample data files for testing the library.
 
@@ -122,6 +122,18 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Thu May 20 2021 IP2Location <support@ip2location.com> - 8.4.0
+- added supports for DB25 to display address type and category fields
+
+* Mon Nov 09 2020 IP2Location <support@ip2location.com> - 8.3.1-1
+- fixed version number
+
+* Tue Nov 03 2020 IP2Location <support@ip2location.com> - 8.3.1
+- included ip2location lookup
+
+* Fri Oct 30 2020 IP2Location <support@ip2location.com> - 8.3.0
+- added new interface "IP2Location_bin_version" to display BIN database version
+
 * Thu Oct 01 2020 IP2Location <support@ip2location.com> - 8.2.0
 - reverted changes based on 8.0.9
 

@@ -4,11 +4,11 @@ Upstream-Contact: IP2Location <support@ip2location.com>
 Source: https://github.com/chrislim2888/IP2Location-C-Library.git
 
 Files: *
-Copyright: 2020 IP2Location <support@ip2location.com>
+Copyright: 2021 IP2Location <support@ip2location.com>
 License: MIT
 
 Files: debian/*
-Copyright: 2020 IP2Location <support@ip2location.com>
+Copyright: 2021 IP2Location <support@ip2location.com>
 License: MIT
 
 License: MIT

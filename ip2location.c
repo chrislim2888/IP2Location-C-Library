@@ -75,6 +75,12 @@ static void print_usage(const char *argv0)
 "			usage_type\n"
 "			Usage type classification of ISP or company.\n"
 "\n"
+"			address_type\n"
+"			IP address types as defined in Internet Protocol version 4 (IPv4) and Internet Protocol version 6 (IPv6).\n"
+"\n"
+"			category\n"
+"			The domain category is based on IAB Tech Lab Content Taxonomy.\n"
+"\n"
 "	-f, --format\n"
 "		Output format. Supported format:\n"
 "			CSV (default)\n"
@@ -165,6 +171,8 @@ static void print_header(FILE *fout, const char *field, const char *format)
 		WRITE_HEADER("mobile_brand");
 		WRITE_HEADER("elevation");
 		WRITE_HEADER("usage_type");
+		WRITE_HEADER("address_type");
+		WRITE_HEADER("category");
 
 		if (*end == ',') {
 			start = end + 1;
@@ -253,6 +261,8 @@ static void print_record(FILE *fout, const char *field, IP2LocationRecord *recor
 		WRITE_FIELD("mobile_brand", record->mobilebrand);
 		WRITE_FIELDF("elevation", record->elevation);
 		WRITE_FIELD("usage_type", record->usagetype);
+		WRITE_FIELD("address_type", record->address_type);
+		WRITE_FIELD("category", record->category);
 
 		if (*end == ',') {
 			start = end + 1;
@@ -283,7 +293,7 @@ int main(int argc, char *argv[])
 	IP2LocationRecord *record = NULL;
 	FILE *fout = stdout;
 
-	field = "ip,country_code,country_name,region_name,city_name,isp,latitude,longitude,domain,zip_code,time_zone,net_speed,idd_code,area_code,weather_station_code,weather_station_name,mcc,mnc,mobile_brand,elevation,usage_type";
+	field = "ip,country_code,country_name,region_name,city_name,isp,latitude,longitude,domain,zip_code,time_zone,net_speed,idd_code,area_code,weather_station_code,weather_station_name,mcc,mnc,mobile_brand,elevation,usage_type,address_type,category";
 
 	for (i = 1; i < argc; i++) {
 		const char *argvi = argv[i];
