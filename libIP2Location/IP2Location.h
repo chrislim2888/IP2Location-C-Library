@@ -114,8 +114,6 @@ typedef struct {
 	uint8_t database_day;
 	uint8_t database_month;
 	uint8_t database_year;
-	uint8_t product_code;
-	uint8_t license_code;
 	uint32_t database_count;
 	uint32_t database_address;
 	uint32_t ip_version;
@@ -126,6 +124,8 @@ typedef struct {
 	uint32_t ipv4_index_base_address;
 	uint32_t ipv6_index_base_address;
 	uint32_t database_size;
+	uint8_t product_code;
+	uint8_t license_code;
 } IP2Location;
 
 typedef struct {
