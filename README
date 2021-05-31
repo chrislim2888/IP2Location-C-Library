@@ -52,7 +52,29 @@ If you encountered **error while loading shared libraries** in linux platform, t
 ldconfig /usr/local/lib
 ```
 
+
+
+# References
+
+##### Address Type
+
+Address type is the IP address types as defined in Internet Protocol version 4 (IPv4) and Internet Protocol version 6 (IPv6). The database return a single character. For the full description, please refer to list below:
+
+- (A) Anycast - One to the closest
+- (U) Unicast - One to one
+- (M) Multicast - One to multiple
+- (B) Broadcast - One to all
+
+
+
+##### Category
+
+Category is the domain category is based on [IAB Tech Lab Content Taxonomy](https://www.ip2location.com/free/iab-categories). These categories are comprised of Tier-1 and Tier-2 (if available) level categories widely used in services like advertising, Internet security  and filtering appliances. Please refer to https://www.ip2location.com/free/iab-categories for the full list.
+
+
+
 # Packages for Fedora/Enterprise Linux can be found here
+
 * https://koji.fedoraproject.org/koji/packageinfo?packageID=32132
 * https://src.fedoraproject.org/rpms/IP2Location
 * https://bodhi.fedoraproject.org/updates/?packages=IP2Location
