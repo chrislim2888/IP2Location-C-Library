@@ -12,11 +12,11 @@ without warranty of any kind.
 Basic Installation
 ==================
 
-   Briefly, the shell command `./configure && make && make install'
-should configure, build, and install this package.  The following
-more-detailed instructions are generic; see the `README' file for
-instructions specific to this package.  Some packages provide this
-`INSTALL' file but do not implement all of the features documented
+   Briefly, the shell command `autoreconf -fiv && ./configure && make 
+&& make install' should configure, build, and install this package.
+The following more-detailed instructions are generic; see the `README'
+file for instructions specific to this package.  Some packages provide
+this `INSTALL' file but do not implement all of the features documented
 below.  The lack of an optional feature in a given package is not
 necessarily a bug.  More recommendations for GNU packages can be found
 in *note Makefile Conventions: (standards)Makefile Conventions.
@@ -51,7 +51,8 @@ of `autoconf'.
    The simplest way to compile this package is:
 
   1. `cd' to the directory containing the package's source code and type
-     `./configure' to configure the package for your system.
+     `autoreconf -fiv`, then type `./configure' to configure the package
+     for your system.
 
      Running `configure' might take a while.  While running, it prints
      some messages telling which features it is checking for.
