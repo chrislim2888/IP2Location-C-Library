@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Fri Nov 12 2021 IP2Location <support@ip2location.com> - 8.4.1
+- fixed test case, typo and portability of fseek()
+
 * Thu May 20 2021 IP2Location <support@ip2location.com> - 8.4.0
 - added supports for DB25 to display address type and category fields
 
