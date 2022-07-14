@@ -1,4 +1,4 @@
-%define	version 8.4.0
+%define	version 8.5.0
 
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Fri Jul 08 2022 IP2Location <support@ip2location.com> - 8.5.0
+- reduced file I/O
+
 * Fri Nov 12 2021 IP2Location <support@ip2location.com> - 8.4.1
 - fixed test case, typo and portability of fseek()
 
