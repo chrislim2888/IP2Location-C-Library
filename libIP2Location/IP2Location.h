@@ -54,10 +54,10 @@ extern "C" {
 #endif
 #endif
 
-#define API_VERSION			8.5.0
+#define API_VERSION			8.5.1
 #define API_VERSION_MAJOR	8
 #define API_VERSION_MINOR	5
-#define API_VERSION_RELEASE	0
+#define API_VERSION_RELEASE	1
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE	4294967295U
@@ -201,8 +201,9 @@ char *IP2Location_bin_version(IP2Location *handler);
 
 struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position);
 uint32_t IP2Location_read32(FILE *handle, uint32_t position);
-uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position);
+uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
 uint8_t IP2Location_read8(FILE *handle, uint32_t position);
+uint8_t IP2Location_read8_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
 char *IP2Location_readStr(FILE *handle, uint32_t position);
 float IP2Location_readFloat(FILE *handle, uint32_t position);
 int32_t IP2Location_DB_set_file_io();
@@ -216,9 +217,9 @@ void IP2Location_clear_memory();
 int32_t IP2Location_close_memory(FILE* file);
 void IP2Location_delete_shared_memory();
 float IP2Location_read_float(FILE* handle, uint32_t position);
-float IP2Location_read_float_row(uint8_t* buffer, uint32_t position);
+float IP2Location_read_float_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
 struct in6_addr IP2Location_read_ipv6_address(FILE* handle, uint32_t position);
-struct in6_addr IP2Location_read128_row(uint8_t* buffer, uint32_t position);
+struct in6_addr IP2Location_read128_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
 char *IP2Location_read_string(FILE* handle, uint32_t position);
 int IP2Location_set_lookup_mode(IP2Location *handler, enum IP2Location_lookup_mode);
 int32_t IP2Location_set_memory_cache(FILE* file);

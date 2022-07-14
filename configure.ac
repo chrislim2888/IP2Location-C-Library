@@ -1,5 +1,5 @@
 AC_PREREQ(2.59)
-AC_INIT([IP2Loc], [8.5.0], [support@ip2location.com])
+AC_INIT([IP2Loc], [8.5.1], [support@ip2location.com])
 AM_INIT_AUTOMAKE([ subdir-objects ])
 
 AM_CONFIG_HEADER([config.h])
