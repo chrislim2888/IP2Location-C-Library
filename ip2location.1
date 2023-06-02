@@ -4,7 +4,7 @@ ip2location \- query IP address information from local IP2Location BIN data file
 
 .SH SYNOPSIS
 ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-ip [IP ADDRESS] [OPTIONS]
-    
+
 .SH DESCRIPTION
 .PP
 ip2location read the IP address, IPv4 or IPv6 address format, and get the information from IP2Location BIN data file for display.
@@ -31,7 +31,7 @@ Query an IP address and display the country_short result
 .TP
 ip2location \-\-data-file [IP2LOCATION BIN DATA PATH] \-\-ip [IP ADDRESS] \-\-field country_code,city_name \-\no-heading \-\-format TAB
 Query an IP address and display the country_short and city result
-    
+
 .SH OPTIONS
 \-b, \-\-bin-version
     Print the IP2Location BIN database version.
@@ -42,25 +42,25 @@ Query an IP address and display the country_short and city result
 \-i, \-\-input-file
     Specify an input file with IP address list.
 
-\-p, \-\-ip         
+\-p, \-\-ip
     Specify an IP address query (Supported IPv4 and IPv6 address).
 
-\-o, \-\-output-file 
+\-o, \-\-output-file
     Specify output file for query results.
 
-\-f, \-\-format     
+\-f, \-\-format
     Specify output format. Supported formats are:
         \- CSV (default)
         \- TAB
         \- XML
-           
-\-h, \-?, \-\-help       
+
+\-h, \-?, \-\-help
     Display this help file
 
-\-v, \-\-version    
+\-v, \-\-version
     Display the version number
 
-\-e, \-\-field          
+\-e, \-\-field
     Specify the field to be displayed. Supported values are:
         \- ip
         \- country_code
@@ -83,16 +83,19 @@ Query an IP address and display the country_short and city result
         \- mobile_brand
         \- elevation
         \- usage_type
-	\- address_type
-	\- category
-        
-\-n, \-\no-heading              
+        \- address_type
+        \- category
+        \- district
+        \- asn
+        \- as
+
+\-n, \-\no-heading
     Suppress the heading display.
-    
+
 .SH [AUTHORS]
-This tool was created by IP2Location (http://www.ip2location.com).
-    
+This tool was created by IP2Location (https://www.ip2location.com).
+
 .SH [COPYRIGHT AND LICENSE]
-Copyright 2001\-2021 IP2Location.com
+Copyright 2001\-2023 IP2Location.com
 
 This tool is licensed under MIT.

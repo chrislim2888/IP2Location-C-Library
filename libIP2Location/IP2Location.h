@@ -1,6 +1,6 @@
 /*
  * IP2Location C library is distributed under MIT license
- * Copyright (c) 2013-2022 IP2Location.com. support at ip2location dot com
+ * Copyright (c) 2013-2023 IP2Location.com. support at ip2location dot com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -54,10 +54,10 @@ extern "C" {
 #endif
 #endif
 
-#define API_VERSION			8.5.1
+#define API_VERSION			8.6.0
 #define API_VERSION_MAJOR	8
-#define API_VERSION_MINOR	5
-#define API_VERSION_RELEASE	1
+#define API_VERSION_MINOR	6
+#define API_VERSION_RELEASE	0
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE	4294967295U
@@ -87,13 +87,16 @@ extern "C" {
 #define USAGETYPE			0x80000
 #define ADDRESSTYPE			0x81000
 #define CATEGORY			0x82000
+#define DISTRICT			0x83000
+#define ASN					0x84000
+#define AS					0x85000
 
 #define DEFAULT				0x0001
 #define NO_EMPTY_STRING		0x0002
 #define NO_LEADING			0x0004
 #define NO_TRAILING			0x0008
 
-#define ALL COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAINNAME | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE | ADDRESSTYPE | CATEGORY
+#define ALL COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAINNAME | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE | ADDRESSTYPE | CATEGORY | DISTRICT | ASN | AS
 #define INVALID_IP_ADDRESS "INVALID IP ADDRESS"
 #define IPV6_ADDRESS_MISSING_IN_IPV4_BIN "IPV6 ADDRESS MISSING IN IPV4 BIN"
 #define NOT_SUPPORTED "This parameter is unavailable for selected data file. Please upgrade the data file."
@@ -163,6 +166,9 @@ typedef struct {
 	char *usage_type;
 	char *address_type;
 	char *category;
+	char *district;
+	char *asn;
+	char *as;
 } IP2LocationRecord;
 
 /* Public functions */
@@ -191,6 +197,9 @@ IP2LocationRecord *IP2Location_get_elevation(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_usagetype(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_addresstype(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_category(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_district(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_asn(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_as(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
 void IP2Location_delete_shm();

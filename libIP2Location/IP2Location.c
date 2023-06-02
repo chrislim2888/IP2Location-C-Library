@@ -44,27 +44,30 @@ typedef struct ip_container {
 	struct in6_addr ipv6;
 } ip_container;
 
-uint8_t COUNTRY_POSITION[26]			= {0,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2};
-uint8_t REGION_POSITION[26]				= {0,  0,  0,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3};
-uint8_t CITY_POSITION[26]				= {0,  0,  0,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4};
-uint8_t LATITUDE_POSITION[26]			= {0,  0,  0,  0,  0,  5,  5,  0,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5};
-uint8_t LONGITUDE_POSITION[26]			= {0,  0,  0,  0,  0,  6,  6,  0,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6};
-uint8_t ZIPCODE_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  7,  7,  7,  7,  0,  7,  7,  7,  0,  7,  0,  7,  7,  7,  0,  7,  7};
-uint8_t TIMEZONE_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  8,  7,  8,  8,  8,  7,  8,  0,  8,  8,  8,  0,  8,  8};
-uint8_t ISP_POSITION[26]				= {0,  0,  3,  0,  5,  0,  7,  5,  7,  0,  8,  0,  9,  0,  9,  0,  9,  0,  9,  7,  9,  0,  9,  7,  9,  9};
-uint8_t DOMAIN_POSITION[26]				= {0,  0,  0,  0,  0,  0,  0,  6,  8,  0,  9,  0, 10,  0, 10,  0, 10,  0, 10,  8, 10,  0, 10,  8, 10, 10};
-uint8_t NETSPEED_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8, 11,  0, 11,  8, 11,  0, 11,  0, 11,  0, 11, 11};
-uint8_t IDDCODE_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9, 12,  0, 12,  0, 12,  9, 12,  0, 12, 12};
-uint8_t AREACODE_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10, 13,  0, 13,  0, 13, 10, 13,  0, 13, 13};
-uint8_t WEATHERSTATIONCODE_POSITION[26]	= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9, 14,  0, 14,  0, 14,  0, 14, 14};
-uint8_t WEATHERSTATIONNAME_POSITION[26]	= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10, 15,  0, 15,  0, 15,  0, 15, 15};
-uint8_t MCC_POSITION[26]				= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9, 16,  0, 16,  9, 16, 16};
-uint8_t MNC_POSITION[26]				= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10, 17,  0, 17, 10, 17, 17};
-uint8_t MOBILEBRAND_POSITION[26]		= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 11, 18,  0, 18, 11, 18, 18};
-uint8_t ELEVATION_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 11, 19,  0, 19, 19};
-uint8_t USAGETYPE_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 12, 20, 20};
-uint8_t ADDRESSTYPE_POSITION[26]		= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 21};
-uint8_t CATEGORY_POSITION[26]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 22};
+uint8_t COUNTRY_POSITION[27]			= {0,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2};
+uint8_t REGION_POSITION[27]				= {0,  0,  0,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3};
+uint8_t CITY_POSITION[27]				= {0,  0,  0,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4};
+uint8_t LATITUDE_POSITION[27]			= {0,  0,  0,  0,  0,  5,  5,  0,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5,  5};
+uint8_t LONGITUDE_POSITION[27]			= {0,  0,  0,  0,  0,  6,  6,  0,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6};
+uint8_t ZIPCODE_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  7,  7,  7,  7,  0,  7,  7,  7,  0,  7,  0,  7,  7,  7,  0,  7,  7,  7};
+uint8_t TIMEZONE_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8,  8,  7,  8,  8,  8,  7,  8,  0,  8,  8,  8,  0,  8,  8,  8};
+uint8_t ISP_POSITION[27]				= {0,  0,  3,  0,  5,  0,  7,  5,  7,  0,  8,  0,  9,  0,  9,  0,  9,  0,  9,  7,  9,  0,  9,  7,  9,  9,  9};
+uint8_t DOMAIN_POSITION[27]				= {0,  0,  0,  0,  0,  0,  0,  6,  8,  0,  9,  0, 10,  0, 10,  0, 10,  0, 10,  8, 10,  0, 10,  8, 10, 10, 10};
+uint8_t NETSPEED_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  8, 11,  0, 11,  8, 11,  0, 11,  0, 11,  0, 11, 11, 11};
+uint8_t IDDCODE_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9, 12,  0, 12,  0, 12,  9, 12,  0, 12, 12, 12};
+uint8_t AREACODE_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10, 13,  0, 13,  0, 13, 10, 13,  0, 13, 13, 13};
+uint8_t WEATHERSTATIONCODE_POSITION[27]	= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9, 14,  0, 14,  0, 14,  0, 14, 14, 14};
+uint8_t WEATHERSTATIONNAME_POSITION[27]	= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10, 15,  0, 15,  0, 15,  0, 15, 15, 15};
+uint8_t MCC_POSITION[27]				= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  9, 16,  0, 16,  9, 16, 16, 16};
+uint8_t MNC_POSITION[27]				= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 10, 17,  0, 17, 10, 17, 17, 17};
+uint8_t MOBILEBRAND_POSITION[27]		= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 11, 18,  0, 18, 11, 18, 18, 18};
+uint8_t ELEVATION_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 11, 19,  0, 19, 19, 19};
+uint8_t USAGETYPE_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 12, 20, 20, 20};
+uint8_t ADDRESSTYPE_POSITION[27]		= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 21, 21};
+uint8_t CATEGORY_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 22, 22};
+uint8_t DISTRICT_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 23};
+uint8_t ASN_POSITION[27]				= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24};
+uint8_t AS_POSITION[27]					= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 25};
 
 // Static variables
 static int32_t is_in_memory = 0;
@@ -122,7 +125,7 @@ static int IP2Location_initialize(IP2Location *handler)
 {
 	uint8_t buffer[64];
 	uint32_t mem_offset = 1;
-	
+
 	if (lookup_mode == IP2LOCATION_FILE_IO) {
 		fread(buffer, sizeof(buffer), 1, handler->file);
 	}
@@ -229,7 +232,7 @@ int ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
 	return ret;
 }
 
-// Alias to 
+// Alias to
 int IP2Location_ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
 {
 	return ipv6_compare(addr1, addr2);
@@ -411,6 +414,24 @@ IP2LocationRecord *IP2Location_get_category(IP2Location *handler, char *ip)
 	return IP2Location_get_record(handler, ip, CATEGORY);
 }
 
+// Get district
+IP2LocationRecord *IP2Location_get_district(IP2Location *handler, char *ip)
+{
+	return IP2Location_get_record(handler, ip, DISTRICT);
+}
+
+// Get ASN
+IP2LocationRecord *IP2Location_get_asn(IP2Location *handler, char *ip)
+{
+	return IP2Location_get_record(handler, ip, ASN);
+}
+
+// Get AS
+IP2LocationRecord *IP2Location_get_as(IP2Location *handler, char *ip)
+{
+	return IP2Location_get_record(handler, ip, AS);
+}
+
 // Get all records of an IP address
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip)
 {
@@ -452,8 +473,12 @@ static IP2LocationRecord *IP2Location_bad_record(const char *message)
 	record->weather_station_name = record->weatherstationname;
 	record->mobile_brand = record->mobilebrand;
 	record->usage_type = record->usagetype;
+
 	record->address_type = strdup(message);
 	record->category = strdup(message);
+	record->district = strdup(message);
+	record->asn = strdup(message);
+	record->as = strdup(message);
 
 	return record;
 }
@@ -673,6 +698,36 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint8_t*
 		}
 	}
 
+	if ((mode & DISTRICT) && (DISTRICT_POSITION[database_type] != 0)) {
+		if (!record->district) {
+			record->district = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (DISTRICT_POSITION[database_type] - 2), mem_offset));
+		}
+	} else {
+		if (!record->district) {
+			record->district = strdup(NOT_SUPPORTED);
+		}
+	}
+
+	if ((mode & ASN) && (ASN_POSITION[database_type] != 0)) {
+		if (!record->asn) {
+			record->asn = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (ASN_POSITION[database_type] - 2), mem_offset));
+		}
+	} else {
+		if (!record->asn) {
+			record->asn = strdup(NOT_SUPPORTED);
+		}
+	}
+
+	if ((mode & AS) && (AS_POSITION[database_type] != 0)) {
+		if (!record->as) {
+			record->as = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (AS_POSITION[database_type] - 2), mem_offset));
+		}
+	} else {
+		if (!record->as) {
+			record->as = strdup(NOT_SUPPORTED);
+		}
+	}
+
 	// Create alias for the new variables
 	record->zip_code = record->zipcode;
 	record->time_zone = record->timezone;
@@ -742,7 +797,7 @@ static IP2LocationRecord * IP2Location_get_ipv6_record(IP2Location *handler, uin
 			fread(&full_row_buffer, full_row_size, 1, handle);
 		}
 		mem_offset = row_offset;
-		
+
 		ip_from = IP2Location_read128_row((uint8_t *)full_row_buffer, 0, mem_offset);
 		ip_to = IP2Location_read128_row((uint8_t *)full_row_buffer, column_offset, mem_offset);
 
@@ -805,20 +860,20 @@ static IP2LocationRecord *IP2Location_get_ipv4_record(IP2Location *handler, uint
 		low = IP2Location_read32_row((uint8_t*)indexbuffer, 0, mem_offset);
 		high = IP2Location_read32_row((uint8_t*)indexbuffer, 4, mem_offset);
 	}
-	
+
 	full_row_size = column_offset + 4;
 	row_size = column_offset - 4;
 
 	while (low <= high) {
 		mid = (uint32_t)((low + high) >> 1);
 		row_offset = base_address + (mid * column_offset);
-		
+
 		if (lookup_mode == IP2LOCATION_FILE_IO) {
 			fseek(handle, row_offset - 1, 0);
 			fread(&full_row_buffer, full_row_size, 1, handle);
 		}
 		mem_offset = row_offset;
-		
+
 		ip_from = IP2Location_read32_row((uint8_t*)full_row_buffer, 0, mem_offset);
 		ip_to = IP2Location_read32_row((uint8_t*)full_row_buffer, column_offset, mem_offset);
 
@@ -888,6 +943,9 @@ void IP2Location_free_record(IP2LocationRecord *record) {
 	free(record->usagetype);
 	free(record->address_type);
 	free(record->category);
+	free(record->district);
+	free(record->asn);
+	free(record->as);
 
 	free(record);
 }
@@ -940,9 +998,9 @@ char *IP2Location_bin_version(IP2Location *handler)
 	}
 
 	static char version[64];
-	
+
 	sprintf(version, "%d-%d-%d", handler->database_year + 2000, handler->database_month, handler->database_day);
-	
+
 	return (version);
 }
 
@@ -1014,9 +1072,9 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		if (is_dababase_loaded == 0) {
 			shm_unlink(get_shm_name());
 		}
-		
+
 		lookup_mode = IP2LOCATION_FILE_IO;
-		
+
 		return -1;
 	}
 
@@ -1035,12 +1093,12 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		if (is_dababase_loaded == 0) {
 			shm_unlink(get_shm_name());
 		}
-		
+
 		lookup_mode = IP2LOCATION_FILE_IO;
 
 		return -1;
 	}
-	
+
 	if (is_dababase_loaded == 0) {
 		if (IP2Location_load_database_into_memory(file, memory_pointer, buffer.st_size) == -1) {
 			munmap(memory_pointer, buffer.st_size);
@@ -1120,7 +1178,7 @@ int32_t IP2Location_set_shared_memory(FILE *file)
 int32_t IP2Location_load_database_into_memory(FILE *file, void *memory, int64_t size)
 {
 	fseek(file, 0, SEEK_SET);
-	
+
 	if (fread(memory, size, 1, file) != 1) {
 		return -1;
 	}
@@ -1132,7 +1190,7 @@ int32_t IP2Location_load_database_into_memory(FILE *file, void *memory, int64_t 
 int32_t IP2Location_DB_close(FILE *file)
 {
 	struct stat buffer;
-	
+
 	if (lookup_mode == IP2LOCATION_CACHE_MEMORY) {
 		if (memory_pointer != NULL) {
 			free(memory_pointer);
@@ -1153,11 +1211,11 @@ int32_t IP2Location_DB_close(FILE *file)
 #endif
 		}
 	}
-	
+
 	if (file != NULL) {
 		fclose(file);
 	}
-	
+
 	lookup_mode = IP2LOCATION_FILE_IO;
 	return 0;
 }
@@ -1198,7 +1256,7 @@ struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position)
 {
 	int i, j;
 	struct in6_addr addr6;
-	
+
 	for (i = 0, j = 15; i < 16; i++, j--) {
 		addr6.s6_addr[i] = IP2Location_read8(handle, position + j);
 	}
@@ -1220,7 +1278,7 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
 	uint8_t byte4 = 0;
 	uint8_t *cache_shm = memory_pointer;
 	size_t temp;
-	
+
 	// Read from file
 	if (lookup_mode == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position - 1, SEEK_SET);
@@ -1237,13 +1295,13 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
 		}
 
 		temp = fread(&byte3, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0;
 		}
-		
+
 		temp = fread(&byte4, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0;
 		}
@@ -1265,7 +1323,7 @@ uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem
 	uint8_t byte3 = 0;
 	uint8_t byte4 = 0;
 	uint8_t *cache_shm = memory_pointer;
-	
+
 	if (lookup_mode == IP2LOCATION_FILE_IO) {
 		memcpy(&val, buffer + position, 4);
 		return val;
@@ -1287,7 +1345,7 @@ uint8_t IP2Location_read8(FILE *handle, uint32_t position)
 	if (lookup_mode == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position - 1, SEEK_SET);
 		temp = fread(&ret, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0;
 		}
@@ -1319,16 +1377,16 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
 	if (lookup_mode == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position, 0);
 		temp = fread(&size, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return strdup("");
 		}
 
 		str = (char *)malloc(size+1);
 		memset(str, 0, size+1);
-		
+
 		temp = fread(str, size, 1, handle);
-		
+
 		if (temp == 0) {
 			free(str);
 			return strdup("");
@@ -1345,7 +1403,7 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
 
 // Alias to IP2Location_readStr()
 // char *IP2Location_read_string(FILE *handle, uint32_t position)
-// {	
+// {
 	// return IP2Location_readStr(handle, position);
 // }
 
@@ -1355,7 +1413,7 @@ char *IP2Location_read_string(FILE *handle, uint32_t position)
 	uint8_t size = 0;
 	char* str = 0;
 	uint8_t *cache_shm = memory_pointer;
-	
+
 	if (lookup_mode == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position, 0);
 		fread(&data, 255, 1, handle); // max size of string field + 1 byte for length
@@ -1377,34 +1435,34 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 	float ret = 0.0;
 	uint8_t *cache_shm = memory_pointer;
 	size_t temp;
-	
+
 #if defined(_SUN_) || defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc64__)
 	char *p = (char *) &ret;
-	
+
 	// for SUN SPARC, have to reverse the byte order
 	if (lookup_mode == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position - 1, 0);
-		
+
 		temp = fread(p + 3, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0.0;
 		}
 
 		temp = fread(p + 2, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0.0;
 		}
 
 		temp = fread(p + 1, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0.0;
 		}
 
 		temp = fread(p, 1, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0.0;
 		}
@@ -1418,7 +1476,7 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 	if (lookup_mode == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position - 1, 0);
 		temp = fread(&ret, 4, 1, handle);
-		
+
 		if (temp == 0) {
 			return 0.0;
 		}
@@ -1440,10 +1498,10 @@ float IP2Location_read_float_row(uint8_t* buffer, uint32_t position, uint32_t me
 	float ret = 0.0;
 	uint8_t stuff[4];
 	uint8_t *cache_shm = memory_pointer;
-	
+
 #if defined(_SUN_) || defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc64__)
 	char *p = (char *) &ret;
-	
+
 	// for SUN SPARC, have to reverse the byte order
 	if (lookup_mode == IP2LOCATION_FILE_IO) {
 		uint8_t temp[4];

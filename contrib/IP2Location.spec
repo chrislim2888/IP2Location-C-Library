@@ -1,4 +1,4 @@
-%define	version 8.5.1
+%define	version 8.6.0
 
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Thu Jun 02 2023 IP2Location <support@ip2location.com> - 8.6.0
+- added district, asn, and as fields
+
 * Thu Jul 14 2022 IP2Location <support@ip2location.com> - 8.5.1
 - fixed wrong offset for memory modes
 
