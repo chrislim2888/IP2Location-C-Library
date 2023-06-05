@@ -1317,23 +1317,14 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
 
 uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
 {
-	uint32_t val = 0;
-	uint8_t byte1 = 0;
-	uint8_t byte2 = 0;
-	uint8_t byte3 = 0;
-	uint8_t byte4 = 0;
-	uint8_t *cache_shm = memory_pointer;
+	uint8_t *addr;
 
 	if (lookup_mode == IP2LOCATION_FILE_IO) {
-		memcpy(&val, buffer + position, 4);
-		return val;
+		addr = buffer + position;
 	} else {
-		byte1 = cache_shm[mem_offset + position - 1];
-		byte2 = cache_shm[mem_offset + position];
-		byte3 = cache_shm[mem_offset + position + 1];
-		byte4 = cache_shm[mem_offset + position + 2];
-		return ((byte4 << 24) | (byte3 << 16) | (byte2 << 8) | (byte1));
+		addr = memory_pointer + mem_offset + position - 1;
 	}
+	return ((addr[3] << 24) | (addr[2] << 16) | (addr[1] << 8) | (addr[0]));
 }
 
 uint8_t IP2Location_read8(FILE *handle, uint32_t position)
@@ -1436,10 +1427,10 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 	uint8_t *cache_shm = memory_pointer;
 	size_t temp;
 
-#if defined(_SUN_) || defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc64__)
+#ifdef WORDS_BIGENDIAN
 	char *p = (char *) &ret;
 
-	// for SUN SPARC, have to reverse the byte order
+	// have to reverse the byte order
 	if (lookup_mode == IP2LOCATION_FILE_IO && handle != NULL) {
 		fseek(handle, position - 1, 0);
 
@@ -1499,10 +1490,10 @@ float IP2Location_read_float_row(uint8_t* buffer, uint32_t position, uint32_t me
 	uint8_t stuff[4];
 	uint8_t *cache_shm = memory_pointer;
 
-#if defined(_SUN_) || defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc64__)
+#ifdef WORDS_BIGENDIAN
 	char *p = (char *) &ret;
 
-	// for SUN SPARC, have to reverse the byte order
+	// have to reverse the byte order
 	if (lookup_mode == IP2LOCATION_FILE_IO) {
 		uint8_t temp[4];
 		memcpy(&temp, buffer + position, 4);
