@@ -117,7 +117,7 @@ static void print_usage(const char *argv0)
 
 static void print_version()
 {
-	printf("IP2Location version 8.6.0\n");
+	printf("IP2Location version 8.6.1\n");
 }
 
 static void print_footer(FILE *fout, const char *field, const char *format)

@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Mon Jun 06 2023 IP2Location <support@ip2location.com> - 8.6.1
+- fix for bigendian (credit to Remi Collet)
+
 * Thu Jun 02 2023 IP2Location <support@ip2location.com> - 8.6.0
 - added district, asn, and as fields
 
