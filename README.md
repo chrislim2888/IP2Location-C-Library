@@ -17,7 +17,20 @@ For more details, please visit:
     cd data
     perl ip-country.pl
 
+
+
+### Ubuntu
+
+```
+sudo add-apt-repository ppa:ip2location/ip2location
+sudo apt update
+sudo apt install ip2location
+```
+
+
+
 ### Windows
+
     Execute "vcvarsall.bat". (This file is part of Microsoft Visual C, not ip2location code) 
     nmake -f Makefile.win
     cd data

@@ -1,6 +1,6 @@
 # IP2Location C Library
 
-IP2Location is a C library that enables the user to find the country, region or state, district, city, latitude and longitude, ZIP/Postal code, time zone, Internet Service Provider (ISP) or company name, domain name, net speed, area code, weather station code, weather station name, mobile country code (MCC), mobile network code (MNC) and carrier brand, elevation, usage type, address type, IAB category and ASN by IP address or hostname originates from. The library reads the geo location information
+IP2Location is a C library that enables the user to find the country, region or state, district, city, latitude and longitude,  ZIP/Postal code, time zone, Internet Service Provider (ISP) or company  name, domain name, net speed, area code, weather station code, weather  station name, mobile country code (MCC), mobile network code (MNC) and  carrier brand, elevation, usage type, address type, IAB category and ASN by IP address or hostname originates from. The library reads the geo location information
 from **IP2Location BIN data** file.
 
 Supported IPv4 and IPv6 address.
@@ -17,7 +17,20 @@ For more details, please visit:
     cd data
     perl ip-country.pl
 
+
+
+### Ubuntu
+
+```
+sudo add-apt-repository ppa:ip2location/ip2location
+sudo apt update
+sudo apt install ip2location
+```
+
+
+
 ### Windows
+
     Execute "vcvarsall.bat". (This file is part of Microsoft Visual C, not ip2location code) 
     nmake -f Makefile.win
     cd data
