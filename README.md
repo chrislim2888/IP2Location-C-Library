@@ -3,6 +3,7 @@
 IP2Location is a C library that enables the user to find the country, region or state, district, city, latitude and longitude,  ZIP/Postal code, time zone, Internet Service Provider (ISP) or company  name, domain name, net speed, area code, weather station code, weather  station name, mobile country code (MCC), mobile network code (MNC) and  carrier brand, elevation, usage type, address type, IAB category and ASN by IP address or hostname originates from. The library reads the geo location information
 from **IP2Location BIN data** file.
 
+In addition to the C Library, the build process will also create an executable called "**ip2location**" that allows you to directly perform IP geolocation lookups. Please refer to the ip2location CLI documentation for more information.
 Supported IPv4 and IPv6 address.
 
 For more details, please visit:
@@ -63,6 +64,22 @@ If you encountered **error while loading shared libraries** in linux platform, t
 ldconfig /usr/local/lib
 ```
 
+# IP2Location CLI
+Query an IP address and display the result
+
+```
+ip2location -d [IP2LOCATION BIN DATA PATH] --ip [IP ADDRESS]
+```
+
+Query all IP addresses from an input file and display the result
+```
+ip2location -d [IP2LOCATION BIN DATA PATH] -i [INPUT FILE PATH]
+```
+
+Query all IP addresses from an input file and display the result in XML format
+```
+ip2location -d [IP2LOCATION BIN DATA PATH] -i [INPUT FILE PATH] --format XML
+```
 
 
 # References
