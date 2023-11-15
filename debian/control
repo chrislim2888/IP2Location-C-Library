@@ -1,4 +1,4 @@
-Source: libip2location
+Source: ip2location
 Section: utils
 Priority: optional
 Maintainer: IP2Location <support@ip2location.com>
@@ -8,7 +8,7 @@ Homepage: https://www.ip2location.com
 Vcs-Browser: https://github.com/chrislim2888/IP2Location-C-Library
 Vcs-Git: https://github.com/chrislim2888/IP2Location-C-Library.git
 
-Package: libip2location
+Package: ip2location
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: IP geolocation library from IP2Location.

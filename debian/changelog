@@ -1,5 +1,5 @@
-libip2location (8.6.1) unstable; urgency=medium
+ip2location (8.6.1) jammy; urgency=medium
 
   * Initial Release.
 
- -- IP2Location <support@ip2location.com>  Mon, 07 Nov 2023 13:52:20 +0800
+ -- IP2Location <support@ip2location.com>  Mon, 14 Nov 2023 15:53:28 +0800
