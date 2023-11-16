@@ -20,6 +20,15 @@ For more details, please visit:
 
 
 
+### Debian
+
+```
+curl -LO https://github.com/chrislim2888/IP2Location-C-Library/releases/download/8.6.1/ip2location-8.6.1.deb
+sudo dpkg -i ip2location-8.6.1.deb
+```
+
+
+
 ### Ubuntu
 
 ```
