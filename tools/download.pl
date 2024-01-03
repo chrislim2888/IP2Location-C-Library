@@ -34,7 +34,7 @@
 # 7.0.0   Support IP2Proxy PX1BIN-PX4BIN
 #         Support LITE ASN
 #
-# Copyright (C) 2005-2017 IP2Location.com. All rights reserved.
+# Copyright (C) 2005-2024 IP2Location.com. All rights reserved.
 #
 ###############################################################################
 use strict;

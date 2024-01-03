@@ -1,6 +1,6 @@
 /*
  * IP2Location C library is distributed under MIT license
- * Copyright (c) 2013-2022 IP2Location.com. support at ip2location dot com
+ * Copyright (c) 2013-2024 IP2Location.com. support at ip2location dot com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
