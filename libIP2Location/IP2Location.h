@@ -107,7 +107,7 @@ extern "C" {
 enum IP2Location_lookup_mode {
 	IP2LOCATION_FILE_IO,
 	IP2LOCATION_CACHE_MEMORY,
-	IP2LOCATION_SHARED_MEMORY
+	IP2LOCATION_SHARED_MEMORY,
 };
 
 typedef struct {
@@ -119,6 +119,7 @@ typedef struct {
 	uint8_t database_year;
 	uint8_t product_code;
 	uint8_t license_code;
+	uint8_t dummy; /* 32-bit alignment */
 	uint32_t database_count;
 	uint32_t database_address;
 	uint32_t ip_version;
@@ -138,32 +139,49 @@ typedef struct {
 	char *city;
 	char *isp;
 	char *domain;
-	char *zipcode;
-	char *timezone;
-	char *netspeed;
-	char *iddcode;
-	char *areacode;
-	char *weatherstationcode;
-	char *weatherstationname;
+	union {
+		char *zipcode;
+		char *zip_code;
+	};
+	union {
+		char *timezone;
+		char *time_zone;
+	};
+	union {
+		char *netspeed;
+		char *net_speed;
+	};
+	union {
+		char *iddcode;
+		char *idd_code;
+	};
+	union {
+		char *areacode;
+		char *area_code;
+	};
+	union {
+		char *weatherstationcode;
+		char *weather_station_code;
+	};
+	union {
+		char *weatherstationname;
+		char *weather_station_name;
+	};
 	char *mcc;
 	char *mnc;
-	char *mobilebrand;
-	char *usagetype;
+	union {
+		char *mobilebrand;
+		char *mobile_brand;
+	};
+	union {
+		char *usagetype;
+		char *usage_type;
+	};
 
 	float latitude;
 	float longitude;
 	float elevation;
 
-	/* Variables changed since 8.1.0 */
-	char *zip_code;
-	char *time_zone;
-	char *net_speed;
-	char *idd_code;
-	char *area_code;
-	char *weather_station_code;
-	char *weather_station_name;
-	char *mobile_brand;
-	char *usage_type;
 	char *address_type;
 	char *category;
 	char *district;

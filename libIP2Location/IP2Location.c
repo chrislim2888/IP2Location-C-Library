@@ -447,8 +447,6 @@ static IP2LocationRecord *IP2Location_bad_record(const char *message)
 	record->region = strdup(message);
 	record->city = strdup(message);
 	record->isp = strdup(message);
-	record->latitude = 0;
-	record->longitude = 0;
 	record->domain = strdup(message);
 	record->zipcode = strdup(message);
 	record->timezone = strdup(message);
@@ -460,19 +458,11 @@ static IP2LocationRecord *IP2Location_bad_record(const char *message)
 	record->mcc = strdup(message);
 	record->mnc = strdup(message);
 	record->mobilebrand = strdup(message);
-	record->elevation = 0;
 	record->usagetype = strdup(message);
 
-	// Create alias for the new variables
-	record->zip_code = record->zipcode;
-	record->time_zone = record->timezone;
-	record->net_speed = record->netspeed;
-	record->idd_code = record->iddcode;
-	record->area_code = record->areacode;
-	record->weather_station_code = record->weatherstationcode;
-	record->weather_station_name = record->weatherstationname;
-	record->mobile_brand = record->mobilebrand;
-	record->usage_type = record->usagetype;
+	record->latitude = 0;
+	record->longitude = 0;
+	record->elevation = 0;
 
 	record->address_type = strdup(message);
 	record->category = strdup(message);
@@ -727,17 +717,6 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint8_t*
 			record->as = strdup(NOT_SUPPORTED);
 		}
 	}
-
-	// Create alias for the new variables
-	record->zip_code = record->zipcode;
-	record->time_zone = record->timezone;
-	record->net_speed = record->netspeed;
-	record->idd_code = record->iddcode;
-	record->area_code = record->areacode;
-	record->weather_station_code = record->weatherstationcode;
-	record->weather_station_name = record->weatherstationname;
-	record->mobile_brand = record->mobilebrand;
-	record->usage_type = record->usagetype;
 
 	return record;
 }
