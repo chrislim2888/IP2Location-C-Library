@@ -30,9 +30,7 @@
 #include "IP2Location.h"
 
 #ifdef _WIN32
-	#define _STR2(x) #x
-	#define _STR(x) _STR2(x)
-	#define PACKAGE_VERSION _STR(IP2LOCATION_API_VERSION)
+	#define PACKAGE_VERSION MACROSTR(IP2LOCATION_API_VERSION)
 	#include <tchar.h>
 #else
 	#include "../config.h"
