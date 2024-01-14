@@ -104,20 +104,26 @@ IP2Location *IP2Location_open(char *bin)
 	}
 
 	handler = (IP2Location *) calloc(1, sizeof(IP2Location));
+	if (handler == NULL) {
+		fclose(f);
+		return NULL;
+	}
 	handler->file = f;
 
 	IP2Location_initialize(handler);
 
 	if (handler->product_code == 1) {
-	} else {
-		if (handler->database_year <= 20 && handler->product_code == 0) {
-		} else {
-			printf(INVALID_BIN_DATABASE);
-			return NULL;
-		}
+		return handler;
 	}
 
-	return handler;
+	if (handler->database_year <= 20 && handler->product_code == 0) {
+		return handler;
+	}
+
+	printf(INVALID_BIN_DATABASE);
+	fclose(f);
+	free(handler);
+	return NULL;
 }
 
 // Initialize database structures
