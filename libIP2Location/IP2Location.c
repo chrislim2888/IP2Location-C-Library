@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stddef.h>
 
 #include "IP2Location.h"
 
@@ -72,7 +73,10 @@ uint8_t AS_POSITION[27]					= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 // Static variables
 static int32_t is_in_memory = 0;
 static enum IP2Location_lookup_mode lookup_mode = IP2LOCATION_FILE_IO; /* Set default lookup mode as File I/O */
-static void *memory_pointer;
+
+// Variables
+extern int lookup_mode;
+uint8_t* memory_pointer;
 
 // Static functions
 static int IP2Location_initialize(IP2Location *handler);
@@ -1302,14 +1306,15 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
 
 uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
 {
-	uint8_t *addr;
+    uint8_t* addr;
 
-	if (lookup_mode == IP2LOCATION_FILE_IO) {
-		addr = buffer + position;
-	} else {
-		addr = memory_pointer + mem_offset + position - 1;
-	}
-	return ((addr[3] << 24) | (addr[2] << 16) | (addr[1] << 8) | (addr[0]));
+    if (lookup_mode == IP2LOCATION_FILE_IO) {
+        addr = buffer + position;
+    } else {
+        addr = memory_pointer + mem_offset + position - 1;
+    }
+
+    return ((uint32_t)addr[3] << 24) | ((uint32_t)addr[2] << 16) | ((uint32_t)addr[1] << 8) | ((uint32_t)addr[0]);
 }
 
 uint8_t IP2Location_read8(FILE *handle, uint32_t position)
