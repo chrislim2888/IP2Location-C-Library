@@ -9,55 +9,11 @@ Supported IPv4 and IPv6 address.
 For more details, please visit:
 [https://www.ip2location.com/developers/c](https://www.ip2location.com/developers/c)
 
+# Developer Documentation
+To learn more about installation, usage, and code examples, please visit the developer documentation at [https://ip2location-c-library.readthedocs.io/en/latest/index.html.](https://ip2location-c-library.readthedocs.io/en/latest/index.html)
 # Installation
-###  Unix/Linux
-    autoreconf -i -v --force
-    ./configure
-    make
-    make install
-    cd data
-    perl ip-country.pl
 
-
-
-### Debian
-
-```
-curl -LO https://github.com/chrislim2888/IP2Location-C-Library/releases/download/8.6.1/ip2location-8.6.1.deb
-sudo dpkg -i ip2location-8.6.1.deb
-```
-
-
-
-### Ubuntu
-
-```
-sudo add-apt-repository ppa:ip2location/ip2location
-sudo apt update
-sudo apt install ip2location
-```
-
-
-
-### Windows
-
-    Execute "vcvarsall.bat". (This file is part of Microsoft Visual C, not ip2location code) 
-    nmake -f Makefile.win
-    cd data
-    perl ip-country.pl
-
-### MacOS
-    autoreconf -i -v --force
-    export CFLAGS=-I/usr/include/malloc 
-    ./configure
-    make
-    make install
-    cd data
-    perl ip-country.pl
-
-# Testing
-    cd test
-    test-IP2Location
+Please refer to the [installation section](https://ip2location-c-library.readthedocs.io/en/latest/quickstart.html#installation) in our documentation for instruction on how to install in various platform.
 
 # Sample BIN Databases
 * Download free IP2Location LITE databases at [https://lite.ip2location.com](https://lite.ip2location.com)  
