@@ -210,7 +210,7 @@ static void print_record(FILE *fout, const char *field, IP2LocationRecord *recor
 #define WRITE_FIELD(field_name, field)  \
 		if (strncmp(start, field_name, end - start) == 0) { \
 			const char *value = field; \
-			if (strcmp(value, NOT_SUPPORTED) == 0) { \
+			if (strcmp(value, IP2LOCATION_NOT_SUPPORTED) == 0) { \
 				value = "N/A"; \
 			} \
 			if (strcmp(format, "XML") == 0) { \

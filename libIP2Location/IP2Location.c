@@ -30,13 +30,14 @@
 #include "IP2Location.h"
 
 #ifdef _WIN32
-	#define _STR2(x) #x
-	#define _STR(x) _STR2(x)
-	#define PACKAGE_VERSION _STR(API_VERSION)
+	#define PACKAGE_VERSION MACROSTR(IP2LOCATION_API_VERSION)
 	#include <tchar.h>
 #else
 	#include "../config.h"
 #endif
+
+#define	CHECK_MODE(bf, bit) ((bf & (1<<(bit))) != 0)
+#define	SHIFT_MODE(bit) (1<<(bit))
 
 typedef struct ip_container {
 	uint32_t version;
@@ -83,6 +84,28 @@ static IP2LocationRecord *IP2Location_new_record();
 static IP2LocationRecord *IP2Location_get_record(IP2Location *handler, char *ip, uint32_t mode);
 static IP2LocationRecord *IP2Location_get_ipv4_record(IP2Location *handler, uint32_t mode, ip_container parsed_ip);
 static IP2LocationRecord *IP2Location_get_ipv6_record(IP2Location *handler, uint32_t mode, ip_container parsed_ip);
+#ifdef IP2LOCATION_HIDDEN_INTERNALS
+static struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position);
+static uint32_t IP2Location_read32(FILE *handle, uint32_t position);
+static uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
+static struct in6_addr IP2Location_read128_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
+static uint8_t IP2Location_read8(FILE *handle, uint32_t position);
+static uint8_t IP2Location_read8_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
+static char *IP2Location_read_string(FILE* handle, uint32_t position);
+static char *IP2Location_readStr(FILE *handle, uint32_t position);
+static float IP2Location_readFloat(FILE *handle, uint32_t position);
+static float IP2Location_read_float(FILE* handle, uint32_t position);
+static float IP2Location_read_float_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset);
+static struct in6_addr IP2Location_read_ipv6_address(FILE* handle, uint32_t position);
+static int32_t IP2Location_DB_set_file_io();
+static int32_t IP2Location_DB_set_memory_cache(FILE *file);
+static int32_t IP2Location_set_memory_cache(FILE* file);
+static int32_t IP2Location_DB_set_shared_memory(FILE *file);
+static int32_t IP2Location_set_shared_memory(FILE* file);
+static int32_t IP2Location_DB_close(FILE *file);
+static int32_t IP2Location_close_memory(FILE* file);
+static void IP2Location_DB_del_shm();
+#endif
 
 #ifndef WIN32
 static int32_t shm_fd;
@@ -120,7 +143,7 @@ IP2Location *IP2Location_open(char *bin)
 		return handler;
 	}
 
-	printf(INVALID_BIN_DATABASE);
+	printf(IP2LOCATION_INVALID_BIN_DATABASE);
 	fclose(f);
 	free(handler);
 	return NULL;
@@ -206,13 +229,13 @@ uint32_t IP2Location_close(IP2Location *handler)
 // Delete IP2Location shared memory if its present
 void IP2Location_delete_shm()
 {
-    IP2Location_DB_del_shm();
+	IP2Location_DB_del_shm();
 }
 
-// Alias to IP2Location_delete_shm()
+// Alias to IP2Location_DB_del_shm()
 void IP2Location_clear_memory()
 {
-	IP2Location_delete_shm();
+	IP2Location_DB_del_shm();
 }
 
 // Alias to IP2Location_DB_del_shm()
@@ -222,7 +245,7 @@ void IP2Location_delete_shared_memory()
 }
 
 // Compare IPv6 address
-int ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
+static int ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
 {
 	int i, ret = 0;
 	for (i = 0; i < 16; i++) {
@@ -238,8 +261,8 @@ int ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
 	return ret;
 }
 
-// Alias to
-int IP2Location_ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
+// Alias to ipv6_compare()
+static int IP2Location_ipv6_compare(struct in6_addr *addr1, struct in6_addr *addr2)
 {
 	return ipv6_compare(addr1, addr2);
 }
@@ -291,157 +314,157 @@ static ip_container IP2Location_parse_address(const char *ip)
 // Get country code
 IP2LocationRecord *IP2Location_get_country_short(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, COUNTRYSHORT);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_COUNTRYSHORT));
 }
 
 // Get country name
 IP2LocationRecord *IP2Location_get_country_long(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, COUNTRYLONG);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_COUNTRYLONG));
 }
 
 // Get the name of state/region
 IP2LocationRecord *IP2Location_get_region(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, REGION);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_REGION));
 }
 
 // Get city name
 IP2LocationRecord *IP2Location_get_city(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, CITY);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_CITY));
 }
 
 // Get ISP name
 IP2LocationRecord *IP2Location_get_isp(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, ISP);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_ISP));
 }
 
 // Get latitude
 IP2LocationRecord *IP2Location_get_latitude(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, LATITUDE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_LATITUDE));
 }
 
 // Get longitude
 IP2LocationRecord *IP2Location_get_longitude(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, LONGITUDE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_LONGITUDE));
 }
 
 // Get domain name
 IP2LocationRecord *IP2Location_get_domain(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, DOMAINNAME);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_DOMAINNAME));
 }
 
 // Get ZIP code
 IP2LocationRecord *IP2Location_get_zipcode(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, ZIPCODE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_ZIPCODE));
 }
 
 // Get time zone
 IP2LocationRecord *IP2Location_get_timezone(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, TIMEZONE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_TIMEZONE));
 }
 
 // Get net speed
 IP2LocationRecord *IP2Location_get_netspeed(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, NETSPEED);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_NETSPEED));
 }
 
 // Get IDD code
 IP2LocationRecord *IP2Location_get_iddcode(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, IDDCODE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_IDDCODE));
 }
 
 // Get area code
 IP2LocationRecord *IP2Location_get_areacode(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, AREACODE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_AREACODE));
 }
 
 // Get weather station code
 IP2LocationRecord *IP2Location_get_weatherstationcode(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, WEATHERSTATIONCODE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_WEATHERSTATIONCODE));
 }
 
 // Get weather station name
 IP2LocationRecord *IP2Location_get_weatherstationname(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, WEATHERSTATIONNAME);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_WEATHERSTATIONNAME));
 }
 
 // Get mobile country code
 IP2LocationRecord *IP2Location_get_mcc(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, MCC);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_MCC));
 }
 
 // Get mobile national code
 IP2LocationRecord *IP2Location_get_mnc(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, MNC);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_MNC));
 }
 
 // Get mobile carrier brand
 IP2LocationRecord *IP2Location_get_mobilebrand(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, MOBILEBRAND);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_MOBILEBRAND));
 }
 
 // Get elevation
 IP2LocationRecord *IP2Location_get_elevation(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, ELEVATION);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_ELEVATION));
 }
 
 // Get usage type
 IP2LocationRecord *IP2Location_get_usagetype(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, USAGETYPE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_USAGETYPE));
 }
 
 // Get address type
 IP2LocationRecord *IP2Location_get_addresstype(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, ADDRESSTYPE);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_ADDRESSTYPE));
 }
 
 // Get category
 IP2LocationRecord *IP2Location_get_category(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, CATEGORY);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_CATEGORY));
 }
 
 // Get district
 IP2LocationRecord *IP2Location_get_district(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, DISTRICT);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_DISTRICT));
 }
 
 // Get ASN
 IP2LocationRecord *IP2Location_get_asn(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, ASN);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_ASN));
 }
 
 // Get AS
 IP2LocationRecord *IP2Location_get_as(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, AS);
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_AS));
 }
 
 // Get all records of an IP address
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip)
 {
-	return IP2Location_get_record(handler, ip, ALL);
+	return IP2Location_get_record(handler, ip, IP2LOCATION_ALL);
 }
 
 // fill the record fields with error message
@@ -484,179 +507,179 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint8_t*
 	FILE *handle = handler->file;
 	IP2LocationRecord *record = IP2Location_new_record();
 
-	if ((mode & COUNTRYSHORT) && (COUNTRY_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_COUNTRYSHORT) && (COUNTRY_POSITION[database_type] != 0)) {
 		if (!record->country_short) {
 			record->country_short = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (COUNTRY_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->country_short) {
-			record->country_short = strdup(NOT_SUPPORTED);
+			record->country_short = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & COUNTRYLONG) && (COUNTRY_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_COUNTRYLONG) && (COUNTRY_POSITION[database_type] != 0)) {
 		if (!record->country_long) {
 			record->country_long = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (COUNTRY_POSITION[database_type] - 2), mem_offset) + 3);
 		}
 	} else {
 		if (!record->country_long) {
-			record->country_long = strdup(NOT_SUPPORTED);
+			record->country_long = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & REGION) && (REGION_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_REGION) && (REGION_POSITION[database_type] != 0)) {
 		if (!record->region) {
 			record->region = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (REGION_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->region) {
-			record->region = strdup(NOT_SUPPORTED);
+			record->region = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & CITY) && (CITY_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_CITY) && (CITY_POSITION[database_type] != 0)) {
 		if (!record->city) {
 			record->city = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (CITY_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->city) {
-			record->city = strdup(NOT_SUPPORTED);
+			record->city = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & ISP) && (ISP_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_ISP) && (ISP_POSITION[database_type] != 0)) {
 		if (!record->isp) {
 			record->isp = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (ISP_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->isp) {
-			record->isp = strdup(NOT_SUPPORTED);
+			record->isp = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & LATITUDE) && (LATITUDE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_LATITUDE) && (LATITUDE_POSITION[database_type] != 0)) {
 		record->latitude = IP2Location_read_float_row(buffer, 4 * (LATITUDE_POSITION[database_type] - 2), mem_offset);
 	} else {
 		record->latitude = 0.0;
 	}
 
-	if ((mode & LONGITUDE) && (LONGITUDE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_LONGITUDE) && (LONGITUDE_POSITION[database_type] != 0)) {
 		record->longitude = IP2Location_read_float_row(buffer, 4 * (LONGITUDE_POSITION[database_type] - 2), mem_offset);
 	} else {
 		record->longitude = 0.0;
 	}
 
-	if ((mode & DOMAINNAME) && (DOMAIN_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_DOMAINNAME) && (DOMAIN_POSITION[database_type] != 0)) {
 		if (!record->domain) {
 			record->domain = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (DOMAIN_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->domain) {
-			record->domain = strdup(NOT_SUPPORTED);
+			record->domain = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & ZIPCODE) && (ZIPCODE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_ZIPCODE) && (ZIPCODE_POSITION[database_type] != 0)) {
 		if (!record->zipcode) {
 			record->zipcode = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (ZIPCODE_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->zipcode) {
-			record->zipcode = strdup(NOT_SUPPORTED);
+			record->zipcode = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & TIMEZONE) && (TIMEZONE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_TIMEZONE) && (TIMEZONE_POSITION[database_type] != 0)) {
 		if (!record->timezone) {
 			record->timezone = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (TIMEZONE_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->timezone) {
-			record->timezone = strdup(NOT_SUPPORTED);
+			record->timezone = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & NETSPEED) && (NETSPEED_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_NETSPEED) && (NETSPEED_POSITION[database_type] != 0)) {
 		if (!record->netspeed) {
 			record->netspeed = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (NETSPEED_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->netspeed) {
-			record->netspeed = strdup(NOT_SUPPORTED);
+			record->netspeed = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & IDDCODE) && (IDDCODE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_IDDCODE) && (IDDCODE_POSITION[database_type] != 0)) {
 		if (!record->iddcode) {
 			record->iddcode = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (IDDCODE_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->iddcode) {
-			record->iddcode = strdup(NOT_SUPPORTED);
+			record->iddcode = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & AREACODE) && (AREACODE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_AREACODE) && (AREACODE_POSITION[database_type] != 0)) {
 		if (!record->areacode) {
 			record->areacode = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (AREACODE_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->areacode) {
-			record->areacode = strdup(NOT_SUPPORTED);
+			record->areacode = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & WEATHERSTATIONCODE) && (WEATHERSTATIONCODE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_WEATHERSTATIONCODE) && (WEATHERSTATIONCODE_POSITION[database_type] != 0)) {
 		if (!record->weatherstationcode) {
 			record->weatherstationcode = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (WEATHERSTATIONCODE_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->weatherstationcode) {
-			record->weatherstationcode = strdup(NOT_SUPPORTED);
+			record->weatherstationcode = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & WEATHERSTATIONNAME) && (WEATHERSTATIONNAME_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_WEATHERSTATIONNAME) && (WEATHERSTATIONNAME_POSITION[database_type] != 0)) {
 		if (!record->weatherstationname) {
 			record->weatherstationname = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (WEATHERSTATIONNAME_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->weatherstationname) {
-			record->weatherstationname = strdup(NOT_SUPPORTED);
+			record->weatherstationname = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & MCC) && (MCC_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_MCC) && (MCC_POSITION[database_type] != 0)) {
 		if (!record->mcc) {
 			record->mcc = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (MCC_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->mcc) {
-			record->mcc = strdup(NOT_SUPPORTED);
+			record->mcc = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & MNC) && (MNC_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_MNC) && (MNC_POSITION[database_type] != 0)) {
 		if (!record->mnc) {
 			record->mnc = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (MNC_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->mnc) {
-			record->mnc = strdup(NOT_SUPPORTED);
+			record->mnc = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & MOBILEBRAND) && (MOBILEBRAND_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_MOBILEBRAND) && (MOBILEBRAND_POSITION[database_type] != 0)) {
 		if (!record->mobilebrand) {
 			record->mobilebrand = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (MOBILEBRAND_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->mobilebrand) {
-			record->mobilebrand = strdup(NOT_SUPPORTED);
+			record->mobilebrand = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & ELEVATION) && (ELEVATION_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_ELEVATION) && (ELEVATION_POSITION[database_type] != 0)) {
 		char * mem = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (ELEVATION_POSITION[database_type] - 2), mem_offset));
 		record->elevation = atof(mem);
 		free(mem);
@@ -664,63 +687,63 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint8_t*
 		record->elevation = 0.0;
 	}
 
-	if ((mode & USAGETYPE) && (USAGETYPE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_USAGETYPE) && (USAGETYPE_POSITION[database_type] != 0)) {
 		if (!record->usagetype) {
 			record->usagetype = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (USAGETYPE_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->usagetype) {
-			record->usagetype = strdup(NOT_SUPPORTED);
+			record->usagetype = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & ADDRESSTYPE) && (ADDRESSTYPE_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_ADDRESSTYPE) && (ADDRESSTYPE_POSITION[database_type] != 0)) {
 		if (!record->address_type) {
 			record->address_type = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (ADDRESSTYPE_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->address_type) {
-			record->address_type = strdup(NOT_SUPPORTED);
+			record->address_type = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & CATEGORY) && (CATEGORY_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_CATEGORY) && (CATEGORY_POSITION[database_type] != 0)) {
 		if (!record->category) {
 			record->category = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (CATEGORY_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->category) {
-			record->category = strdup(NOT_SUPPORTED);
+			record->category = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & DISTRICT) && (DISTRICT_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_DISTRICT) && (DISTRICT_POSITION[database_type] != 0)) {
 		if (!record->district) {
 			record->district = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (DISTRICT_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->district) {
-			record->district = strdup(NOT_SUPPORTED);
+			record->district = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & ASN) && (ASN_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_ASN) && (ASN_POSITION[database_type] != 0)) {
 		if (!record->asn) {
 			record->asn = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (ASN_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->asn) {
-			record->asn = strdup(NOT_SUPPORTED);
+			record->asn = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
-	if ((mode & AS) && (AS_POSITION[database_type] != 0)) {
+	if (CHECK_MODE(mode, IP2LOCATION_AS) && (AS_POSITION[database_type] != 0)) {
 		if (!record->as) {
 			record->as = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (AS_POSITION[database_type] - 2), mem_offset));
 		}
 	} else {
 		if (!record->as) {
-			record->as = strdup(NOT_SUPPORTED);
+			record->as = strdup(IP2LOCATION_NOT_SUPPORTED);
 		}
 	}
 
@@ -828,7 +851,7 @@ static IP2LocationRecord *IP2Location_get_ipv4_record(IP2Location *handler, uint
 
 	ip_number = parsed_ip.ipv4;
 
-	if (ip_number == (uint32_t) MAX_IPV4_RANGE) {
+	if (ip_number == (uint32_t) IP2LOCATION_MAX_IPV4_RANGE) {
 		ip_number = ip_number - 1;
 	}
 
@@ -887,12 +910,12 @@ static IP2LocationRecord *IP2Location_get_record(IP2Location *handler, char *ip,
 	}
 	if (parsed_ip.version == 6) {
 		if (handler->ipv6_database_count == 0) {
-			return IP2Location_bad_record(IPV6_ADDRESS_MISSING_IN_IPV4_BIN);
+			return IP2Location_bad_record(IP2LOCATION_IPV6_ADDRESS_MISSING_IN_IPV4_BIN);
 		}
 
 		return IP2Location_get_ipv6_record(handler, mode, parsed_ip);
 	} else {
-		return IP2Location_bad_record(INVALID_IP_ADDRESS);
+		return IP2Location_bad_record(IP2LOCATION_INVALID_IP_ADDRESS);
 	}
 }
 
@@ -952,7 +975,7 @@ static int IP2Location_is_ipv6(char *ip)
 // Get API version numeric (Will deprecate in coming major version update)
 unsigned long int IP2Location_api_version_num(void)
 {
-	return (API_VERSION_NUMERIC);
+	return (IP2LOCATION_API_VERSION_NUMERIC);
 }
 
 // Alias to IP2Location_api_version_num()
@@ -965,7 +988,7 @@ unsigned long int IP2Location_api_version_number(void)
 char *IP2Location_api_version_string(void)
 {
 	static char version[64];
-	sprintf(version, "%d.%d.%d", API_VERSION_MAJOR, API_VERSION_MINOR, API_VERSION_RELEASE);
+	sprintf(version, "%d.%d.%d", IP2LOCATION_API_VERSION_MAJOR, IP2LOCATION_API_VERSION_MINOR, IP2LOCATION_API_VERSION_RELEASE);
 	return (version);
 }
 
@@ -990,7 +1013,7 @@ char *IP2Location_bin_version(IP2Location *handler)
 }
 
 // Set to use memory caching
-int32_t IP2Location_DB_set_memory_cache(FILE *file)
+IP2LOCATION_STATIC int32_t IP2Location_DB_set_memory_cache(FILE *file)
 {
 	struct stat buffer;
 	lookup_mode = IP2LOCATION_CACHE_MEMORY;
@@ -1015,7 +1038,7 @@ int32_t IP2Location_DB_set_memory_cache(FILE *file)
 }
 
 // Alias to IP2Location_DB_set_memory_cache()
-int32_t IP2Location_set_memory_cache(FILE *file)
+IP2LOCATION_STATIC int32_t IP2Location_set_memory_cache(FILE *file)
 {
 	return IP2Location_DB_set_memory_cache(file);
 }
@@ -1032,11 +1055,11 @@ static const char *get_shm_name(void) {
 }
 
 // Set to use shared memory
-int32_t IP2Location_DB_set_shared_memory(FILE *file)
+IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 {
 	struct stat buffer;
 	int32_t is_dababase_loaded = 1;
-	void *addr = (void*)MAP_ADDR;
+	void *addr = (void*)IP2LOCATION_MAP_ADDR;
 
 	lookup_mode = IP2LOCATION_SHARED_MEMORY;
 
@@ -1111,7 +1134,7 @@ static const TCHAR *get_shm_name(void) {
 	return name;
 }
 
-int32_t IP2Location_DB_set_shared_memory(FILE *file)
+IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 {
 	struct stat buffer;
 	int32_t is_dababase_loaded = 1;
@@ -1154,13 +1177,13 @@ int32_t IP2Location_DB_set_shared_memory(FILE *file)
 #endif
 
 // Alias to IP2Location_DB_set_shared_memory()
-int32_t IP2Location_set_shared_memory(FILE *file)
+IP2LOCATION_STATIC int32_t IP2Location_set_shared_memory(FILE *file)
 {
 	return IP2Location_DB_set_shared_memory(file);
 }
 
 // Load BIN file into memory
-int32_t IP2Location_load_database_into_memory(FILE *file, void *memory, int64_t size)
+IP2LOCATION_STATIC int32_t IP2Location_load_database_into_memory(FILE *file, void *memory, int64_t size)
 {
 	fseek(file, 0, SEEK_SET);
 
@@ -1172,7 +1195,7 @@ int32_t IP2Location_load_database_into_memory(FILE *file, void *memory, int64_t 
 }
 
 // Close the corresponding memory, based on the opened option
-int32_t IP2Location_DB_close(FILE *file)
+IP2LOCATION_STATIC int32_t IP2Location_DB_close(FILE *file)
 {
 	struct stat buffer;
 
@@ -1207,26 +1230,26 @@ int32_t IP2Location_DB_close(FILE *file)
 
 
 // Alias to IP2Location_DB_close
-int32_t IP2Location_close_memory(FILE *file)
+IP2LOCATION_STATIC int32_t IP2Location_close_memory(FILE *file)
 {
 	return IP2Location_DB_close(file);
 }
 
 #ifndef	WIN32
 // Remove shared memory object
-void IP2Location_DB_del_shm()
+IP2LOCATION_STATIC void IP2Location_DB_del_shm()
 {
 	shm_unlink(get_shm_name());
 }
 #else
 #ifdef WIN32
-void IP2Location_DB_del_shm()
+IP2LOCATION_STATIC void IP2Location_DB_del_shm()
 {
 }
 #endif
 #endif
 
-struct in6_addr IP2Location_read128_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
+IP2LOCATION_STATIC struct in6_addr IP2Location_read128_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
 {
 	int i, j;
 	struct in6_addr addr6;
@@ -1237,7 +1260,7 @@ struct in6_addr IP2Location_read128_row(uint8_t* buffer, uint32_t position, uint
 	return addr6;
 }
 
-struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position)
 {
 	int i, j;
 	struct in6_addr addr6;
@@ -1250,12 +1273,12 @@ struct in6_addr IP2Location_readIPv6Address(FILE *handle, uint32_t position)
 }
 
 // Alias to IP2Location_readIPv6Address()
-struct in6_addr IP2Location_read_ipv6_address(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC struct in6_addr IP2Location_read_ipv6_address(FILE *handle, uint32_t position)
 {
 	return IP2Location_readIPv6Address(handle, position);
 }
 
-uint32_t IP2Location_read32(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC uint32_t IP2Location_read32(FILE *handle, uint32_t position)
 {
 	uint8_t byte1 = 0;
 	uint8_t byte2 = 0;
@@ -1300,7 +1323,7 @@ uint32_t IP2Location_read32(FILE *handle, uint32_t position)
 	return ((byte4 << 24) | (byte3 << 16) | (byte2 << 8) | (byte1));
 }
 
-uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
+IP2LOCATION_STATIC uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
 {
 	uint8_t *addr;
 
@@ -1312,7 +1335,7 @@ uint32_t IP2Location_read32_row(uint8_t* buffer, uint32_t position, uint32_t mem
 	return ((addr[3] << 24) | (addr[2] << 16) | (addr[1] << 8) | (addr[0]));
 }
 
-uint8_t IP2Location_read8(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC uint8_t IP2Location_read8(FILE *handle, uint32_t position)
 {
 	uint8_t ret = 0;
 	uint8_t *cache_shm = memory_pointer;
@@ -1332,7 +1355,7 @@ uint8_t IP2Location_read8(FILE *handle, uint32_t position)
 	return ret;
 }
 
-uint8_t IP2Location_read8_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
+IP2LOCATION_STATIC uint8_t IP2Location_read8_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
 {
 	uint8_t *cache_shm = memory_pointer;
 
@@ -1343,7 +1366,7 @@ uint8_t IP2Location_read8_row(uint8_t* buffer, uint32_t position, uint32_t mem_o
 	}
 }
 
-char *IP2Location_readStr(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC char *IP2Location_readStr(FILE *handle, uint32_t position)
 {
 	uint8_t size = 0;
 	char *str = 0;
@@ -1383,7 +1406,7 @@ char *IP2Location_readStr(FILE *handle, uint32_t position)
 	// return IP2Location_readStr(handle, position);
 // }
 
-char *IP2Location_read_string(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC char *IP2Location_read_string(FILE *handle, uint32_t position)
 {
 	uint8_t data[255];
 	uint8_t size = 0;
@@ -1406,7 +1429,7 @@ char *IP2Location_read_string(FILE *handle, uint32_t position)
 	return str;
 }
 
-float IP2Location_readFloat(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC float IP2Location_readFloat(FILE *handle, uint32_t position)
 {
 	float ret = 0.0;
 	uint8_t *cache_shm = memory_pointer;
@@ -1464,12 +1487,12 @@ float IP2Location_readFloat(FILE *handle, uint32_t position)
 }
 
 // Alias to IP2Location_readFloat()
-float IP2Location_read_float(FILE *handle, uint32_t position)
+IP2LOCATION_STATIC float IP2Location_read_float(FILE *handle, uint32_t position)
 {
 	return IP2Location_readFloat(handle, position);
 }
 
-float IP2Location_read_float_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
+IP2LOCATION_STATIC float IP2Location_read_float_row(uint8_t* buffer, uint32_t position, uint32_t mem_offset)
 {
 	float ret = 0.0;
 	uint8_t stuff[4];
