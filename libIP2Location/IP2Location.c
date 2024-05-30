@@ -76,7 +76,6 @@ static int32_t is_in_memory = 0;
 static enum IP2Location_lookup_mode lookup_mode = IP2LOCATION_FILE_IO; /* Set default lookup mode as File I/O */
 
 // Variables
-extern int lookup_mode;
 uint8_t* memory_pointer;
 
 // Static functions
