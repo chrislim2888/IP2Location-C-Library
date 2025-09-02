@@ -90,6 +90,15 @@ static void print_usage(const char *argv0)
 "			as_name\n"
 "			Autonomous system (AS) name.\n"
 "\n"
+"			as_domain\n"
+"			Domain name of the AS registrant.\n"
+"\n"
+"			as_usage_type\n"
+"			Usage type of the AS registrant.\n"
+"\n"
+"			as_cidr\n"
+"			CIDR range for the whole AS.\n"
+"\n"
 "	-f, --format\n"
 "	Output format. Supported format:\n"
 "		- csv (default)\n"
@@ -185,6 +194,9 @@ static void print_header(FILE *fout, const char *field, const char *format)
 		WRITE_HEADER("district");
 		WRITE_HEADER("as_number");
 		WRITE_HEADER("as_name");
+		WRITE_HEADER("as_domain");
+		WRITE_HEADER("as_usage_type");
+		WRITE_HEADER("as_cidr");
 
 		if (*end == ',') {
 			start = end + 1;
@@ -278,6 +290,9 @@ static void print_record(FILE *fout, const char *field, IP2LocationRecord *recor
 		WRITE_FIELD("district", record->district);
 		WRITE_FIELD("as_number", record->asn);
 		WRITE_FIELD("as_name", record->as);
+		WRITE_FIELD("as_domain", record->as_domain);
+		WRITE_FIELD("as_usage_type", record->as_usage_type);
+		WRITE_FIELD("as_cidr", record->as_cidr);
 
 		if (*end == ',') {
 			start = end + 1;
@@ -308,7 +323,7 @@ int main(int argc, char *argv[])
 	IP2LocationRecord *record = NULL;
 	FILE *fout = stdout;
 
-	field = "ip,country_code,country_name,region_name,city_name,isp,latitude,longitude,domain,zip_code,time_zone,net_speed,idd_code,area_code,weather_station_code,weather_station_name,mcc,mnc,mobile_brand,elevation,usage_type,address_type,category,district,as_number,as_name";
+	field = "ip,country_code,country_name,region_name,city_name,isp,latitude,longitude,domain,zip_code,time_zone,net_speed,idd_code,area_code,weather_station_code,weather_station_name,mcc,mnc,mobile_brand,elevation,usage_type,address_type,category,district,as_number,as_name,as_domain,as_usage_type,as_cidr";
 
 	for (i = 1; i < argc; i++) {
 		const char *argvi = argv[i];

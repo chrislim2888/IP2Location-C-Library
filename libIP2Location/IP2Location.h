@@ -1,6 +1,6 @@
 /*
  * IP2Location C library is distributed under MIT license
- * Copyright (c) 2013-2024 IP2Location.com. support at ip2location dot com
+ * Copyright (c) 2013-2025 IP2Location.com. support at ip2location dot com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -107,6 +107,9 @@ enum DB_FIELDS {
 	IP2LOCATION_DISTRICT,
 	IP2LOCATION_ASN, /* 23 */
 	IP2LOCATION_AS,
+	IP2LOCATION_AS_DOMAIN,
+	IP2LOCATION_AS_USAGE_TYPE,
+	IP2LOCATION_AS_CIDR,
 /*
 	SPARE
 	SPARE
@@ -220,6 +223,9 @@ typedef struct {
 	char *district;
 	char *asn;
 	char *as;
+	char *as_domain;
+	char *as_usage_type;
+	char *as_cidr;
 } IP2LocationRecord;
 
 /* Public functions */
@@ -257,6 +263,9 @@ IP2LocationRecord *IP2Location_get_category(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_district(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_asn(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_as(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_as_domain(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_as_usage_type(IP2Location *handler, char *ip);
+IP2LocationRecord *IP2Location_get_as_cidr(IP2Location *handler, char *ip);
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip);
 void IP2Location_free_record(IP2LocationRecord *record);
 
@@ -301,6 +310,9 @@ unsigned long int IP2Location_api_version_number(void);
 #define DISTRICT IP2LOCATION_DISTRICT
 #define ASN IP2LOCATION_ASN
 #define AS IP2LOCATION_AS
+#define AS_DOMAIN IP2LOCATION_AS_DOMAIN
+#define AS_USAGE_TYPE IP2LOCATION_AS_USAGE_TYPE
+#define AS_CIDR IP2LOCATION_AS_CIDR
 #define ALL IPLOCATION_ALL
 #define DEFAULT IP2LOCATION_DEFAULT
 #define NO_EMPTY_STRING IP2LOCATION_NO_EMPTY_STRING

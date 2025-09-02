@@ -1,6 +1,6 @@
 /*
  * IP2Location C library is distributed under MIT license
- * Copyright (c) 2013-2024 IP2Location.com. support at ip2location dot com
+ * Copyright (c) 2013-2025 IP2Location.com. support at ip2location dot com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the MIT license
@@ -70,6 +70,9 @@ uint8_t CATEGORY_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
 uint8_t DISTRICT_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 23};
 uint8_t ASN_POSITION[27]				= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 24};
 uint8_t AS_POSITION[27]					= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 25};
+uint8_t AS_DOMAIN_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 26};
+uint8_t AS_USAGE_TYPE_POSITION[27]		= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 27};
+uint8_t AS_CIDR_POSITION[27]			= {0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 28};
 
 // Static variables
 static int32_t is_in_memory = 0;
@@ -464,6 +467,24 @@ IP2LocationRecord *IP2Location_get_as(IP2Location *handler, char *ip)
 	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_AS));
 }
 
+// Get AS Domain
+IP2LocationRecord *IP2Location_get_as_domain(IP2Location *handler, char *ip)
+{
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_AS_DOMAIN));
+}
+
+// Get AS Usage Type
+IP2LocationRecord *IP2Location_get_as_usage_type(IP2Location *handler, char *ip)
+{
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_AS_USAGE_TYPE));
+}
+
+// Get AS CIDR
+IP2LocationRecord *IP2Location_get_as_cidr(IP2Location *handler, char *ip)
+{
+	return IP2Location_get_record(handler, ip, SHIFT_MODE(IP2LOCATION_AS_CIDR));
+}
+
 // Get all records of an IP address
 IP2LocationRecord *IP2Location_get_all(IP2Location *handler, char *ip)
 {
@@ -501,6 +522,9 @@ static IP2LocationRecord *IP2Location_bad_record(const char *message)
 	record->district = strdup(message);
 	record->asn = strdup(message);
 	record->as = strdup(message);
+	record->as_domain = strdup(message);
+	record->as_usage_type = strdup(message);
+	record->as_cidr = strdup(message);
 
 	return record;
 }
@@ -750,6 +774,36 @@ static IP2LocationRecord *IP2Location_read_record(IP2Location *handler, uint8_t*
 		}
 	}
 
+	if (CHECK_MODE(mode, IP2LOCATION_AS_DOMAIN) && (AS_DOMAIN_POSITION[database_type] != 0)) {
+		if (!record->as_domain) {
+			record->as_domain = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (AS_DOMAIN_POSITION[database_type] - 2), mem_offset));
+		}
+	} else {
+		if (!record->as_domain) {
+			record->as_domain = strdup(IP2LOCATION_NOT_SUPPORTED);
+		}
+	}
+
+	if (CHECK_MODE(mode, IP2LOCATION_AS_USAGE_TYPE) && (AS_USAGE_TYPE_POSITION[database_type] != 0)) {
+		if (!record->as_usage_type) {
+			record->as_usage_type = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (AS_USAGE_TYPE_POSITION[database_type] - 2), mem_offset));
+		}
+	} else {
+		if (!record->as_usage_type) {
+			record->as_usage_type = strdup(IP2LOCATION_NOT_SUPPORTED);
+		}
+	}
+
+	if (CHECK_MODE(mode, IP2LOCATION_AS_CIDR) && (AS_CIDR_POSITION[database_type] != 0)) {
+		if (!record->as_cidr) {
+			record->as_cidr = IP2Location_read_string(handle, IP2Location_read32_row(buffer, 4 * (AS_CIDR_POSITION[database_type] - 2), mem_offset));
+		}
+	} else {
+		if (!record->as_cidr) {
+			record->as_cidr = strdup(IP2LOCATION_NOT_SUPPORTED);
+		}
+	}
+
 	return record;
 }
 
@@ -957,6 +1011,9 @@ void IP2Location_free_record(IP2LocationRecord *record) {
 	free(record->district);
 	free(record->asn);
 	free(record->as);
+	free(record->as_domain);
+	free(record->as_usage_type);
+	free(record->as_cidr);
 
 	free(record);
 }
@@ -1061,14 +1118,14 @@ static const char *get_shm_name(void) {
 IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 {
 	struct stat buffer;
-	int32_t is_dababase_loaded = 1;
+	int32_t is_database_loaded = 1;
 	void *addr = (void*)IP2LOCATION_MAP_ADDR;
 
 	lookup_mode = IP2LOCATION_SHARED_MEMORY;
 
 	// New shared memory object is created
 	if ((shm_fd = shm_open(get_shm_name(), O_RDWR | O_CREAT | O_EXCL, 0777)) != -1) {
-		is_dababase_loaded = 0;
+		is_database_loaded = 0;
 	}
 
 	// Failed to create new shared memory object
@@ -1080,7 +1137,7 @@ IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 	if (fstat(fileno(file), &buffer) == -1) {
 		close(shm_fd);
 
-		if (is_dababase_loaded == 0) {
+		if (is_database_loaded == 0) {
 			shm_unlink(get_shm_name());
 		}
 
@@ -1089,7 +1146,7 @@ IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		return -1;
 	}
 
-	if (is_dababase_loaded == 0 && ftruncate(shm_fd, buffer.st_size + 1) == -1) {
+	if (is_database_loaded == 0 && ftruncate(shm_fd, buffer.st_size + 1) == -1) {
 		close(shm_fd);
 		shm_unlink(get_shm_name());
 		lookup_mode = IP2LOCATION_FILE_IO;
@@ -1101,7 +1158,7 @@ IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 	if (memory_pointer == (void *) -1) {
 		close(shm_fd);
 
-		if (is_dababase_loaded == 0) {
+		if (is_database_loaded == 0) {
 			shm_unlink(get_shm_name());
 		}
 
@@ -1110,7 +1167,7 @@ IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		return -1;
 	}
 
-	if (is_dababase_loaded == 0) {
+	if (is_database_loaded == 0) {
 		if (IP2Location_load_database_into_memory(file, memory_pointer, buffer.st_size) == -1) {
 			munmap(memory_pointer, buffer.st_size);
 			close(shm_fd);
@@ -1131,8 +1188,7 @@ static const TCHAR *get_shm_name(void) {
 	static TCHAR name[64] = _T("");
 
 	if (!name[0]) {
-		_sntprintf(name, sizeof(name)/sizeof(name[0]), _T("%s_%lu"),
-                   _T(IP2LOCATION_SHM), GetProcessId(NULL));
+		_sntprintf(name, sizeof(name)/sizeof(name[0]), _T("%s_%lu"), _T(IP2LOCATION_SHM), GetProcessId(NULL));
 	}
 	return name;
 }
@@ -1140,7 +1196,7 @@ static const TCHAR *get_shm_name(void) {
 IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 {
 	struct stat buffer;
-	int32_t is_dababase_loaded = 1;
+	int32_t is_database_loaded = 1;
 
 	lookup_mode = IP2LOCATION_SHARED_MEMORY;
 
@@ -1156,7 +1212,7 @@ IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		return -1;
 	}
 
-	is_dababase_loaded = (GetLastError() == ERROR_ALREADY_EXISTS);
+	is_database_loaded = (GetLastError() == ERROR_ALREADY_EXISTS);
 	memory_pointer = MapViewOfFile(shm_fd, FILE_MAP_WRITE, 0, 0, 0);
 
 	if (memory_pointer == NULL) {
@@ -1165,7 +1221,7 @@ IP2LOCATION_STATIC int32_t IP2Location_DB_set_shared_memory(FILE *file)
 		return -1;
 	}
 
-	if (is_dababase_loaded == 0) {
+	if (is_database_loaded == 0) {
 		if (IP2Location_load_database_into_memory(file, memory_pointer, buffer.st_size) == -1) {
 			UnmapViewOfFile(memory_pointer);
 			CloseHandle(shm_fd);
