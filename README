@@ -23,8 +23,8 @@ For more details, please visit:
 ### Debian
 
 ```
-curl -LO https://github.com/chrislim2888/IP2Location-C-Library/releases/download/8.6.1/ip2location-8.6.1.deb
-sudo dpkg -i ip2location-8.6.1.deb
+curl -LO https://github.com/chrislim2888/IP2Location-C-Library/releases/download/8.7.0/ip2location-8.7.0.deb
+sudo dpkg -i ip2location-8.7.0.deb
 ```
 
 
@@ -41,14 +41,14 @@ sudo apt install ip2location
 
 ### Windows
 
-    Execute "vcvarsall.bat". (This file is part of Microsoft Visual C, not ip2location code) 
+    Execute "vcvarsall.bat". (This file is part of Microsoft Visual C, not ip2location code)
     nmake -f Makefile.win
     cd data
     perl ip-country.pl
 
 ### MacOS
     autoreconf -i -v --force
-    export CFLAGS=-I/usr/include/malloc 
+    export CFLAGS=-I/usr/include/malloc
     ./configure
     make
     make install
@@ -60,7 +60,7 @@ sudo apt install ip2location
     test-IP2Location
 
 # Sample BIN Databases
-* Download free IP2Location LITE databases at [https://lite.ip2location.com](https://lite.ip2location.com)  
+* Download free IP2Location LITE databases at [https://lite.ip2location.com](https://lite.ip2location.com)
 * Download IP2Location sample databases at [https://www.ip2location.com/developers](https://www.ip2location.com/developers)
 
 # IPv4 BIN vs IPv6 BIN
@@ -117,5 +117,5 @@ Category is the domain category is based on [IAB Tech Lab Content Taxonomy](http
 * https://bodhi.fedoraproject.org/updates/?packages=IP2Location
 
 # Support
-Email: support@ip2location.com.  
+Email: support@ip2location.com.
 URL: [https://www.ip2location.com](https://www.ip2location.com)

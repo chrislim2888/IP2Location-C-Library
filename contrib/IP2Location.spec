@@ -1,4 +1,4 @@
-%define	version 8.6.1
+%define	version 8.7.0
 
 Name:		IP2Location
 Summary:	C library for mapping IP address to geolocation information
@@ -122,6 +122,9 @@ install -p data/IPV6-COUNTRY.BIN %{buildroot}%{_datadir}/%{name}/IPV6-COUNTRY.SA
 
 
 %changelog
+* Tue Sep 02 2025 IP2Location <support@ip2location.com> - 8.7.0
+- added as domain, as usage type, and as cidr fields
+
 * Mon Jun 06 2023 IP2Location <support@ip2location.com> - 8.6.1
 - fix for bigendian (credit to Remi Collet)
 
