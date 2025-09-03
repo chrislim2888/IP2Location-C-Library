@@ -106,7 +106,7 @@ int main () {
 
 	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, "161.11.12.13");
 
-	printf("%s %s %s %s %s %f %f %s %s %s %s %s %s %s %s %s %s %s %f %s\n", record->country_short, record->country_long, record->region, record->city, record->isp, record->latitude, record->longitude, record->domain, record->zipcode, record->timezone, record->netspeed, record->iddcode, record->areacode, record->weatherstationcode, record->weatherstationname, record->mcc, record->mnc, record->mobilebrand, record->elevation, record->usagetype, record->address_type, record->category, record->district, record->asn, record->as);
+	printf("%s %s %s %s %s %f %f %s %s %s %s %s %s %s %s %s %s %s %f %s\n", record->country_short, record->country_long, record->region, record->city, record->isp, record->latitude, record->longitude, record->domain, record->zipcode, record->timezone, record->netspeed, record->iddcode, record->areacode, record->weatherstationcode, record->weatherstationname, record->mcc, record->mnc, record->mobilebrand, record->elevation, record->usagetype, record->address_type, record->category, record->district, record->asn, record->as, record->as_domain, record->as_usage_type, record->as_cidr);
 
 	IP2Location_free_record(record);
 
